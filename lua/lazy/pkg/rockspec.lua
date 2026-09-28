@@ -57,7 +57,7 @@ function M.hererocks.bin(bin)
   return Util.norm(hererocks .. "/" .. bin)
 end
 
--- check if hererocks is building
+-- 检查 hererocks 是否正在构建
 ---@return boolean?
 function M.hererocks.building()
   return vim.tbl_get(Config.plugins.hererocks or {}, "_", "build")
@@ -115,13 +115,13 @@ function M.build(task)
   if task:has_warnings() then
     task:log({
       "",
-      "This plugin requires `luarocks`. Try one of the following:",
-      " - fix your `luarocks` installation",
-      Config.hererocks() and " - disable *hererocks* with `opts.rocks.hererocks = false`"
-        or " - enable `hererocks` with `opts.rocks.hererocks = true`",
-      " - disable `luarocks` support completely with `opts.rocks.enabled = false`",
+      "该插件需要 `luarocks`。请尝试以下方法之一：",
+      " - 修复你的 `luarocks` 安装",
+      Config.hererocks() and " - 用 `opts.rocks.hererocks = false` 禁用 *hererocks*"
+        or " - 用 `opts.rocks.hererocks = true` 启用 `hererocks`",
+      " - 用 `opts.rocks.enabled = false` 完全禁用 `luarocks` 支持",
     })
-    task:warn("\nWill try building anyway, but will likely fail...")
+    task:warn("\n仍会尝试进行构建，但很可能失败……")
 
     task:warn("\n" .. string.rep("-", 80) .. "\n")
 
@@ -135,8 +135,8 @@ function M.build(task)
   local env = {}
   local luarocks = "luarocks"
   if Config.hererocks() then
-    -- hererocks is still building, so skip for now
-    -- a new build will happen in the next round
+    -- hererocks 仍在构建中，所以暂时跳过
+    -- 下一轮会进行新的构建
     if M.hererocks.building() then
       return
     end
@@ -157,12 +157,12 @@ function M.build(task)
   end
 
   local pkg = task.plugin._.pkg
-  assert(pkg, "missing rockspec pkg for " .. task.plugin.name .. "\nThis shouldn't happen, please report.")
+  assert(pkg, "插件 " .. task.plugin.name .. " 缺少 rockspec pkg\n这不应该发生，请反馈。")
 
   local rockspec = M.rockspec(task.plugin.dir .. "/" .. pkg.file) or {}
   assert(
     rockspec.package,
-    "missing rockspec package name for " .. task.plugin.name .. "\nThis shouldn't happen, please report."
+    "插件 " .. task.plugin.name .. " 缺少 rockspec 包名\n这不应该发生，请反馈。"
   )
 
   local root = Config.options.rocks.root .. "/" .. task.plugin.name
@@ -188,12 +188,12 @@ function M.build(task)
     return
   end
 
-  task:warn("Failed installing " .. rockspec.package .. " with `luarocks`.")
+  task:warn("使用 `luarocks` 安装 " .. rockspec.package .. " 失败。")
   task:warn("\n" .. string.rep("-", 80) .. "\n")
-  task:warn("Trying to build from source.")
+  task:warn("正在尝试从源码构建。")
 
-  -- install failed, so try building from source
-  task:set_level() -- reset level
+  -- 安装失败，因此尝试从源码构建
+  task:set_level() -- 重置层级
   ok = task:spawn(luarocks, {
     args = {
       "--tree",
@@ -293,11 +293,11 @@ function M.get(plugin)
     local spec = Community.get_spec(name)
 
     if spec then
-      -- community spec
+      -- 社区 spec
       table.insert(specs, spec)
       return false
     elseif url then
-      -- Neovim plugin rock
+      -- Neovim 插件 rock
       table.insert(specs, { url })
       return false
     end
@@ -305,17 +305,17 @@ function M.get(plugin)
   end, rockspec.dependencies or {})
 
   local use =
-    -- package without a /lua directory
+    -- 不带 /lua 目录的软件包
     not has_lua
-    -- has dependencies that are not skipped, 
-    -- not in community specs, 
-    -- and don't have a rockspec mapping
+    -- 存在未被跳过、
+    -- 不在社区 spec 中、
+    -- 且没有 rockspec 映射的依赖
     or #rocks > 0
-    -- has a complex build process
+    -- 拥有复杂的构建流程
     or not M.is_simple_build(rockspec)
 
   if not use then
-    -- community specs only
+    -- 只使用社区 spec
     return #specs > 0
         and {
           file = vim.fn.fnamemodify(rockspec_file, ":t"),

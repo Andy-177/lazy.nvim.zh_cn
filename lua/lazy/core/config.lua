@@ -5,54 +5,53 @@ local M = {}
 
 ---@class LazyConfig
 M.defaults = {
-  root = vim.fn.stdpath("data") .. "/lazy", -- directory where plugins will be installed
+  root = vim.fn.stdpath("data") .. "/lazy", -- 插件的安装目录
   defaults = {
-    -- Set this to `true` to have all your plugins lazy-loaded by default.
-    -- Only do this if you know what you are doing, as it can lead to unexpected behavior.
-    lazy = false, -- should plugins be lazy-loaded?
-    -- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
-    -- have outdated releases, which may break your Neovim install.
-    version = nil, -- always use the latest git commit
-    -- version = "*", -- try installing the latest stable version for plugins that support semver
-    -- default `cond` you can use to globally disable a lot of plugins
-    -- when running inside vscode for example
+    -- 将此项设为 `true`，可让所有插件默认都按需加载。
+    -- 只有在你清楚这样做的后果时才启用，因为它可能导致意外的行为。
+    lazy = false, -- 插件是否按需加载？
+    -- 目前建议保持 version=false，因为很多支持版本控制的插件
+    -- 其发布版本已经过时，可能会破坏你的 Neovim 安装。
+    version = nil, -- 始终使用最新的 git 提交
+    -- version = "*", -- 尝试为支持 semver 的插件安装最新的稳定版本
+    -- 默认的 `cond`，可用于在全局层面禁用大量插件，
+    -- 例如在 vscode 中运行时禁用它们
     cond = nil, ---@type boolean|fun(self:LazyPlugin):boolean|nil
   },
-  -- leave nil when passing the spec as the first argument to setup()
+  -- 当把 spec 作为 setup() 的第一个参数传入时，保持 nil
   spec = nil, ---@type LazySpec
-  local_spec = true, -- load project specific .lazy.lua spec files. They will be added at the end of the spec.
-  lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
-  ---@type number? limit the maximum amount of concurrent tasks
+  local_spec = true, -- 加载项目专属的 .lazy.lua spec 文件。它们会被添加到 spec 的末尾。
+  lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- 执行 update 后生成的锁定文件。
+  ---@type number? 限制并发任务的最大数量
   concurrency = jit.os:find("Windows") and (vim.uv.available_parallelism() * 2) or nil,
   git = {
-    -- defaults for the `Lazy log` command
-    -- log = { "--since=3 days ago" }, -- show commits from the last 3 days
-    log = { "-8" }, -- show the last 8 commits
-    timeout = 120, -- kill processes that take more than 2 minutes
+    -- `Lazy log` 命令的默认参数
+    -- log = { "--since=3 days ago" }, -- 显示最近 3 天的提交
+    log = { "-8" }, -- 显示最近 8 个提交
+    timeout = 120, -- 终止运行超过 2 分钟的进程
     url_format = "https://github.com/%s.git",
-    -- lazy.nvim requires git >=2.19.0. If you really want to use lazy with an older version,
-    -- then set the below to false. This should work, but is NOT supported and will
-    -- increase downloads a lot.
+    -- lazy.nvim 需要 git >=2.19.0。如果你确实想用更旧的版本来使用 lazy，
+    -- 则把下面这项设为 false。这样应该能工作，但属于**不受支持**的用法，
+    -- 并且会大幅增加下载量。
     filter = true,
-    -- rate of network related git operations (clone, fetch, checkout)
+    -- 与网络相关的 git 操作（clone、fetch、checkout）的频率限制
     throttle = {
-      enabled = false, -- not enabled by default
-      -- max 2 ops every 5 seconds
+      enabled = false, -- 默认不启用
+      -- 每 5 秒最多 2 次操作
       rate = 2,
-      duration = 5 * 1000, -- in ms
+      duration = 5 * 1000, -- 单位：毫秒
     },
-    -- Time in seconds to wait before running fetch again for a plugin.
-    -- Repeated update/check operations will not run again until this
-    -- cooldown period has passed.
+    -- 再次对某个插件执行 fetch 之前需要等待的秒数。
+    -- 重复的 update/check 操作在这个冷却期结束前不会再次执行。
     cooldown = 0,
   },
   pkg = {
     enabled = true,
     cache = vim.fn.stdpath("state") .. "/lazy/pkg-cache.lua",
-    -- the first package source that is found for a plugin will be used.
+    -- 插件找到的第一个可用的包源将被使用。
     sources = {
       "lazy",
-      "rockspec", -- will only be used when rocks.enabled is true
+      "rockspec", -- 仅当 rocks.enabled 为 true 时才会使用
       "packspec",
     },
   },
@@ -60,38 +59,38 @@ M.defaults = {
     enabled = true,
     root = vim.fn.stdpath("data") .. "/lazy-rocks",
     server = "https://lumen-oss.github.io/rocks-binaries/",
-    -- use hererocks to install luarocks?
-    -- set to `nil` to use hererocks when luarocks is not found
-    -- set to `true` to always use hererocks
-    -- set to `false` to always use luarocks
+    -- 是否使用 hererocks 来安装 luarocks？
+    -- 设为 `nil` 表示在找不到 luarocks 时使用 hererocks
+    -- 设为 `true` 表示始终使用 hererocks
+    -- 设为 `false` 表示始终使用 luarocks
     hererocks = nil,
   },
   dev = {
-    -- Directory where you store your local plugin projects. If a function is used,
-    -- the plugin directory (e.g. `~/projects/plugin-name`) must be returned.
+    -- 存放本地插件项目的目录。如果使用函数，
+    -- 则必须返回插件目录（例如 `~/projects/plugin-name`）。
     ---@type string | fun(plugin: LazyPlugin): string
     path = "~/projects",
-    ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
-    patterns = {}, -- For example {"folke"}
-    fallback = false, -- Fallback to git when local plugin doesn't exist
+    ---@type string[] 匹配这些模式的插件将使用你的本地版本，而不是从 GitHub 拉取
+    patterns = {}, -- 例如 {"folke"}
+    fallback = false, -- 当本地插件不存在时回退到 git
   },
   install = {
-    -- install missing plugins on startup. This doesn't increase startup time.
+    -- 启动时安装缺失的插件。这不会增加启动时间。
     missing = true,
-    -- try to load one of these colorschemes when starting an installation during startup
+    -- 启动时若要开始安装，则尝试加载其中某个配色方案
     colorscheme = { "habamax" },
   },
   ui = {
-    -- a number <1 is a percentage., >1 is a fixed size
+    -- 小于 1 的数字表示百分比，大于 1 表示固定尺寸
     size = { width = 0.8, height = 0.8 },
-    wrap = true, -- wrap the lines in the ui
-    -- The border to use for the UI window. Accepts same border values as |nvim_open_win()|.
+    wrap = true, -- 在界面中换行显示
+    -- UI 窗口使用的边框。接受与 |nvim_open_win()| 相同的 border 取值。
     border = "none",
-    -- The backdrop opacity. 0 is fully opaque, 100 is fully transparent.
+    -- 背景遮罩的不透明度。0 表示完全不透明，100 表示完全透明。
     backdrop = 60,
-    title = nil, ---@type string only works when border is not "none"
+    title = nil, ---@type string 仅当 border 不为 "none" 时生效
     title_pos = "center", ---@type "center" | "left" | "right"
-    -- Show pills on top of the Lazy window
+    -- 在 Lazy 窗口顶部显示药丸式导航按钮
     pills = true, ---@type boolean
     icons = {
       cmd = " ",
@@ -119,14 +118,14 @@ M.defaults = {
         "‒",
       },
     },
-    -- leave nil, to automatically select a browser depending on your OS.
-    -- If you want to use a specific browser, you can define it here
+    -- 保持 nil，以便根据你的操作系统自动选择浏览器。
+    -- 如果你想使用特定的浏览器，可以在这里定义
     browser = nil, ---@type string?
-    throttle = 1000 / 30, -- how frequently should the ui process render events
+    throttle = 1000 / 30, -- 界面处理并渲染事件的频率
     custom_keys = {
-      -- You can define custom key maps here. If present, the description will
-      -- be shown in the help menu.
-      -- To disable one of the defaults, set it to false.
+      -- 你可以在这里定义自定义按键映射。如果存在，
+      -- 其描述会显示在帮助菜单中。
+      -- 若要禁用某个默认按键，把它设为 false。
 
       ["<localleader>l"] = {
         function(plugin)
@@ -134,17 +133,17 @@ M.defaults = {
             cwd = plugin.dir,
           })
         end,
-        desc = "Open lazygit log",
+        desc = "打开 lazygit 日志",
       },
 
       ["<localleader>i"] = {
         function(plugin)
           Util.notify(vim.inspect(plugin), {
-            title = "Inspect " .. plugin.name,
+            title = "检查 " .. plugin.name,
             lang = "lua",
           })
         end,
-        desc = "Inspect Plugin",
+        desc = "检查插件",
       },
 
       ["<localleader>t"] = {
@@ -153,53 +152,53 @@ M.defaults = {
             cwd = plugin.dir,
           })
         end,
-        desc = "Open terminal in plugin dir",
+        desc = "在插件目录中打开终端",
       },
     },
   },
-  -- Output options for headless mode
+  -- headless（无界面）模式下的输出选项
   headless = {
-    -- show the output from process commands like git
+    -- 显示 git 等进程命令的输出
     process = true,
-    -- show log messages
+    -- 显示日志信息
     log = true,
-    -- show task start/end
+    -- 显示任务的开始/结束
     task = true,
-    -- use ansi colors
+    -- 使用 ansi 颜色
     colors = true,
   },
   diff = {
-    -- diff command <d> can be one of:
-    -- * browser: opens the github compare view. Note that this is always mapped to <K> as well,
-    --   so you can have a different command for diff <d>
-    -- * git: will run git diff and open a buffer with filetype git
-    -- * terminal_git: will open a pseudo terminal with git diff
-    -- * diffview.nvim: will open Diffview to show the diff
+    -- diff 命令 <d> 可以是以下之一：
+    -- * browser：打开 github 的比较视图。请注意它总是同时绑定到 <K>，
+    --   因此你可以为 diff <d> 设置不同的命令
+    -- * git：运行 git diff 并打开一个 filetype 为 git 的缓冲区
+    -- * terminal_git：打开一个运行 git diff 的伪终端
+    -- * diffview.nvim：打开 Diffview 来显示差异
     cmd = "git",
   },
   checker = {
-    -- automatically check for plugin updates
+    -- 自动检查插件更新
     enabled = false,
-    concurrency = nil, ---@type number? set to 1 to check for updates very slowly
-    notify = true, -- get a notification when new updates are found
-    frequency = 3600, -- check for updates every hour
-    check_pinned = false, -- check for pinned packages that can't be updated
+    concurrency = nil, ---@type number? 设为 1 可以非常缓慢地检查更新
+    notify = true, -- 发现新更新时给出通知
+    frequency = 3600, -- 每小时检查一次更新
+    check_pinned = false, -- 检查无法更新的已锁定（pinned）软件包
   },
   change_detection = {
-    -- automatically check for config file changes and reload the ui
+    -- 自动检查配置文件变更并重新加载界面
     enabled = true,
-    notify = true, -- get a notification when changes are found
+    notify = true, -- 发现变更时给出通知
   },
   performance = {
     cache = {
       enabled = true,
     },
-    reset_packpath = true, -- reset the package path to improve startup time
+    reset_packpath = true, -- 重置包路径以加快启动速度
     rtp = {
-      reset = true, -- reset the runtime path to $VIMRUNTIME and your config directory
+      reset = true, -- 将运行时路径重置为 $VIMRUNTIME 和你的配置目录
       ---@type string[]
-      paths = {}, -- add any custom paths here that you want to includes in the rtp
-      ---@type string[] list any plugins you want to disable here
+      paths = {}, -- 在这里添加任何你想包含进 rtp 的自定义路径
+      ---@type string[] 在这里列出任何你想禁用的插件
       disabled_plugins = {
         -- "gzip",
         -- "matchit",
@@ -212,24 +211,24 @@ M.defaults = {
       },
     },
   },
-  -- lazy can generate helptags from the headings in markdown readme files,
-  -- so :help works even for plugins that don't have vim docs.
-  -- when the readme opens with :help it will be correctly displayed as markdown
+  -- lazy 可以从 markdown readme 文件的标题生成 helptags，
+  -- 因此即使插件没有 vim 文档，:help 也能正常工作。
+  -- 用 :help 打开 readme 时，它会被正确地按 markdown 渲染
   readme = {
     enabled = true,
     root = vim.fn.stdpath("state") .. "/lazy/readme",
     files = { "README.md", "lua/**/README.md" },
-    -- only generate markdown helptags for plugins that don't have docs
+    -- 只为那些没有文档的插件生成 markdown helptags
     skip_if_doc_exists = true,
   },
-  state = vim.fn.stdpath("state") .. "/lazy/state.json", -- state info for checker and other things
-  -- Enable profiling of lazy.nvim. This will add some overhead,
-  -- so only enable this when you are debugging lazy.nvim
+  state = vim.fn.stdpath("state") .. "/lazy/state.json", -- checker 等功能使用的状态信息
+  -- 启用 lazy.nvim 的性能分析。这会带来一些额外开销，
+  -- 因此只在你调试 lazy.nvim 时才启用
   profiling = {
-    -- Enables extra stats on the debug tab related to the loader cache.
-    -- Additionally gathers stats about all package.loaders
+    -- 在 debug 标签页中启用与 loader 缓存相关的额外统计信息。
+    -- 同时还会收集所有 package.loaders 的统计数据
     loader = false,
-    -- Track each new require in the Lazy profiling tab
+    -- 在 Lazy 性能分析标签页中追踪每一次新的 require
     require = false,
   },
   debug = false,
@@ -282,7 +281,7 @@ function M.setup(opts)
   end
   table.insert(M.options.install.colorscheme, "habamax")
 
-  -- root
+  -- 根目录
   M.options.root = Util.norm(M.options.root)
   if type(M.options.dev.path) == "string" then
     M.options.dev.path = Util.norm(M.options.dev.path)
@@ -317,7 +316,7 @@ function M.setup(opts)
   end
   vim.opt.rtp:append(M.options.readme.root)
 
-  -- disable plugin loading since we do all of that ourselves
+  -- 禁用插件自动加载，因为我们自己完成了所有这些工作
   vim.go.loadplugins = false
   M.mapleader = vim.g.mapleader
   M.maplocalleader = vim.g.maplocalleader
@@ -346,7 +345,7 @@ function M.setup(opts)
           end, 10)
         end
 
-        -- useful for plugin developers when making changes to a packspec file
+        -- 当插件开发者修改 packspec 文件时很有用
         vim.api.nvim_create_autocmd("BufWritePost", {
           pattern = { "lazy.lua", "pkg.json", "*.rockspec" },
           callback = function()

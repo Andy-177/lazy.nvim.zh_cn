@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Ask a question
+  - name: 提问
     url: https://github.com/folke/lazy.nvim/discussions
-    about: Use Github discussions instead
+    about: 请改用 Github 讨论区

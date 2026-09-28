@@ -6,15 +6,15 @@ local M = {}
 ---@alias CacheEntry {hash:CacheHash, chunk:string}
 
 ---@class ModuleFindOpts
----@field all? boolean Search for all matches (defaults to `false`)
----@field rtp? boolean Search for modname in the runtime path (defaults to `true`)
----@field patterns? string[] Patterns to use (defaults to `{"/init.lua", ".lua"}`)
----@field paths? string[] Extra paths to search for modname
+---@field all? boolean 搜索所有匹配项（默认为 `false`）
+---@field rtp? boolean 在运行时路径中搜索 modname（默认为 `true`）
+---@field patterns? string[] 要使用的模式（默认为 `{"/init.lua", ".lua"}`）
+---@field paths? string[] 用于搜索 modname 的额外路径
 
 ---@class ModuleInfo
----@field modpath string Path of the module
----@field modname string Name of the module
----@field stat? uv_fs_t File stat of the module path
+---@field modpath string 模块的路径
+---@field modname string 模块的名称
+---@field stat? uv_fs_t 模块路径的文件状态
 
 ---@alias LoaderStats table<string, {total:number, time:number, [string]:number?}?>
 
@@ -38,7 +38,7 @@ local Loader = {
   },
 }
 
---- Tracks the time spent in a function
+--- 跟踪在函数中花费的时间
 ---@private
 function Loader.track(stat, start)
   Loader._stats[stat] = Loader._stats[stat] or { total = 0, time = 0 }
@@ -46,8 +46,8 @@ function Loader.track(stat, start)
   Loader._stats[stat].time = Loader._stats[stat].time + uv.hrtime() - start
 end
 
---- slightly faster/different version than vim.fs.normalize
---- we also need to have it here, since the loader will load vim.fs
+--- 比 vim.fs.normalize 稍快/略有不同的版本
+--- 我们也必须在这里实现它，因为 loader 会加载 vim.fs
 ---@private
 function Loader.normalize(path)
   if path:sub(1, 1) == "~" then
@@ -61,10 +61,10 @@ function Loader.normalize(path)
   return path:sub(-1) == "/" and path:sub(1, -2) or path
 end
 
---- Gets the rtp excluding after directories.
---- The result is cached, and will be updated if the runtime path changes.
---- When called from a fast event, the cached value will be returned.
---- @return string[] rtp, boolean updated
+--- 获取不包含 after 目录的 rtp。
+--- 结果会被缓存，并在运行时路径变化时更新。
+--- 当从快速事件中调用时，将返回缓存的值。
+--- @return string[] rtp, boolean 是否已更新
 ---@private
 function Loader.get_rtp()
   local start = uv.hrtime()
@@ -78,7 +78,7 @@ function Loader.get_rtp()
     Loader._rtp = {}
     for _, path in ipairs(vim.api.nvim_get_runtime_file("", true)) do
       path = Loader.normalize(path)
-      -- skip after directories
+      -- 跳过 after 目录
       if path:sub(-6, -1) ~= "/after" and not (Loader._indexed[path] and vim.tbl_isempty(Loader._indexed[path])) then
         Loader._rtp[#Loader._rtp + 1] = path
       end
@@ -90,8 +90,8 @@ function Loader.get_rtp()
   return Loader._rtp, updated
 end
 
---- Returns the cache file name
----@param name string can be a module name, or a file name
+--- 返回缓存文件名
+---@param name string 可以是模块名，也可以是文件名
 ---@return string file_name
 ---@private
 function Loader.cache_file(name)
@@ -99,8 +99,8 @@ function Loader.cache_file(name)
   return ret:sub(-4) == ".lua" and (ret .. "c") or (ret .. ".luac")
 end
 
---- Saves the cache entry for a given module or file
----@param name string module name or filename
+--- 保存某个模块或文件的缓存条目
+---@param name string 模块名或文件名
 ---@param entry CacheEntry
 ---@private
 function Loader.write(name, entry)
@@ -117,8 +117,8 @@ function Loader.write(name, entry)
   uv.fs_close(f)
 end
 
---- Loads the cache entry for a given module or file
----@param name string module name or filename
+--- 加载某个模块或文件的缓存条目
+---@param name string 模块名或文件名
 ---@return CacheEntry?
 ---@private
 function Loader.read(name)
@@ -149,8 +149,8 @@ function Loader.read(name)
   Loader.track("read", start)
 end
 
---- The `package.loaders` loader for lua files using the cache.
----@param modname string module name
+--- 使用缓存的 lua 文件 `package.loaders` 加载器
+---@param modname string 模块名
 ---@return string|function
 ---@private
 function Loader.loader(modname)
@@ -165,8 +165,8 @@ function Loader.loader(modname)
   return "\ncache_loader: module " .. modname .. " not found"
 end
 
---- The `package.loaders` loader for libs
----@param modname string module name
+--- 库的 `package.loaders` 加载器
+---@param modname string 模块名
 ---@return string|function
 ---@private
 function Loader.loader_lib(modname)
@@ -176,11 +176,11 @@ function Loader.loader_lib(modname)
   local ret = M.find(modname, { patterns = is_win and { ".dll" } or { ".so" } })[1]
   ---@type function?, string?
   if ret then
-    -- Making function name in Lua 5.1 (see src/loadlib.c:mkfuncname) is
-    -- a) strip prefix up to and including the first dash, if any
-    -- b) replace all dots by underscores
-    -- c) prepend "luaopen_"
-    -- So "foo-bar.baz" should result in "luaopen_bar_baz"
+    -- 在 Lua 5.1 中生成函数名（参见 src/loadlib.c:mkfuncname）的方式是
+    -- a) 去掉前缀直到第一个短横线（如果有）为止
+    -- b) 把所有点替换为下划线
+    -- c) 在前面加上 "luaopen_"
+    -- 所以 "foo-bar.baz" 应该得到 "luaopen_bar_baz"
     local dash = modname:find("-", 1, true)
     local funcname = dash and modname:sub(dash + 1) or modname
     local chunk, err = package.loadlib(ret.modpath, "luaopen_" .. funcname:gsub("%.", "_"))
@@ -191,7 +191,7 @@ function Loader.loader_lib(modname)
   return "\ncache_loader_lib: module " .. modname .. " not found"
 end
 
---- `loadfile` using the cache
+--- 使用缓存的 `loadfile`
 ---@param filename? string
 ---@param mode? "b"|"t"|"bt"
 ---@param env? table
@@ -202,16 +202,16 @@ end
 function Loader.loadfile(filename, mode, env, hash)
   local start = uv.hrtime()
   filename = Loader.normalize(filename)
-  mode = nil -- ignore mode, since we byte-compile the lua source files
+  mode = nil -- 忽略 mode，因为我们会对 lua 源文件做字节码编译
   local chunk, err = Loader.load(filename, { mode = mode, env = env, hash = hash })
   Loader.track("loadfile", start)
   return chunk, err
 end
 
---- Checks whether two cache hashes are the same based on:
---- * file size
---- * mtime in seconds
---- * mtime in nanoseconds
+--- 根据以下内容检查两个缓存哈希是否相同：
+--- * 文件大小
+--- * 以秒为单位的 mtime
+--- * 以纳秒为单位的 mtime
 ---@param h1 CacheHash
 ---@param h2 CacheHash
 ---@private
@@ -219,12 +219,12 @@ function Loader.eq(h1, h2)
   return h1 and h2 and h1.size == h2.size and h1.mtime.sec == h2.mtime.sec and h1.mtime.nsec == h2.mtime.nsec
 end
 
---- Loads the given module path using the cache
+--- 使用缓存加载给定的模块路径
 ---@param modpath string
----@param opts? {hash?: CacheHash, mode?: "b"|"t"|"bt", env?:table} (table|nil) Options for loading the module:
----    - hash: (table) the hash of the file to load if it is already known. (defaults to `vim.uv.fs_stat({modpath})`)
----    - mode: (string) the mode to load the module with. "b"|"t"|"bt" (defaults to `nil`)
----    - env: (table) the environment to load the module in. (defaults to `nil`)
+---@param opts? {hash?: CacheHash, mode?: "b"|"t"|"bt", env?:table} (table|nil) 加载模块的选项：
+---    - hash: (table) 若已知，则为要加载文件的哈希值。（默认为 `vim.uv.fs_stat({modpath})`）
+---    - mode: (string) 加载模块所用的模式。"b"|"t"|"bt"（默认为 `nil`）
+---    - env: (table) 加载模块所处的环境。（默认为 `nil`）
 ---@see |luaL_loadfile()|
 ---@return function?, string? error_message
 ---@private
@@ -237,7 +237,7 @@ function Loader.load(modpath, opts)
   local chunk, err
 
   if not hash then
-    -- trigger correct error
+    -- 触发正确的错误
     chunk, err = Loader._loadfile(modpath, opts.mode, opts.env)
     Loader.track("load", start)
     return chunk, err
@@ -245,7 +245,7 @@ function Loader.load(modpath, opts)
 
   local entry = Loader.read(modpath)
   if entry and Loader.eq(entry.hash, hash) then
-    -- found in cache and up to date
+    -- 在缓存中找到且是最新的
     -- selene: allow(incorrect_standard_library_use)
     chunk, err = load(entry.chunk --[[@as string]], "@" .. modpath, opts.mode, opts.env)
     if not (err and err:find("cannot load incompatible bytecode", 1, true)) then
@@ -264,19 +264,19 @@ function Loader.load(modpath, opts)
   return chunk, err
 end
 
---- Finds lua modules for the given module name.
----@param modname string Module name, or `"*"` to find the top-level modules instead
----@param opts? ModuleFindOpts (table|nil) Options for finding a module:
----    - rtp: (boolean) Search for modname in the runtime path (defaults to `true`)
----    - paths: (string[]) Extra paths to search for modname (defaults to `{}`)
----    - patterns: (string[]) List of patterns to use when searching for modules.
----                A pattern is a string added to the basename of the Lua module being searched.
----                (defaults to `{"/init.lua", ".lua"}`)
----    - all: (boolean) Return all matches instead of just the first one (defaults to `false`)
----@return ModuleInfo[] (list) A list of results with the following properties:
----    - modpath: (string) the path to the module
----    - modname: (string) the name of the module
----    - stat: (table|nil) the fs_stat of the module path. Won't be returned for `modname="*"`
+--- 查找与给定模块名对应的 lua 模块。
+---@param modname string 模块名，或 `"*"` 表示改为查找顶层模块
+---@param opts? ModuleFindOpts (table|nil) 查找模块的选项：
+---    - rtp: (boolean) 在运行时路径中查找 modname（默认为 `true`）
+---    - paths: (string[]) 用于查找 modname 的额外路径（默认为 `{}`）
+---    - patterns: (string[]) 查找模块时使用的模式列表。
+---                模式是一个字符串，会追加到正在查找的 lua 模块的基本名之后。
+---                （默认为 `{"/init.lua", ".lua"}`）
+---    - all: (boolean) 返回所有匹配项，而不只是第一个（默认为 `false`）
+---@return ModuleInfo[] (list) 具有以下属性的结果列表：
+---    - modpath: (string) 模块的路径
+---    - modname: (string) 模块的名称
+---    - stat: (table|nil) 模块路径的 fs_stat。当 `modname="*"` 时不会返回
 function M.find(modname, opts)
   local start = uv.hrtime()
   opts = opts or {}
@@ -285,18 +285,18 @@ function M.find(modname, opts)
   local basename = modname:gsub("%.", "/")
   local idx = modname:find(".", 1, true)
 
-  -- HACK: fix incorrect require statements. Really not a fan of keeping this,
-  -- but apparently the regular lua loader also allows this
+  -- 变通做法：修正错误的 require 语句。我真的不太喜欢保留这个处理，
+  -- 但显然常规的 lua 加载器也允许这样做
   if idx == 1 then
     modname = modname:gsub("^%.+", "")
     basename = modname:gsub("%.", "/")
     idx = modname:find(".", 1, true)
   end
 
-  -- get the top-level module name
+  -- 得到顶层模块名
   local topmod = idx and modname:sub(1, idx - 1) or modname
 
-  -- OPTIM: search for a directory first when topmod == modname
+  -- 优化：当 topmod == modname 时优先搜索目录
   local patterns = opts.patterns or (topmod == modname and { "/init.lua", ".lua" } or { ".lua", "/init.lua" })
   for p, pattern in ipairs(patterns) do
     patterns[p] = "/lua/" .. basename .. pattern
@@ -305,14 +305,14 @@ function M.find(modname, opts)
   ---@type ModuleInfo[]
   local results = {}
 
-  -- Only continue if we haven't found anything yet or we want to find all
+  -- 只有在还没找到任何内容、或者我们想要找到全部时才继续
   ---@private
   local function continue()
     return #results == 0 or opts.all
   end
 
-  -- Checks if the given paths contain the top-level module.
-  -- If so, it tries to find the module path for the given module name.
+  -- 检查给定的路径是否包含顶层模块。
+  -- 如果是，则尝试为给定的模块名查找模块路径。
   ---@param paths string[]
   ---@private
   local function _find(paths)
@@ -340,7 +340,7 @@ function M.find(modname, opts)
     end
   end
 
-  -- always check the rtp first
+  -- 总是先检查 rtp
   if opts.rtp ~= false then
     _find(Loader._rtp or {})
     if continue() then
@@ -351,23 +351,23 @@ function M.find(modname, opts)
     end
   end
 
-  -- check any additional paths
+  -- 检查任何额外的路径
   if continue() and opts.paths then
     _find(opts.paths)
   end
 
   Loader.track("find", start)
   if #results == 0 then
-    -- module not found
+    -- 未找到模块
     Loader._stats.find.not_found = Loader._stats.find.not_found + 1
   end
 
   return results
 end
 
---- Resets the topmods cache for the path, or all the paths
---- if path is nil.
----@param path string? path to reset
+--- 重置该路径（或所有路径）的 topmods 缓存
+--- 当 path 为 nil 时。
+---@param path string? 要重置的路径
 function M.reset(path)
   if path then
     Loader._indexed[Loader.normalize(path)] = nil
@@ -376,11 +376,11 @@ function M.reset(path)
   end
 end
 
---- Enables the experimental Lua module loader:
---- * overrides loadfile
---- * adds the lua loader using the byte-compilation cache
---- * adds the libs loader
---- * removes the default Neovim loader
+--- 启用实验性的 Lua 模块加载器：
+--- * 覆盖 loadfile
+--- * 添加使用字节码编译缓存的 lua 加载器
+--- * 添加库的加载器
+--- * 移除 Neovim 默认的加载器
 function M.enable()
   if M.enabled then
     return
@@ -389,11 +389,11 @@ function M.enable()
   vim.fn.mkdir(vim.fn.fnamemodify(M.path, ":p"), "p")
   -- selene: allow(global_usage)
   _G.loadfile = Loader.loadfile
-  -- add lua loader
+  -- 添加 lua 加载器
   table.insert(package.loaders, 2, Loader.loader)
-  -- add libs loader
+  -- 添加库加载器
   table.insert(package.loaders, 3, Loader.loader_lib)
-  -- remove Neovim loader
+  -- 移除 Neovim 加载器
   for l, loader in ipairs(package.loaders) do
     if loader == vim._load_package then
       table.remove(package.loaders, l)
@@ -401,8 +401,8 @@ function M.enable()
     end
   end
 
-  -- this will reset the top-mods in case someone adds a new
-  -- top-level lua module to a path already on the rtp
+  -- 这会重置 top-mods，以防有人向已在 rtp 中的路径
+  -- 添加了新的顶层 lua 模块
   vim.api.nvim_create_autocmd("BufWritePost", {
     group = vim.api.nvim_create_augroup("cache_topmods_reset", { clear = true }),
     callback = function(event)
@@ -415,9 +415,9 @@ function M.enable()
   })
 end
 
---- Disables the experimental Lua module loader:
---- * removes the loaders
---- * adds the default Neovim loader
+--- 禁用实验性的 Lua 模块加载器：
+--- * 移除这些加载器
+--- * 添加回 Neovim 默认的加载器
 function M.disable()
   if not M.enabled then
     return
@@ -435,8 +435,8 @@ function M.disable()
   vim.api.nvim_del_augroup_by_name("cache_topmods_reset")
 end
 
---- Return the top-level `/lua/*` modules for this path
----@param path string path to check for top-level lua modules
+--- 返回该路径顶层的 `/lua/*` 模块
+---@param path string 用于检查顶层 lua 模块的路径
 ---@private
 function Loader.lsmod(path)
   if not Loader._indexed[path] then
@@ -449,7 +449,7 @@ function Loader.lsmod(path)
         break
       end
       local modpath = path .. "/lua/" .. name
-      -- HACK: type is not always returned due to a bug in luv
+      -- 变通做法：由于 luv 的 bug，type 有时不会被返回
       t = t or uv.fs_stat(modpath).type
       ---@type string
       local topname
@@ -474,7 +474,7 @@ function Loader.lsmod(path)
   return Loader._indexed[path]
 end
 
---- Debug function that wraps all loaders and tracks stats
+--- 调试用函数，包装所有加载器并跟踪统计数据
 ---@private
 function M._profile_loaders()
   for l, loader in pairs(package.loaders) do
@@ -489,7 +489,7 @@ function M._profile_loaders()
   end
 end
 
---- Prints all cache stats
+--- 打印所有缓存统计信息
 ---@param opts? {print?:boolean}
 ---@return LoaderStats
 ---@private
@@ -506,11 +506,11 @@ function M._inspect(opts)
     for _, stat in ipairs(stats) do
       vim.list_extend(chunks, {
         { "\n" .. stat .. "\n", "Title" },
-        { "* total:    " },
+        { "* 总数:    " },
         { tostring(Loader._stats[stat].total) .. "\n", "Number" },
-        { "* time:     " },
+        { "* 耗时:     " },
         { ms(Loader._stats[stat].time) .. "\n", "Bold" },
-        { "* avg time: " },
+        { "* 平均耗时: " },
         { ms(Loader._stats[stat].time / Loader._stats[stat].total) .. "\n", "Bold" },
       })
       for k, v in pairs(Loader._stats[stat]) do

@@ -5,7 +5,7 @@ local Util = require("lazy.core.util")
 ---@field type LazyHandlerTypes
 ---@field extends? LazyHandler
 ---@field active table<string,table<string,string>>
----@field managed table<string,string> mapping handler keys to plugin names
+---@field managed table<string,string> 将 handler 键映射到插件名称
 ---@field super LazyHandler
 local M = {}
 
@@ -33,7 +33,7 @@ function M.setup()
   for _, plugin in pairs(Config.plugins) do
     Util.try(function()
       M.enable(plugin)
-    end, "Failed to setup handlers for " .. plugin.name)
+    end, "为 " .. plugin.name .. " 设置处理器失败")
   end
 end
 
@@ -81,7 +81,7 @@ function M:_del(_value) end
 ---@param _plugin LazyPlugin
 ---@return string|{id:string}
 function M:_parse(value, _plugin)
-  assert(type(value) == "string", "Expected string, got " .. vim.inspect(value))
+  assert(type(value) == "string", "期望一个字符串，实际得到 " .. vim.inspect(value))
   return value
 end
 

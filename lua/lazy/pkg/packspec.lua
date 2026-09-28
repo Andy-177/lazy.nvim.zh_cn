@@ -28,7 +28,7 @@ function M.get(plugin)
   local ret = {}
   if pkg.dependencies then
     for url, version in pairs(pkg.dependencies) do
-      -- HACK: Add `.git` to github urls
+      -- 变通做法：给 github 网址加上 `.git`
       if url:find("github") and not url:match("%.git$") then
         url = url .. ".git"
       end

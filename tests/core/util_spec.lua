@@ -51,7 +51,7 @@ describe("util", function()
       Helpers.fs_rm("")
       local files = Helpers.fs_create(test.files)
 
-      -- test with empty cache
+      -- 在缓存为空的情况下测试
       Cache.reset()
       local root = Util.find_root(test.mod)
       assert(root, "no root found for " .. test.mod .. " (test " .. t .. ")")
@@ -63,7 +63,7 @@ describe("util", function()
       table.sort(mods)
       assert.same(expected, mods)
 
-      -- fill the cache
+      -- 填充缓存
       Cache.reset()
       root = Util.find_root(test.mod)
       assert(root, "no root found for " .. test.mod .. " (test " .. t .. ")")

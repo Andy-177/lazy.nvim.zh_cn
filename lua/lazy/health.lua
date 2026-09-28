@@ -4,7 +4,7 @@ local uv = vim.uv or vim.loop
 
 local M = {}
 
--- "report_" prefix has been deprecated, use the recommended replacements if they exist.
+-- `report_` 前缀已废弃；如果存在推荐的替代函数，请改用它们。
 local start = vim.health.start or vim.health.report_start
 local ok = vim.health.ok or vim.health.report_ok
 local warn = vim.health.warn or vim.health.report_warn
@@ -39,12 +39,12 @@ function M.have(cmd, opts)
     if vim.fn.executable(c) == 1 then
       local out, exit_code = Process.exec({ c, opts.version })
       if exit_code ~= 0 then
-        opts.error(("failed to get version of {%s}\n%s"):format(c, table.concat(out, "\n")))
+        opts.error(("获取 {%s} 的版本失败\n%s"):format(c, table.concat(out, "\n")))
       else
         local version = vim.trim(out[1] or "")
         version = version:gsub("^%s*" .. vim.pesc(c) .. "%s*", "")
         if opts.version_pattern and not version:find(opts.version_pattern, 1, true) then
-          opts.warn(("`%s` version `%s` needed, but found `%s`"):format(c, opts.version_pattern, version))
+          opts.warn(("`%s` 需要版本 `%s`，但找到的是 `%s`"):format(c, opts.version_pattern, version))
         else
           found = ("{%s} `%s`"):format(c, version)
           break
@@ -57,9 +57,9 @@ function M.have(cmd, opts)
     return true
   else
     (opts.optional and opts.warn or opts.error)(
-      ("{%s} %snot installed"):format(
-        table.concat(cmd, "} or {"),
-        opts.version_pattern and "version `" .. opts.version_pattern .. "` " or ""
+      ("{%s} %s未安装"):format(
+        table.concat(cmd, "} 或 {"),
+        opts.version_pattern and "版本 `" .. opts.version_pattern .. "` " or ""
       )
     )
   end
@@ -82,18 +82,18 @@ function M.check()
     for _, packs in ipairs(vim.fn.expand(site .. "/pack/*", false, true)) do
       if not packs:find("[/\\]dist$") and uv.fs_stat(packs) then
         existing = true
-        warn("found existing packages at `" .. packs .. "`")
+        warn("在 `" .. packs .. "` 处发现了已存在的软件包")
       end
     end
   end
   if not existing then
-    ok("no existing packages found by other package managers")
+    ok("没有发现其他包管理器留下的软件包")
   end
 
   for _, name in ipairs({ "packer", "plugged", "paq", "pckr", "mini.deps" }) do
     for _, path in ipairs(vim.opt.rtp:get()) do
       if path:find(name, 1, true) then
-        error("Found paths on the rtp from another plugin manager `" .. name .. "`")
+        error("在 rtp 上发现了来自另一个插件管理器 `" .. name .. "` 的路径")
         break
       end
     end
@@ -101,20 +101,20 @@ function M.check()
 
   local packer_compiled = vim.fn.stdpath("config") .. "/plugin/packer_compiled.lua"
   if uv.fs_stat(packer_compiled) then
-    error("please remove the file `" .. packer_compiled .. "`")
+    error("请删除文件 `" .. packer_compiled .. "`")
   else
-    ok("packer_compiled.lua not found")
+    ok("未找到 packer_compiled.lua")
   end
 
   local spec = Config.spec
   if spec == nil then
-    error('No plugins loaded. Did you forget to run `require("lazy").setup()`?')
+    error('没有加载任何插件。你是不是忘了运行 `require("lazy").setup()`？')
   else
     for _, plugin in pairs(spec.plugins) do
       M.check_valid(plugin)
     end
     if #spec.notifs > 0 then
-      error("Issues were reported when loading your specs:")
+      error("加载你的 spec 时报告了以下问题：")
       for _, notif in ipairs(spec.notifs) do
         local lines = vim.split(notif.msg, "\n")
         for _, line in ipairs(lines) do
@@ -131,9 +131,9 @@ function M.check()
   start("luarocks")
   if Config.options.rocks.enabled then
     if Config.hererocks() then
-      info("checking `hererocks` installation")
+      info("正在检查 `hererocks` 安装")
     else
-      info("checking `luarocks` installation")
+      info("正在检查 `luarocks` 安装")
     end
     local need_luarocks = {}
     for _, plugin in pairs(spec.plugins) do
@@ -142,13 +142,13 @@ function M.check()
       end
     end
     if #need_luarocks == 0 then
-      ok("no plugins require `luarocks`, so you can ignore any warnings below")
+      ok("没有插件需要 `luarocks`，所以你可以忽略下面的任何警告")
     else
       local lines = vim.tbl_map(function(name)
         return "  * `" .. name .. "`"
       end, need_luarocks)
 
-      info("you have some plugins that require `luarocks`:\n" .. table.concat(lines, "\n"))
+      info("你有以下插件需要 `luarocks`：\n" .. table.concat(lines, "\n"))
     end
     local ok = require("lazy.pkg.rockspec").check({
       error = #need_luarocks > 0 and error or warn,
@@ -157,16 +157,16 @@ function M.check()
     })
     if not ok then
       warn(table.concat({
-        "Lazy won't be able to install plugins that require `luarocks`.",
-        "Here's what you can do:",
-        " - fix your `luarocks` installation",
-        Config.hererocks() and " - disable *hererocks* with `opts.rocks.hererocks = false`"
-          or " - enable `hererocks` with `opts.rocks.hererocks = true`",
-        " - disable `luarocks` support completely with `opts.rocks.enabled = false`",
+        "Lazy 将无法安装那些需要 `luarocks` 的插件。",
+        "你可以采取以下措施：",
+        " - 修复你的 `luarocks` 安装",
+        Config.hererocks() and " - 用 `opts.rocks.hererocks = false` 禁用 *hererocks*"
+          or " - 用 `opts.rocks.hererocks = true` 启用 `hererocks`",
+        " - 用 `opts.rocks.enabled = false` 完全禁用 `luarocks` 支持",
       }, "\n"))
     end
   else
-    ok("luarocks disabled")
+    ok("luarocks 已禁用")
   end
 end
 
@@ -175,7 +175,7 @@ function M.check_valid(plugin)
   for key in pairs(plugin) do
     if not vim.tbl_contains(M.valid, key) then
       if key ~= "module" or type(plugin.module) ~= "boolean" then
-        warn("{" .. plugin.name .. "}: unknown key <" .. key .. ">")
+        warn("{" .. plugin.name .. "}：未知字段 <" .. key .. ">")
       end
     end
   end

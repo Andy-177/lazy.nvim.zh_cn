@@ -5,8 +5,8 @@
 ---@field cache? table<string,any>
 ---@field cloned? boolean
 ---@field cond? boolean
----@field dep? boolean True if this plugin is only in the spec as a dependency
----@field dir? string Explicit dir or dev set for this plugin
+---@field dep? boolean 如果该插件仅作为依赖出现在 spec 中则为 true
+---@field dir? string 为该插件显式设置的 dir 或 dev
 ---@field dirty? boolean
 ---@field build? boolean
 ---@field frags? number[]
@@ -28,9 +28,9 @@
 ---@alias PluginOpts table|fun(self:LazyPlugin, opts:table):table?
 
 ---@class LazyPluginHooks
----@field init? fun(self:LazyPlugin) Will always be run
----@field deactivate? fun(self:LazyPlugin) Unload/Stop a plugin
----@field config? fun(self:LazyPlugin, opts:table)|true Will be executed when loading the plugin
+---@field init? fun(self:LazyPlugin) 始终会运行
+---@field deactivate? fun(self:LazyPlugin) 卸载/停止插件
+---@field config? fun(self:LazyPlugin, opts:table)|true 加载插件时执行
 ---@field build? false|string|async fun(self:LazyPlugin)|(string|async fun(self:LazyPlugin))[]
 ---@field opts? PluginOpts
 
@@ -46,22 +46,22 @@
 ---@field commit? string
 ---@field version? string|boolean
 ---@field pin? boolean
----@field submodules? boolean Defaults to true
+---@field submodules? boolean 默认为 true
 
 ---@class LazyPluginBase
 ---@field [1] string?
----@field name string display name and name used for plugin config files
----@field main? string Entry module that has setup & deactivate
+---@field name string 显示名称，同时用作插件配置文件名
+---@field main? string 包含 setup 和 deactivate 的入口模块
 ---@field url string?
 ---@field dir string
 ---@field enabled? boolean|(fun():boolean)
 ---@field cond? boolean|(fun():boolean)
----@field optional? boolean If set, then this plugin will not be added unless it is added somewhere else
+---@field optional? boolean 若设置，则除非在其他地方被添加，否则不会添加该插件
 ---@field lazy? boolean
----@field priority? number Only useful for lazy=false plugins to force loading certain plugins first. Default priority is 50
----@field dev? boolean If set, then link to the respective folder under your ~/projects
+---@field priority? number 仅对 lazy=false 的插件有用，用于强制优先加载某些插件。默认优先级为 50
+---@field dev? boolean 若设置，则链接到 ~/projects 下的对应目录
 ---@field rocks? string[]
----@field virtual? boolean virtual plugins won't be installed or added to the rtp.
+---@field virtual? boolean 虚拟插件不会被安装，也不会加入 rtp
 
 ---@class LazyPlugin: LazyPluginBase,LazyPluginHandlers,LazyPluginHooks,LazyPluginRef
 ---@field dependencies? string[]
@@ -76,7 +76,7 @@
 ---@field module? false
 
 ---@class LazyPluginSpec: LazyPluginBase,LazyPluginSpecHandlers,LazyPluginHooks,LazyPluginRef
----@field name? string display name and name used for plugin config files
+---@field name? string 显示名称，同时用作插件配置文件名
 ---@field dir? string
 ---@field dependencies? string|string[]|LazyPluginSpec[]
 ---@field specs? string|string[]|LazyPluginSpec[]
@@ -84,7 +84,7 @@
 ---@alias LazySpec string|LazyPluginSpec|LazySpecImport|LazySpec[]
 
 ---@class LazySpecImport
----@field import string|(fun():LazyPluginSpec) spec module to import
+---@field import string|(fun():LazyPluginSpec) 要导入的 spec 模块
 ---@field name? string
 ---@field enabled? boolean|(fun():boolean)
 ---@field cond? boolean|(fun():boolean)

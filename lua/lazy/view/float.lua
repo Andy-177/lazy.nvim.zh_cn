@@ -117,7 +117,7 @@ end
 
 function M:mount()
   if self:buf_valid() then
-    -- keep existing buffer
+    -- 保留已有的缓冲区
     self.buf = self.buf
   elseif self.opts.file then
     self.buf = vim.fn.bufadd(self.opts.file)
@@ -166,7 +166,7 @@ function M:mount()
     self:augroup(true)
   end, { win = true })
   self:focus()
-  self:on_key(ViewConfig.keys.close, self.close, "Close")
+  self:on_key(ViewConfig.keys.close, self.close, "关闭")
   self:on({ "BufDelete", "BufHidden" }, self.close)
 
   if vim.bo[self.buf].buftype == "" then
@@ -239,7 +239,7 @@ function M:on(events, fn, opts)
   opts.callback = function(e)
     local this = _self()
     if not this then
-      -- delete the autocmd
+      -- 删除该 autocmd
       return true
     end
     return fn(this, e)
@@ -329,15 +329,15 @@ function M:show()
   elseif self:buf_valid() then
     self:mount()
   else
-    error("LazyFloat: buffer closed")
+    error("LazyFloat: 缓冲区已关闭")
   end
 end
 
 function M:focus()
   vim.api.nvim_set_current_win(self.win)
 
-  -- it seems that setting the current win doesn't work before VimEnter,
-  -- so do that then
+  -- 似乎在 VimEnter 之前设置当前窗口不会生效，
+  -- 所以那时再这么做
   if vim.v.vim_did_enter ~= 1 then
     vim.api.nvim_create_autocmd("VimEnter", {
       once = true,

@@ -172,45 +172,45 @@ function M:title()
 
   if self.view.state.mode ~= "help" and self.view.state.mode ~= "profile" and self.view.state.mode ~= "debug" then
     if self.progress.done < self.progress.total then
-      self:append("Tasks: ", "LazyH2")
+      self:append("任务：", "LazyH2")
       self:append(self.progress.done .. "/" .. self.progress.total, "LazyComment")
     else
-      self:append("Total: ", "LazyH2")
-      self:append(#self.plugins .. " plugins", "LazyComment")
+      self:append("总计：", "LazyH2")
+      self:append(#self.plugins .. " 个插件", "LazyComment")
     end
     self:nl():nl()
   end
 end
 
 function M:help()
-  self:append("Help", "LazyH2"):nl():nl()
+  self:append("帮助", "LazyH2"):nl():nl()
 
-  self:append("Use "):append(ViewConfig.keys.abort, "LazySpecial"):append(" to abort all running tasks."):nl():nl()
+  self:append("使用 "):append(ViewConfig.keys.abort, "LazySpecial"):append(" 可以中止所有正在运行的任务。"):nl():nl()
 
-  self:append("You can press "):append("<CR>", "LazySpecial"):append(" on a plugin to show its details."):nl():nl()
+  self:append("你可以在插件上按 "):append("<CR>", "LazySpecial"):append(" 来查看它的详细信息。"):nl():nl()
 
-  self:append("Most properties can be hovered with ")
+  self:append("大多数属性都可以用 ")
   self:append("<K>", "LazySpecial")
-  self:append(" to open links, help files, readmes and git commits."):nl()
+  self:append(" 悬停，以打开链接、帮助文件、readme 和 git 提交。"):nl()
   self
-    :append("When hovering with ")
+    :append("在其他位置用 ")
     :append("<K>", "LazySpecial")
-    :append(" on a plugin anywhere else, a diff will be opened if there are updates")
+    :append(" 悬停某个插件时，如果有更新")
     :nl()
-  self:append("or the plugin was just updated. Otherwise the plugin webpage will open."):nl():nl()
+  self:append("或者该插件刚刚更新过，则会打开差异对比；否则会打开该插件的网页。"):nl():nl()
 
-  self:append("Use "):append("<d>", "LazySpecial"):append(" on a commit or plugin to open the diff view"):nl():nl()
+  self:append("在提交或插件上使用 "):append("<d>", "LazySpecial"):append(" 可以打开差异视图"):nl():nl()
   self
-    :append("Use ")
+    :append("使用 ")
     :append("<]]>", "LazySpecial")
-    :append(" and ")
+    :append(" 和 ")
     :append("<[[>", "LazySpecial")
-    :append(" to navigate between plugins")
+    :append(" 可在插件之间移动")
     :nl()
     :nl()
   self:nl()
 
-  self:append("Keyboard Shortcuts", "LazyH2"):nl()
+  self:append("快捷键", "LazyH2"):nl()
   for _, mode in ipairs(ViewConfig.get_commands()) do
     if mode.key then
       local title = mode.name:sub(1, 1):upper() .. mode.name:sub(2)
@@ -223,7 +223,7 @@ function M:help()
     end
   end
 
-  self:nl():append("Keyboard Shortcuts for Plugins", "LazyH2"):nl()
+  self:nl():append("插件的快捷键", "LazyH2"):nl()
   for _, mode in ipairs(ViewConfig.get_commands()) do
     if mode.key_plugin then
       local title = mode.name:sub(1, 1):upper() .. mode.name:sub(2)
@@ -238,7 +238,7 @@ function M:help()
   for lhs, rhs in pairs(Config.options.ui.custom_keys) do
     if type(rhs) == "table" and rhs.desc then
       self:append("- ", "LazySpecial", { indent = 2 })
-      self:append("Custom key ", "Title")
+      self:append("自定义按键 ", "Title")
       self:append(lhs, "LazyProp")
       self:append(" " .. rhs.desc):nl()
     end
@@ -389,13 +389,13 @@ function M:diagnostics(plugin)
       skip = true
     elseif task:has_errors() then
       self:diagnostic({
-        message = task.name .. " failed",
+        message = task.name .. " 失败",
         severity = vim.diagnostic.severity.ERROR,
       })
       skip = true
     elseif task:has_warnings() then
       self:diagnostic({
-        message = task.name .. " warning",
+        message = task.name .. " 警告",
         severity = vim.diagnostic.severity.WARN,
       })
       skip = true
@@ -406,23 +406,23 @@ function M:diagnostics(plugin)
   end
   if plugin._.build then
     self:diagnostic({
-      message = "needs build",
+      message = "需要构建",
       severity = vim.diagnostic.severity.WARN,
     })
   elseif plugin._.updated then
     if plugin._.updated.from == plugin._.updated.to then
       self:diagnostic({
-        message = "already up to date",
+        message = "已是最新",
       })
     else
       local version = Git.info(plugin.dir, true).version
       if version then
         self:diagnostic({
-          message = "updated to " .. tostring(version),
+          message = "已更新到 " .. tostring(version),
         })
       else
         self:diagnostic({
-          message = "updated from " .. plugin._.updated.from:sub(1, 7) .. " to " .. plugin._.updated.to:sub(1, 7),
+          message = "已从 " .. plugin._.updated.from:sub(1, 7) .. " 更新到 " .. plugin._.updated.to:sub(1, 7),
         })
       end
     end
@@ -430,11 +430,11 @@ function M:diagnostics(plugin)
     local version = plugin._.updates.to.version
     if version then
       self:diagnostic({
-        message = "version " .. tostring(version) .. " is available",
+        message = "版本 " .. tostring(version) .. " 可用",
       })
     else
       self:diagnostic({
-        message = "updates available",
+        message = "有可用更新",
       })
     end
   end
@@ -452,10 +452,10 @@ function M:plugin(plugin)
   end
   local plugin_start = self:row()
   if plugin._.loaded then
-    -- When the plugin is loaded, only show the loading reason
+    -- 插件已加载时，只显示加载原因
     self:reason(plugin._.loaded)
   else
-    -- otherwise show all lazy handlers
+    -- 否则显示所有的按需加载处理器
     self:append(" ")
     self:handlers(plugin)
     for _, other in pairs(Config.plugins) do
@@ -496,7 +496,7 @@ end
 function M:tasks(plugin)
   for _, task in ipairs(plugin._.tasks or {}) do
     if self.view:is_selected(plugin) then
-      self:append(Config.options.ui.icons.task .. "[task] ", "Title", { indent = 4 }):append(task.name)
+      self:append(Config.options.ui.icons.task .. "[任务] ", "Title", { indent = 4 }):append(task.name)
       self:append(" " .. math.floor((task:time()) * 100) / 100 .. "ms", "Bold")
       self:nl()
     end
@@ -527,7 +527,7 @@ function M:log(task)
       local ref, msg, time = line:match("^(%w+) (.*) (%(.*%))$")
       if msg then
         if msg:find("^%S+!:") then
-          self:diagnostic({ message = "Breaking Changes", severity = vim.diagnostic.severity.WARN })
+          self:diagnostic({ message = "破坏性变更", severity = vim.diagnostic.severity.WARN })
         end
         self:append(ref:sub(1, 7) .. " ", "LazyCommit", { indent = 6 })
 
@@ -559,24 +559,24 @@ end
 function M:details(plugin)
   ---@type string[][]
   local props = {}
-  table.insert(props, { "dir", plugin.dir, "LazyDir" })
+  table.insert(props, { "目录", plugin.dir, "LazyDir" })
   if plugin.url then
-    table.insert(props, { "url", (plugin.url:gsub("%.git$", "")), "LazyUrl" })
+    table.insert(props, { "网址", (plugin.url:gsub("%.git$", "")), "LazyUrl" })
   end
   local git = Git.info(plugin.dir, true)
   if git then
     git.branch = git.branch or Git.get_branch(plugin)
     if git.version then
-      table.insert(props, { "version", tostring(git.version) })
+      table.insert(props, { "版本", tostring(git.version) })
     end
     if git.tag then
-      table.insert(props, { "tag", git.tag })
+      table.insert(props, { "标签", git.tag })
     end
     if git.branch then
-      table.insert(props, { "branch", git.branch })
+      table.insert(props, { "分支", git.branch })
     end
     if git.commit then
-      table.insert(props, { "commit", git.commit:sub(1, 7), "LazyCommit" })
+      table.insert(props, { "提交", git.commit:sub(1, 7), "LazyCommit" })
     end
   end
   local rocks = require("lazy.pkg.rockspec").deps(plugin)
@@ -592,7 +592,7 @@ function M:details(plugin)
       local data = Util.read_file(path)
       local tag = data:match("%*(%S-)%*")
       if tag then
-        table.insert(props, { "help", "|" .. tag .. "|" })
+        table.insert(props, { "帮助", "|" .. tag .. "|" })
       end
     end
   end)
@@ -650,19 +650,17 @@ end
 function M:profile()
   local stats = require("lazy.stats").stats()
   local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-  self:append("Startuptime: ", "LazyH2"):append(ms .. "ms", "Number"):nl():nl()
+  self:append("启动耗时：", "LazyH2"):append(ms .. "ms", "Number"):nl():nl()
   if stats.real_cputime then
-    self:append("Based on the actual CPU time of the Neovim process till "):append("UIEnter", "LazySpecial")
-    self:append("."):nl()
-    self:append("This is more accurate than ")
+    self:append("基于 Neovim 进程的实际 CPU 时间，截止于 "):append("UIEnter", "LazySpecial")
+    self:append("。"):nl()
+    self:append("这比 ")
     self:append("`nvim --startuptime`", "@markup.raw.markdown_inline")
-    self:append(".")
+    self:append(" 更准确。")
   else
-    self:append("An accurate startuptime based on the actual CPU time of the Neovim process is not available."):nl()
-    self
-      :append("Startuptime is instead based on a delta with a timestamp when lazy started till ")
-      :append("UIEnter", "LazySpecial")
-    self:append(".")
+    self:append("无法获得基于 Neovim 进程实际 CPU 时间的精确启动耗时。"):nl()
+    self:append("这里的启动耗时是基于 lazy 启动时的时间戳与 "):append("UIEnter", "LazySpecial")
+    self:append(" 之间的差值计算的。")
   end
   self:nl()
 
@@ -682,16 +680,16 @@ function M:profile()
 
   self:nl()
 
-  self:append("Profile", "LazyH2"):nl():nl()
+  self:append("性能分析", "LazyH2"):nl():nl()
   self
-    :append("You can press ")
+    :append("你可以按 ")
     :append(ViewConfig.keys.profile_sort, "LazySpecial")
-    :append(" to change sorting between chronological order & time taken.")
+    :append(" 在按时间顺序和按耗时排序之间切换。")
     :nl()
   self
-    :append("Press ")
+    :append("按 ")
     :append(ViewConfig.keys.profile_filter, "LazySpecial")
-    :append(" to filter profiling entries that took more time than a given threshold")
+    :append(" 可以筛选出耗时超过指定阈值的性能分析条目")
     :nl()
 
   self:nl()
@@ -744,10 +742,10 @@ function M.list_icon(depth)
 end
 
 function M:debug()
-  self:append("Active Handlers", "LazyH2"):nl()
+  self:append("活动的处理器", "LazyH2"):nl()
   self
     :append(
-      "This shows only the lazy handlers that are still active. When a plugin loads, its handlers are removed",
+      "这里只显示仍然处于活动状态的按需加载处理器。当一个插件被加载后，它的处理器就会被移除",
       "LazyComment",
       { indent = 2 }
     )
@@ -782,9 +780,9 @@ function M:debug()
   Util.foreach(require("lazy.core.cache")._inspect(), function(name, stats)
     self:append(name, "LazyH2"):nl()
     local props = {
-      { "total", stats.total or 0, "Number" },
-      { "time", self:ms(stats.time or 0, 3), "Bold" },
-      { "avg time", self:ms((stats.time or 0) / (stats.total or 0), 3), "Bold" },
+      { "总数", stats.total or 0, "Number" },
+      { "耗时", self:ms(stats.time or 0, 3), "Bold" },
+      { "平均耗时", self:ms((stats.time or 0) / (stats.total or 0), 3), "Bold" },
     }
     for k, v in pairs(stats) do
       if k ~= "total" and k ~= "time" then

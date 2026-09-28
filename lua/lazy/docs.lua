@@ -131,7 +131,7 @@ function M.colors(opts)
     end
   end
   local lines = {
-    { "Highlight Group", "Default Group", "Description" },
+    { "高亮组", "默认组", "说明" },
     { "---", "---", "---" },
   }
   Util.foreach(require(opts.modname).colors, function(group, link)

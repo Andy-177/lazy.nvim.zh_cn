@@ -17,18 +17,18 @@ local Util = require("lazy.core.util")
 ---@field group number
 local M = {}
 
--- Event dependencies
+-- 事件依赖关系
 M.triggers = {
   FileType = "BufReadPost",
   BufReadPost = "BufReadPre",
 }
 
--- A table of mappings for custom events
--- Can be used by distros to add custom events (see usage in LazyVim)
+-- 自定义事件的映射表
+-- 发行版可以用它来添加自定义事件（用法参见 LazyVim）
 ---@type table<string, LazyEvent>
 M.mappings = {
   VeryLazy = { id = "VeryLazy", event = "User", pattern = "VeryLazy" },
-  -- Example:
+  -- 示例：
   -- LazyFile = { id = "LazyFile", event = { "BufReadPost", "BufNewFile", "BufWritePre" } },
 }
 M.mappings["User VeryLazy"] = M.mappings.VeryLazy
@@ -73,7 +73,7 @@ function M:_add(event)
       if done or not self.active[event.id] then
         return
       end
-      -- HACK: work-around for https://github.com/neovim/neovim/issues/25526
+      -- 变通做法：针对 https://github.com/neovim/neovim/issues/25526 的变通处理
       done = true
       if event.id ~= "VeryLazy" then
         Util.track({ [self.type] = event.id })
@@ -81,10 +81,10 @@ function M:_add(event)
 
       local state = M.get_state(ev.event, ev.buf, ev.data)
 
-      -- load the plugins
+      -- 加载插件
       Loader.load(self.active[event.id], { [self.type] = event.id })
 
-      -- check if any plugin created an event handler for this event and fire the group
+      -- 检查是否有插件为这个事件创建了事件处理器，并触发该分组
       for _, s in ipairs(state) do
         M.trigger(s)
       end
@@ -95,7 +95,7 @@ function M:_add(event)
   })
 end
 
--- Get the current state of the event and all the events that will be fired
+-- 获取当前事件的状态以及所有将被触发的事件
 ---@param event string
 ---@param buf number
 ---@param data any
@@ -108,13 +108,13 @@ function M.get_state(event, buf, data)
       buffer = buf,
       data = data,
     })
-    data = nil -- only pass the data to the first event
+    data = nil -- 只把 data 传给第一个事件
     event = M.triggers[event]
   end
   return state
 end
 
--- Get all augroups for the events
+-- 获取某个事件的所有 augroup
 ---@param event string
 function M.get_augroups(event)
   local groups = {} ---@type string[]
@@ -126,8 +126,8 @@ function M.get_augroups(event)
   return groups
 end
 
--- Trigger an event. When a group is given, only the events in that group will be triggered.
--- When exclude is set, the events in those groups will be skipped.
+-- 触发一个事件。如果给出了 group，则只会触发该分组中的事件。
+-- 如果设置了 exclude，则会跳过这些分组中的事件。
 ---@param opts LazyEventOpts
 function M.trigger(opts)
   if opts.group or opts.exclude == nil then
@@ -145,12 +145,12 @@ function M.trigger(opts)
   end
 end
 
--- Trigger an event
+-- 触发一个事件
 ---@param opts LazyEventOpts
 function M._trigger(opts)
   if Config.options.debug then
     Util.info({
-      "# Firing Events",
+      "# 正在触发事件",
       "  - **event:** " .. opts.event,
       opts.group and ("  - **group:** " .. opts.group),
       opts.buffer and ("  - **buffer:** " .. opts.buffer),

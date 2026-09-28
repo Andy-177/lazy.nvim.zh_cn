@@ -33,18 +33,18 @@ function M.setup()
     end,
   })
 
-  -- load the plugins
+  -- 加载插件
   Plugin.load()
   Handler.init()
 
-  -- install missing plugins
+  -- 安装缺失的插件
   if Config.options.install.missing then
     Util.track("install")
     local count = 0
     while M.install_missing() do
       count = count + 1
       if count > 5 then
-        Util.error("Too many rounds of missing plugins")
+        Util.error("缺失插件的安装轮次过多")
         break
       end
     end
@@ -53,18 +53,18 @@ function M.setup()
   Config.mapleader = vim.g.mapleader
   Config.maplocalleader = vim.g.maplocalleader
 
-  -- report any warnings & errors
+  -- 报告任何警告和错误
   Config.spec:report()
 
-  -- setup handlers
+  -- 设置处理器
   Util.track("handlers")
   Handler.setup()
   M.did_handlers = true
   Util.track()
 end
 
--- this will incrementally install missing plugins
--- multiple rounds can happen when importing a spec from a missing plugin
+-- 这会以增量方式安装缺失的插件
+-- 当从缺失插件中导入 spec 时，可能会发生多轮安装
 function M.install_missing()
   for _, plugin in pairs(Config.plugins) do
     local installed = plugin._.installed
@@ -82,66 +82,66 @@ function M.install_missing()
       end
       Cache.reset()
       require("lazy.manage").install({ wait = true, lockfile = true, clear = false })
-      -- remove any installed plugins from indexed, so cache will index again
+      -- 从索引中移除任何已安装的插件，让缓存重新建立索引
       for _, p in pairs(Config.plugins) do
         if p._.installed then
           Cache.reset(p.dir)
         end
       end
-      -- reload plugins
+      -- 重新加载插件
       Plugin.load()
       return true
     end
   end
 end
 
--- Startup sequence
--- 1. load any start plugins and do init
+-- 启动流程
+-- 1. 加载任何 start 插件并执行 init
 function M.startup()
   Util.track({ start = "startup" })
 
-  -- load filetype.lua first since plugins might depend on that
+  -- 先加载 filetype.lua，因为插件可能依赖它
   M.source(vim.env.VIMRUNTIME .. "/filetype.lua")
 
-  -- backup original rtp
+  -- 备份原始的 rtp
   local rtp = vim.opt.rtp:get() --[[@as string[] ]]
 
-  -- 1. run plugin init
+  -- 1. 运行插件 init
   Util.track({ start = "init" })
   for _, plugin in pairs(Config.plugins) do
     if plugin.init then
       Util.track({ plugin = plugin.name, init = "init" })
       Util.try(function()
         plugin.init(plugin)
-      end, "Failed to run `init` for **" .. plugin.name .. "**")
+      end, "运行 **" .. plugin.name .. "** 的 `init` 失败")
       Util.track()
     end
   end
   Util.track()
 
-  -- 2. load start plugin
+  -- 2. 加载 start 插件
   Util.track({ start = "start" })
   for _, plugin in ipairs(M.get_start_plugins()) do
-    -- plugin may be loaded by another plugin in the meantime
+    -- 期间该插件可能已被其他插件加载
     if not plugin._.loaded then
       M.load(plugin, { start = "start" })
     end
   end
   Util.track()
 
-  -- 3. load plugins from the original rtp, excluding after
+  -- 3. 从原始 rtp 加载插件，排除 after 目录
   Util.track({ start = "rtp plugins" })
   for _, path in ipairs(rtp) do
     if not path:find("after/?$") then
-      -- these paths don't will already have their ftdetect ran,
-      -- by sourcing filetype.lua above, so skip them
+      -- 这些路径的 ftdetect 之前已经通过上面的 filetype.lua 运行过了，
+      -- 所以跳过它们
       M.did_ftdetect[path] = path
       M.packadd(path)
     end
   end
   Util.track()
 
-  -- 4. load after plugins
+  -- 4. 加载 after 插件
   Util.track({ start = "after" })
   for _, path in
     ipairs(vim.opt.rtp:get() --[[@as string[] ]])
@@ -176,7 +176,7 @@ end
 ---@class Loader
 ---@param plugins string|LazyPlugin|string[]|LazyPlugin[]
 ---@param reason {[string]:string}
----@param opts? {force:boolean} when force is true, we skip the cond check
+---@param opts? {force:boolean} 当 force 为 true 时，跳过 cond 检查
 function M.load(plugins, reason, opts)
   ---@diagnostic disable-next-line: cast-local-type
   plugins = (type(plugins) == "string" or plugins.name) and { plugins } or plugins
@@ -189,7 +189,7 @@ function M.load(plugins, reason, opts)
       elseif Config.spec.disabled[plugin] then
         plugin = nil
       else
-        Util.error("Plugin " .. plugin .. " not found")
+        Util.error("未找到插件 " .. plugin)
         plugin = nil
       end
     end
@@ -213,39 +213,39 @@ function M.deactivate(plugin)
       if mod.deactivate then
         mod.deactivate(plugin)
       end
-    end, "Failed to deactivate plugin " .. plugin.name)
+    end, "停用插件 " .. plugin.name .. " 失败")
   end
 
-  -- execute deactivate when needed
+  -- 在需要时执行 deactivate
   if plugin.deactivate then
     Util.try(function()
       plugin.deactivate(plugin)
-    end, "Failed to deactivate plugin " .. plugin.name)
+    end, "停用插件 " .. plugin.name .. " 失败")
   end
 
-  -- disable handlers
+  -- 禁用处理器
   Handler.disable(plugin)
 
-  -- clear plugin properties cache
+  -- 清除插件属性缓存
   plugin._.cache = nil
 
-  -- remove loaded lua modules
+  -- 移除已加载的 lua 模块
   Util.walkmods(plugin.dir .. "/lua", function(modname)
     package.loaded[modname] = nil
     package.preload[modname] = nil
   end)
 
-  -- clear vim.g.loaded_ for plugins
+  -- 为插件清除 vim.g.loaded_
   Util.ls(plugin.dir .. "/plugin", function(_, name, type)
     if type == "file" then
       vim.g["loaded_" .. name:gsub("%..*", "")] = nil
     end
   end)
-  -- set as not loaded
+  -- 标记为未加载
   plugin._.loaded = nil
 end
 
---- reload a plugin
+--- 重新加载插件
 ---@param plugin LazyPlugin|string
 function M.reload(plugin)
   if type(plugin) == "string" then
@@ -253,23 +253,23 @@ function M.reload(plugin)
   end
 
   if not plugin then
-    error("Plugin not found")
+    error("未找到插件")
   end
 
   local load = plugin._.loaded ~= nil
   M.deactivate(plugin)
 
-  -- enable handlers
+  -- 启用处理器
   Handler.enable(plugin)
 
-  -- run init
+  -- 运行 init
   if plugin.init then
     Util.try(function()
       plugin.init(plugin)
-    end, "Failed to run `init` for **" .. plugin.name .. "**")
+    end, "运行 **" .. plugin.name .. "** 的 `init` 失败")
   end
 
-  -- if this is a start plugin, load it now
+  -- 如果这是一个 start 插件，立即加载它
   if plugin.lazy == false then
     load = true
   end
@@ -283,7 +283,7 @@ function M.reload(plugin)
     end
   end
 
-  -- reload any vimscript files for this plugin
+  -- 重新加载该插件的 vimscript 文件
   local scripts = vim.fn.getscriptinfo()
   local loaded_scripts = {}
   for _, s in ipairs(scripts) do
@@ -309,10 +309,10 @@ end
 
 ---@param plugin LazyPlugin
 ---@param reason {[string]:string}
----@param opts? {force:boolean} when force is true, we skip the cond check
+---@param opts? {force:boolean} 当 force 为 true 时，跳过 cond 检查
 function M._load(plugin, reason, opts)
   if not plugin._.installed then
-    return Util.error("Plugin " .. plugin.name .. " is not installed")
+    return Util.error("插件 " .. plugin.name .. " 未安装")
   end
 
   if plugin._.cond == false and not (opts and opts.force) then
@@ -322,7 +322,7 @@ function M._load(plugin, reason, opts)
   if not Handler.did_setup then
     Util.try(function()
       Handler.enable(plugin)
-    end, "Failed to setup handlers for " .. plugin.name)
+    end, "为 " .. plugin.name .. " 设置处理器失败")
   end
 
   ---@diagnostic disable-next-line: assign-type-mismatch
@@ -352,7 +352,7 @@ function M._load(plugin, reason, opts)
   if plugin.dependencies then
     Util.try(function()
       M.load(plugin.dependencies, {})
-    end, "Failed to load deps for " .. plugin.name)
+    end, "加载 " .. plugin.name .. " 的依赖失败")
   end
 
   if not plugin.virtual then
@@ -370,7 +370,7 @@ function M._load(plugin, reason, opts)
   end)
 end
 
---- runs plugin config
+--- 运行插件配置
 ---@param plugin LazyPlugin
 function M.config(plugin)
   local fn
@@ -388,11 +388,11 @@ function M.config(plugin)
       end
     else
       return Util.error(
-        "Lua module not found for config of " .. plugin.name .. ". Please use a `config()` function instead"
+        "未找到用于配置 " .. plugin.name .. " 的 Lua 模块。请改用 `config()` 函数"
       )
     end
   end
-  Util.try(fn, "Failed to run `config` for " .. plugin.name)
+  Util.try(fn, "运行 " .. plugin.name .. " 的 `config` 失败")
 end
 
 ---@param plugin LazyPlugin
@@ -410,7 +410,7 @@ function M.get_main(plugin)
     local modname = mod.modname
     mods[#mods + 1] = modname
     local modnorm = Util.normname(modname)
-    -- if we found an exact match, then use that
+    -- 如果找到了精确匹配，就使用它
     if modnorm == normname then
       mods = { modname }
       break
@@ -451,18 +451,18 @@ function M.source_runtime(...)
       files[#files + 1] = path
     end
   end)
-  -- plugin files are sourced alphabetically per directory
+  -- 插件文件按目录内字母顺序加载
   table.sort(files)
   for _, path in ipairs(files) do
     M.source(path)
   end
 end
 
--- This does the same as runtime.c:add_pack_dir_to_rtp
--- * find first after
--- * find lazy pack path
--- * insert right after lazy pack path or right before first after or at the end
--- * insert after dir right before first after or append to the end
+-- 这与 runtime.c:add_pack_dir_to_rtp 的作用相同
+-- * 先找到第一个 after
+-- * 找到 lazy 包路径
+-- * 插入到 lazy 包路径之后，或第一个 after 之前，或最末尾
+-- * 在目录之后插入，或第一个 after 之前，或追加到最末尾
 ---@param plugin LazyPlugin
 function M.add_to_rtp(plugin)
   local rtp = vim.api.nvim_get_runtime_file("", true)
@@ -508,7 +508,7 @@ function M.source(path)
   Util.track({ runtime = path })
   Util.try(function()
     vim.cmd("source " .. path)
-  end, "Failed to source `" .. path .. "`")
+  end, "加载 `" .. path .. "` 失败")
   Util.track()
 end
 
@@ -532,17 +532,17 @@ function M.auto_load(modname, modpath)
   local plugin = Plugin.find(modpath, { fast = not M.did_handlers })
   if plugin then
     plugin._.rtp_loaded = true
-    -- don't load if:
-    -- * handlers haven't been setup yet
-    -- * we're loading specs
-    -- * the plugin is already loaded
+    -- 以下情况不要加载：
+    -- * 处理器尚未设置
+    -- * 正在加载 spec
+    -- * 插件已经加载
     if M.did_handlers and not (Plugin.loading or plugin._.loaded) then
       if plugin.module == false then
-        error("Plugin " .. plugin.name .. " is not loaded and is configured with module=false")
+        error("插件 " .. plugin.name .. " 未加载，且被配置为 module=false")
       end
       M.load(plugin, { require = modname })
       if plugin._.cond == false then
-        error("You're trying to load `" .. plugin.name .. "` for which `cond==false`")
+        error("你正在尝试加载 `" .. plugin.name .. "`，但它的 `cond==false`")
       end
     end
   end
@@ -559,7 +559,7 @@ function M.loader(modname)
   end
 
   if ret then
-    -- explicitly set to nil to prevent loading errors
+    -- 显式设为 nil 以防止加载出错
     package.loaded[modname] = nil
     M.auto_load(modname, ret.modpath)
     local mod = package.loaded[modname]

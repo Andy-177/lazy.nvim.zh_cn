@@ -47,17 +47,17 @@ function M.bright_white(text) return M.color(text, "bright_white") end
 ---@param data string
 ---@param prefix string
 function M.prefix(data, prefix)
-  -- Normalize Windows-style newlines to simple newlines
+  -- 把 Windows 风格的换行符统一为普通换行符
   data = data:gsub("\r\n", "\n")
 
-  -- Handle prefix for the first line, if data starts immediately
+  -- 处理第一行的前缀，如果数据是立即开始的话
   data = prefix .. data
 
-  -- Prefix new lines ensuring not to double prefix if a line starts with \r
+  -- 为新行添加前缀，同时避免当某行以 \r 开头时重复添加前缀
   data = data:gsub("(\n)([^\r])", "%1" .. prefix .. "%2")
 
-  -- Handle carriage returns properly to avoid double prefixing
-  -- Replace any \r not followed by \n with \r, then add a prefix only if the following character isn't the start of our prefix
+  -- 正确处理回车符，以避免重复添加前缀
+  -- 把任何后面不跟 \n 的 \r 替换为 \r，然后仅当下一个字符不是我们前缀的开头时才添加前缀
   data = data:gsub("\r([^\n])", function(nextChar)
     if nextChar:sub(1, #prefix) == prefix then
       return "\r" .. nextChar

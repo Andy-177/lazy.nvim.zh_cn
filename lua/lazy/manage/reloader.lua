@@ -41,7 +41,7 @@ function M.check(start)
   ---@type {file:string, what:string}[]
   local changes = {}
 
-  -- spec is a module
+  -- spec 是一个模块
   local function check(_, modpath)
     checked[modpath] = true
     local hash = vim.uv.fs_stat(modpath)
@@ -71,14 +71,14 @@ function M.check(start)
 
   if Loader.init_done and Config.mapleader ~= vim.g.mapleader then
     vim.schedule(function()
-      require("lazy.core.util").warn("You need to set `vim.g.mapleader` **BEFORE** loading lazy")
+      require("lazy.core.util").warn("你需要在加载 lazy **之前**设置 `vim.g.mapleader`")
     end)
     Config.mapleader = vim.g.mapleader
   end
 
   if Loader.init_done and Config.maplocalleader ~= vim.g.maplocalleader then
     vim.schedule(function()
-      require("lazy.core.util").warn("You need to set `vim.g.maplocalleader` **BEFORE** loading lazy")
+      require("lazy.core.util").warn("你需要在加载 lazy **之前**设置 `vim.g.maplocalleader`")
     end)
     Config.maplocalleader = vim.g.maplocalleader
   end
@@ -92,7 +92,7 @@ end
 function M.reload(changes)
   vim.schedule(function()
     if Config.options.change_detection.notify and not Config.headless() then
-      local lines = { "# Config Change Detected. Reloading...", "" }
+      local lines = { "# 检测到配置变更。正在重新加载……", "" }
       for _, change in ipairs(changes) do
         table.insert(lines, "- **" .. change.what .. "**: `" .. vim.fn.fnamemodify(change.file, ":p:~:.") .. "`")
       end

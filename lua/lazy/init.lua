@@ -40,7 +40,7 @@ function M.setup(spec, opts)
   M._start = M._start == 0 and vim.uv.hrtime() or M._start
   if vim.g.lazy_did_setup then
     return vim.notify(
-      "Re-sourcing your config is not supported with lazy.nvim",
+      "lazy.nvim 不支持重新 source 你的配置文件",
       vim.log.levels.WARN,
       { title = "lazy.nvim" }
     )
@@ -50,14 +50,14 @@ function M.setup(spec, opts)
     return
   end
   if vim.fn.has("nvim-0.8.0") ~= 1 then
-    return vim.notify("lazy.nvim requires Neovim >= 0.8.0", vim.log.levels.ERROR, { title = "lazy.nvim" })
+    return vim.notify("lazy.nvim 需要 Neovim >= 0.8.0", vim.log.levels.ERROR, { title = "lazy.nvim" })
   end
   if not (pcall(require, "ffi") and jit and jit.version) then
-    return vim.notify("lazy.nvim requires Neovim built with LuaJIT", vim.log.levels.ERROR, { title = "lazy.nvim" })
+    return vim.notify("lazy.nvim 需要使用 LuaJIT 构建的 Neovim", vim.log.levels.ERROR, { title = "lazy.nvim" })
   end
   local start = vim.uv.hrtime()
 
-  -- use the Neovim cache if available
+  -- 如果可用，就使用 Neovim 自带的缓存
   if vim.loader and vim.fn.has("nvim-0.9.1") == 1 then
     package.loaded["lazy.core.cache"] = vim.loader
   end
@@ -65,7 +65,7 @@ function M.setup(spec, opts)
   local Cache = require("lazy.core.cache")
 
   local enable_cache = vim.tbl_get(opts, "performance", "cache", "enabled") ~= false
-  -- load module cache before anything else
+  -- 在其他所有操作之前先加载模块缓存
   if enable_cache then
     Cache.enable()
   end
@@ -90,28 +90,28 @@ function M.setup(spec, opts)
     end
   end
 
-  Util.track({ plugin = "lazy.nvim" }) -- setup start
+  Util.track({ plugin = "lazy.nvim" }) -- setup 开始
   Util.track("module", vim.uv.hrtime() - start)
 
-  -- load config
+  -- 加载配置
   Util.track("config")
   Config.setup(opts)
   Util.track()
 
-  -- setup loader and handlers
+  -- 设置 loader 和 handlers
   Loader.setup()
 
-  -- correct time delta and loaded
+  -- 修正时间差和已加载状态
   local delta = vim.uv.hrtime() - start
-  Util.track().time = delta -- end setup
+  Util.track().time = delta -- setup 结束
   if Config.plugins["lazy.nvim"] then
     Config.plugins["lazy.nvim"]._.loaded = { time = delta, source = "init.lua" }
   end
 
-  -- load plugins with lazy=false or Plugin.init
+  -- 加载那些 lazy=false 的插件，或者调用了 Plugin.init 的插件
   Loader.startup()
 
-  -- all done!
+  -- 全部完成！
   vim.api.nvim_exec_autocmds("User", { pattern = "LazyDone", modeline = false })
   require("lazy.stats").track("LazyDone")
 end

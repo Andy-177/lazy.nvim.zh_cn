@@ -1,5 +1,5 @@
--- Lazy Bootstrapper
--- Usage:
+-- Lazy 引导脚本
+-- 用法：
 -- ```lua
 -- load(vim.fn.system("curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua"))()
 -- ```
@@ -22,7 +22,7 @@ function M.setup()
   if not vim.env.LAZY_PATH and not uv.fs_stat(lazypath) then
     vim.api.nvim_echo({
       {
-        "Cloning lazy.nvim\n\n",
+        "正在克隆 lazy.nvim\n\n",
         "DiagnosticInfo",
       },
     }, true, {})
@@ -36,9 +36,9 @@ function M.setup()
     })
     if not ok or vim.v.shell_error ~= 0 then
       vim.api.nvim_echo({
-        { "Failed to clone lazy.nvim\n", "ErrorMsg" },
+        { "克隆 lazy.nvim 失败\n", "ErrorMsg" },
         { vim.trim(out or ""), "WarningMsg" },
-        { "\nPress any key to exit...", "MoreMsg" },
+        { "\n按任意键退出……", "MoreMsg" },
       }, true, {})
       vim.fn.getchar()
       os.exit(1)

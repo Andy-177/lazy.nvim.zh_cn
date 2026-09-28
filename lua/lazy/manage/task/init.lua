@@ -96,7 +96,7 @@ end
 ---@param task LazyTaskFn
 function Task:_run(task)
   if Config.headless() and Config.options.headless.task then
-    self:log("Running task " .. self.name, vim.log.levels.INFO)
+    self:log("正在运行任务 " .. self.name, vim.log.levels.INFO)
   end
 
   self
@@ -168,7 +168,7 @@ end
 function Task:_done()
   if Config.headless() and Config.options.headless.task then
     local ms = math.floor(self:time() + 0.5)
-    self:log("Finished task " .. self.name .. " in " .. ms .. "ms", vim.log.levels.INFO)
+    self:log("任务 " .. self.name .. " 完成，耗时 " .. ms .. "ms", vim.log.levels.INFO)
   end
   self._ended = vim.uv.hrtime()
   if self._opts.on_done then
@@ -207,7 +207,7 @@ function Task:spawn(cmd, opts)
 
   if headless then
     opts.on_data = function(data)
-      -- prefix with plugin name
+      -- 加上插件名前缀
       io.write(Terminal.prefix(data, self:prefix()))
     end
   end

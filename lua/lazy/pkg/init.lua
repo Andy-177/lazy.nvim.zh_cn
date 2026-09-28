@@ -99,12 +99,12 @@ local function _load()
           if type(pkg.spec) == "function" then
             pkg.spec = pkg.spec()
           end
-          -- wrap in the scope of the plugin
+          -- 包装到该插件的作用域中
           pkg.spec = { pkg.name, specs = pkg.spec }
         end
         M.cache = ret.pkgs
       end
-    end, "Error loading pkg:")
+    end, "加载 pkg 时出错：")
   end
   if rawget(M, "cache") then
     M.dirty = false

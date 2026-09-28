@@ -46,7 +46,7 @@ function M.open(uri, opts)
   local ret = vim.fn.jobstart(cmd, { detach = true })
   if ret <= 0 then
     local msg = {
-      "Failed to open uri",
+      "打开 uri 失败",
       ret,
       vim.inspect(cmd),
     }
@@ -94,8 +94,8 @@ function M.throttle(ms, fn)
   end
 end
 
---- Creates a weak reference to an object.
---- Calling the returned function will return the object if it has not been garbage collected.
+--- 为一个对象创建弱引用。
+--- 调用返回的函数时，如果该对象尚未被垃圾回收，就会返回它。
 ---@generic T: table
 ---@param obj T
 ---@return T|fun():T?
@@ -104,7 +104,7 @@ function M.weak(obj)
   ---@return table<any, any>
   local function get()
     local ret = rawget(weak, "_obj")
-    return ret == nil and error("Object has been garbage collected", 2) or ret
+    return ret == nil and error("该对象已经被垃圾回收", 2) or ret
   end
   local mt = {
     __mode = "v",
@@ -129,7 +129,7 @@ end
 ---@field env? table<string,string>
 ---@field float? LazyFloatOptions
 
--- Opens a floating terminal (interactive by default)
+-- 打开一个浮动终端（默认是交互式的）
 ---@param cmd? string[]|string
 ---@param opts? LazyCmdOptions|{interactive?:boolean}
 function M.float_term(cmd, opts)
@@ -157,7 +157,7 @@ function M.float_term(cmd, opts)
   return float
 end
 
---- Runs the command and shows it in a floating window
+--- 运行该命令，并在浮动窗口中显示结果
 ---@param cmd string[]
 ---@param opts? LazyCmdOptions|{filetype?:string}
 function M.float_cmd(cmd, opts)
@@ -168,9 +168,9 @@ function M.float_cmd(cmd, opts)
     M.error({
       "`" .. table.concat(cmd, " ") .. "`",
       "",
-      "## Error",
+      "## 错误",
       table.concat(lines, "\n"),
-    }, { title = "Command Failed (" .. code .. ")" })
+    }, { title = "命令执行失败（" .. code .. "）" })
     return
   end
   local float = M.float(opts)
@@ -182,7 +182,7 @@ function M.float_cmd(cmd, opts)
   return float
 end
 
----@deprecated use float_term or float_cmd instead
+---@deprecated 请改用 float_term 或 float_cmd
 function M.open_cmd()
   M.warn([[`require("lazy.util").open_cmd()` is deprecated. Please use `float_term` instead. Check the docs]])
 end
@@ -264,7 +264,7 @@ function M._dump(value, result)
     end
     table.insert(result, "}")
   else
-    error("Unsupported type " .. t)
+    error("不支持的类型 " .. t)
   end
 end
 

@@ -121,7 +121,7 @@ function M:_add(keys)
     vim.keymap.set(keys.mode, lhs, function()
       local plugins = self.active[keys.id]
 
-      -- always delete the mapping immediately to prevent recursive mappings
+      -- 立即删除该映射，以防止递归映射
       self:_del(keys)
       self.active[keys.id] = nil
 
@@ -136,18 +136,18 @@ function M:_add(keys)
         lhs = lhs .. "<C-]>"
       end
       local feed = vim.api.nvim_replace_termcodes("<Ignore>" .. lhs, true, true, true)
-      -- insert instead of append the lhs
+      -- 插入而不是追加 lhs
       vim.api.nvim_feedkeys(feed, "i", false)
     end, {
       desc = opts.desc,
       nowait = opts.nowait,
-      -- we do not return anything, but this is still needed to make operator pending mappings work
+      -- 我们不返回任何内容，但为了使 operator-pending 映射工作，这仍然是必需的
       expr = true,
       buffer = buf,
     })
   end
 
-  -- buffer-local mappings
+  -- 缓冲区局部的映射
   if keys.ft then
     vim.api.nvim_create_autocmd("FileType", {
       pattern = keys.ft,
@@ -155,8 +155,8 @@ function M:_add(keys)
         if self.active[keys.id] and not M.is_nop(keys) then
           add(event.buf)
         else
-          -- Only create the mapping if its managed by lazy
-          -- otherwise the plugin is supposed to manage it
+          -- 只有当映射由 lazy 管理时才创建它，
+          -- 否则该映射应由插件自己管理
           self:_set(keys, event.buf)
         end
       end,
@@ -166,12 +166,11 @@ function M:_add(keys)
   end
 end
 
--- Delete a mapping and create the real global/buffer-local
--- mapping when needed
+-- 删除一个映射，并在需要时创建真正的全局/缓冲区局部映射
 ---@param keys LazyKeys
 function M:_del(keys)
-  -- bufs will be all buffers of the filetype for a buffer-local mapping
-  -- OR `false` for a global mapping
+  -- 对于缓冲区局部映射，bufs 将是该文件类型的所有缓冲区
+  -- 或者是 `false` 表示全局映射
   local bufs = { false }
 
   if keys.ft then
@@ -187,7 +186,7 @@ function M:_del(keys)
   end
 end
 
--- Create a mapping if it is managed by lazy
+-- 如果映射由 lazy 管理，则创建它
 ---@param keys LazyKeys
 ---@param buf number?
 function M:_set(keys, buf)

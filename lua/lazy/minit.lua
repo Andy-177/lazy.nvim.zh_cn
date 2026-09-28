@@ -53,7 +53,7 @@ function M.setup(opts)
     opts = M.minitest.setup(opts)
   end
 
-  -- set stdpaths to use .tests
+  -- 把 stdpaths 设置为使用 .tests
   if vim.env.LAZY_STDPATH then
     local root = vim.fn.fnamemodify(vim.env.LAZY_STDPATH, ":p")
     for _, name in ipairs({ "config", "data", "state", "cache" }) do
@@ -107,11 +107,11 @@ M.minitest = {}
 
 function M.minitest.run()
   local Config = require("lazy.core.config")
-  -- disable termnial output for the tests
+  -- 为测试禁用终端输出
   Config.options.headless = {}
 
   if not require("lazy.core.config").headless() then
-    return vim.notify("busted can only run in headless mode. Please run with `nvim -l`", vim.log.levels.WARN)
+    return vim.notify("busted 只能在无头模式下运行。请使用 `nvim -l` 运行", vim.log.levels.WARN)
   end
   package.path = package.path .. ";" .. vim.uv.cwd() .. "/tests/?.lua"
   local Test = require("mini.test")
@@ -171,14 +171,14 @@ M.busted = {}
 
 function M.busted.run()
   local Config = require("lazy.core.config")
-  -- disable termnial output for the tests
+  -- 为测试禁用终端输出
   Config.options.headless = {}
 
   if not require("lazy.core.config").headless() then
-    return vim.notify("busted can only run in headless mode. Please run with `nvim -l`", vim.log.levels.WARN)
+    return vim.notify("busted 只能在无头模式下运行。请使用 `nvim -l` 运行", vim.log.levels.WARN)
   end
   package.path = package.path .. ";" .. vim.uv.cwd() .. "/tests/?.lua"
-  -- run busted
+  -- 运行 busted
   return pcall(require("busted.runner"), {
     standalone = false,
   }) or os.exit(1)

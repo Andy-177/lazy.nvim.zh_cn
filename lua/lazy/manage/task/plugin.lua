@@ -53,7 +53,7 @@ M.build = {
 
     local builders = self.plugin.build
 
-    -- Skip if `build` is set to `false`
+    -- 如果 `build` 被设为 `false` 则跳过
     if builders == false then
       return
     end
@@ -103,7 +103,7 @@ M.exists = {
   end,
   run = function(self)
     if not Util.file_exists(self.plugin.dir) then
-      self:error("Local plugin does not exist at `" .. self.plugin.dir .. "`")
+      self:error("本地插件不存在于 `" .. self.plugin.dir .. "`")
     end
   end,
 }

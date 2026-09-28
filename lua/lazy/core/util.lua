@@ -102,13 +102,13 @@ function M.pretty_trace(opts)
       source = vim.fn.fnamemodify(source, ":p:~:.") --[[@as string]]
       local line = "  - " .. source .. ":" .. info.currentline
       if info.name then
-        line = line .. " _in_ **" .. info.name .. "**"
+        line = line .. "，位于 **" .. info.name .. "** 中"
       end
       table.insert(trace, line)
     end
     level = level + 1
   end
-  return #trace > 0 and ("\n\n# stacktrace:\n" .. table.concat(trace, "\n")) or ""
+  return #trace > 0 and ("\n\n# 调用栈追踪：\n" .. table.concat(trace, "\n")) or ""
 end
 
 ---@generic R
@@ -118,7 +118,7 @@ end
 function M.try(fn, opts)
   opts = type(opts) == "string" and { msg = opts } or opts or {}
   local msg = opts.msg
-  -- error handler
+  -- 错误处理器
   local error_handler = function(err)
     msg = (msg and (msg .. "\n\n") or "") .. err .. M.pretty_trace()
     if opts.on_error then
@@ -150,7 +150,7 @@ function M.get_source()
   end
 end
 
--- Fast implementation to check if a table is a list
+-- 检查一个 table 是否为 list 的快速实现
 ---@param t table
 function M.is_list(t)
   local i = 0
@@ -208,9 +208,9 @@ function M.ls(path, fn)
 
     local fname = path .. "/" .. name
 
-    -- HACK: type is not always returned due to a bug in luv,
-    -- so fecth it with fs_stat instead when needed.
-    -- see https://github.com/folke/lazy.nvim/issues/306
+    -- 变通做法：由于 luv 的 bug，type 有时不会被返回，
+    -- 因此在需要时改用 fs_stat 获取它。
+    -- 参见 https://github.com/folke/lazy.nvim/issues/306
     if fn(fname, name, t or vim.uv.fs_stat(fname).type) == false then
       break
     end
@@ -441,11 +441,11 @@ local function can_merge(v)
   return type(v) == "table" and (vim.tbl_isempty(v) or not M.is_list(v))
 end
 
---- Merges the values similar to vim.tbl_deep_extend with the **force** behavior,
---- but the values can be any type, in which case they override the values on the left.
---- Values will me merged in-place in the first left-most table. If you want the result to be in
---- a new table, then simply pass an empty table as the first argument `vim.merge({}, ...)`
---- Supports clearing values by setting a key to `vim.NIL`
+--- 类似于 vim.tbl_deep_extend 并带有 **force** 行为来合并各个值，
+--- 但这些值可以是任意类型，此时它们会覆盖左侧的值。
+--- 各个值会被就地合并到最左边的那个 table 中。如果你希望结果放在
+--- 一个新的 table 中，只需把空 table 作为第一个参数传入，即 `vim.merge({}, ...)`
+--- 支持通过把某个键设为 `vim.NIL` 来清除值
 ---@generic T
 ---@param ... T
 ---@return T
@@ -471,8 +471,8 @@ end
 
 function M.lazy_require(module)
   local mod = nil
-  -- if already loaded, return the module
-  -- otherwise return a lazy module
+  -- 如果已经加载，则直接返回该模块
+  -- 否则返回一个惰性模块
   return type(package.loaded[module]) == "table" and package.loaded[module]
     or setmetatable({}, {
       __index = function(_, key)

@@ -64,7 +64,7 @@ describe("task", function()
     task:wait()
     assert(not task:running())
     assert(task_result.done)
-    assert(task:has_errors() and task:output(vim.log.levels.ERROR):find("Failed to spawn"), task:output())
+    assert(task:has_errors() and task:output(vim.log.levels.ERROR):find("启动进程失败"), task:output())
   end)
 
   it("spawn", function()

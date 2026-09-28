@@ -10,12 +10,12 @@ local manifest_file = "build/manifest.lua"
 
 function M.fetch(url, file, prefix)
   if not vim.uv.fs_stat(file) then
-    print((prefix or "") .. "Fetching " .. url .. " to " .. file .. "\n")
+    print((prefix or "") .. "正在获取 " .. url .. " 到 " .. file .. "\n")
     vim.cmd.redraw()
     local out = vim.fn.system("wget " .. url .. " -O " .. file)
     if vim.v.shell_error ~= 0 then
       pcall(vim.uv.fs_unlink, file)
-      error("Failed to fetch " .. url .. ":\n" .. out)
+      error("获取 " .. url .. " 失败：\n" .. out)
     end
   end
 end
@@ -54,7 +54,7 @@ function M.fetch_manifest()
   local ret = { repository = {} }
   for _, file in ipairs(M.split()) do
     local part = Rocks.parse(file)
-    print(vim.tbl_count(part.repository or {}) .. " rocks in " .. file .. "\n")
+    print(vim.tbl_count(part.repository or {}) .. " 个 rock，位于 " .. file .. "\n")
     for k, v in pairs(part.repository or {}) do
       ret.repository[k] = v
     end
@@ -113,7 +113,7 @@ function M.build()
     local rockspec = Rocks.rockspec("build/" .. rock.name .. ".rockspec")
     if rockspec then
       local url = rockspec.source and rockspec.source.url
-      -- parse github short url
+      -- 解析 github 短网址
       if url and url:find("://github.com/") then
         url = url:gsub("^.*://github.com/", "")
         local parts = vim.split(url, "/")
@@ -124,7 +124,7 @@ function M.build()
         rock.url = url
         print(rock.name .. " " .. url)
       else
-        print("Error: " .. rock.name .. " missing source url\n\n")
+        print("错误：" .. rock.name .. " 缺少源代码 URL\n\n")
         print(vim.inspect(rockspec) .. "\n")
       end
     end

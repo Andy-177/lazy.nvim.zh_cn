@@ -92,7 +92,7 @@ end
 ---@param yield? boolean
 function Async:wake(yield)
   local async = M.running()
-  assert(async, "Not in an async context")
+  assert(async, "当前不在异步上下文中")
   self:on("done", function()
     async:resume()
   end)
@@ -102,7 +102,7 @@ end
 ---@async
 function Async:wait()
   if coroutine.running() == self._co then
-    error("Cannot wait on self")
+    error("不能在自身上等待")
   end
 
   local async = M.running()
@@ -212,7 +212,7 @@ end
 ---@param ms number
 function M.sleep(ms)
   local async = M.running()
-  assert(async, "Not in an async context")
+  assert(async, "当前不在异步上下文中")
   async:sleep(ms)
 end
 

@@ -1,79 +1,77 @@
-# ✅ TODO
+# ✅ 待办事项
 
-- [x] progress bar?
-- [x] options when opening file
-- [x] lazy notify? not ideal when installing missing stuff
-- [x] topmods?
+- [x] 进度条？
+- [x] 打开文件时的选项
+- [x] lazy 通知？在安装缺失内容时不太理想
+- [x] 顶层模块？
 
-- [ ] better merging options?
-- [ ] especially what to do with merging of handlers?
-- [ ] overwriting keymaps probably doesn't work
-- [ ] disabled deps?
+- [ ] 更好的选项合并机制？
+- [ ] 尤其是该如何处理处理器（handlers）的合并？
+- [ ] 覆盖快捷键映射大概行不通
+- [ ] 被禁用的依赖？
 
-- [x] fancy UI to manage all your Neovim plugins
-- [x] auto lazy-loading of lua modules
-- [x] lazy-loading on events, commands, filetypes and key mappings
-- [x] Partial clones instead of shallow clones
-- [x] waits till missing deps are installed (bootstrap Neovim and start using it right away)
-- [x] Async
-- [x] No need to manually compile
-- [x] Fast. Automatically caches and compiles byte code of all lua modules needed during startup
-- [x] Correct sequencing of dependencies (deps should always be opt. Maybe make everything opt?)
-- [x] Config in multiple files
-- [x] dev option and patterns for local packages
-- [x] Profiling
-- [x] lockfile `lazy-lock.json`
-- [x] upvalues in `config` & `init`
-- [x] automatically check for updates
-- [x] commit, branch, tag, version and full semver support
-- [x] statusline component to see number of pending updates
+- [x] 用华丽的 UI 管理你所有的 Neovim 插件
+- [x] 自动延迟加载 lua 模块
+- [x] 按事件、命令、文件类型和快捷键映射延迟加载
+- [x] 使用部分克隆而非浅克隆
+- [x] 等待缺失的依赖安装完成（引导 Neovim，让你立刻就能开始使用）
+- [x] 异步
+- [x] 无需手动编译
+- [x] 快速。自动缓存并编译启动期间所需全部 lua 模块的字节码
+- [x] 正确处理依赖的执行顺序（依赖应当始终是可选的。也许可以让一切都是可选的？）
+- [x] 在多个文件中进行配置
+- [x] 用于本地包的 dev 选项与模式匹配
+- [x] 性能分析
+- [x] 锁文件 `lazy-lock.json`
+- [x] `config` 与 `init` 中的 upvalues
+- [x] 自动检查更新
+- [x] 支持 commit、branch、tag、version 以及完整的 semver
+- [x] 显示待处理更新数量的状态栏组件
 
-- [x] semver https://devhints.io/semver
-- [x] auto-loading on completion for lazy-loaded commands
-- [x] bootstrap code
-- [x] Background update checker
-- [x] health checks: check merge conflicts async
-  - [x] unsupported props or props from other managers
-  - [x] other packages still in site?
-  - [x] other package manager artifacts still present? compiled etc
-- [x] status page showing running handlers and cache stats
-- [x] temp colorscheme used during startup when installing missing plugins
-- [x] automatically reloads when config changes are detected
-- [x] handlers imply opt
-- [x] dependencies imply opt for deps
-- [x] show spec errors in health
-- [x] fix plugin details
-- [ ] show disabled plugins (strikethrough?)
-- [ ] log file
-- [x] git tests
-- [x] Import specs from other plugin managers
-- [ ] [packspec](https://github.com/nvim-lua/nvim-package-specification)
+- [x] semver https://devhints.io/semver
+- [x] 对延迟加载的命令在补全时自动加载
+- [x] 引导代码
+- [x] 后台更新检查器
+- [x] 健康检查：异步检查合并冲突
+  - [x] 不受支持的属性，或来自其他管理器的属性
+  - [x] site 目录中是否还残留其他软件包？
+  - [x] 是否还残留其他包管理器的产物（已编译文件等）？
+- [x] 显示正在运行的处理器以及缓存统计信息的状态页
+- [x] 在启动期间安装缺失插件时使用的临时配色方案
+- [x] 检测到配置变更时自动重新加载
+- [x] 处理器隐含地表示可选
+- [x] 依赖隐含地表示其依赖可选
+- [x] 在健康检查中显示 spec 错误
+- [x] 修复插件详情
+- [ ] 显示被禁用的插件（加删除线？）
+- [ ] 日志文件
+- [x] git 测试
+- [x] 从其他插件管理器导入 spec
+- [ ] [packspec](https://github.com/nvim-lua/nvim-package-specification)
 
-  - [ ] add support to specify `engines`, `os` and `cpu` like in `package.json`
-  - [ ] semver merging. Should check if two or more semver ranges are compatible and calculate the union range
-    - default semver merging strategy: if no version matches all, then use the highest version?
-  - [ ] package meta index (package.lua cache for all packages)
+  - [ ] 像 `package.json` 那样支持指定 `engines`、`os` 和 `cpu`
+  - [ ] semver 合并。应当检查两个或更多 semver 范围是否兼容，并计算它们的并集范围
+    - 默认的 semver 合并策略：如果没有版本能匹配全部条件，就使用最高版本？
+  - [ ] 软件包元数据索引（所有软件包的 package.lua 缓存）
 
-- [x] document highlight groups
-- [x] document user events
-- [x] document API, like lazy.plugins()
-- [x] icons
+- [x] 记录高亮组
+- [x] 记录用户事件
+- [x] 记录 API，例如 lazy.plugins()
+- [x] 图标
 
-- [x] check in cache if rtp files match
-- [x] I think the installation section, specifically the loading part, could use an
-      extra sentence or two. I was confused on what `config.plugins` was initially.
-      Maybe a quick, "for example, if you have a lua file
-      `~/.config/nvim/lua/config/plugins.lua` that returns a table" or something it'd
-      remove most question marks I think.
-- [x] When auto-installing the plugins the cursor isn't focused on the floating
-      window, but on the non-floating window in the background.
-- [x] Doing `:Lazy clean` doesn't show which plugins were removed.
-- [x] Shouldn't the "Versioning" section be in the "Lockfile" chapter?
-- [x] Why are personal dotfiles used as examples? Dotfiles change all the time,
-      there's no guarantee this will be relevant or even exist in two years.
-- [x] What's the difference between lazy-loading and verylazy-loading?
-- [x] Most emojis in "Configuration" aren't shown for me.
-- [x] add section on how to uninstall
-- [x] add `:Packadd` command or something similar
-- [x] headless install
-- [x] better keys handling
+- [x] 检查缓存中的 rtp 文件是否匹配
+- [x] 我觉得安装一节，特别是加载那一部分，可以再补上一两句。我一开始搞不清 `config.plugins` 到底是什么。
+      也许加个简短的说明，比如「举例来说，如果你有一个返回表的 lua 文件
+      `~/.config/nvim/lua/config/plugins.lua`」之类的，就能消除大部分疑问。
+- [x] 自动安装插件时，焦点并不在浮动窗口上，而是在背景中的非浮动窗口上。
+- [x] 执行 `:Lazy clean` 不会显示移除了哪些插件。
+- [x] 「版本控制」这一节是不是应该放到「锁文件」那一章里？
+- [x] 为什么要拿个人的 dotfiles 当例子？dotfiles 一直在变，
+      无法保证两年之后它们还相关、甚至还存在。
+- [x] 延迟加载和 verylazy 加载有什么区别？
+- [x] 「配置」一节里的大多数 emoji 在我这里显示不出来。
+- [x] 增加一节关于如何卸载的说明
+- [x] 添加 `:Packadd` 命令或类似的命令
+- [x] 无头模式安装
+- [x] 更好的快捷键处理
+

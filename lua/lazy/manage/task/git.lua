@@ -87,9 +87,9 @@ M.log = {
       target = assert(Git.get_target(self.plugin))
       if not target.commit then
         for k, v in pairs(target) do
-          error(k .. " '" .. v .. "' not found")
+          error("未找到 " .. k .. " '" .. v .. "'")
         end
-        error("no target commit found")
+        error("未找到目标提交")
       end
       assert(target.commit, self.plugin.name .. " " .. target.branch)
       if not self.plugin._.is_local then
@@ -114,8 +114,8 @@ M.log = {
       cwd = self.plugin.dir,
     })
 
-    -- for local plugins, mark as needing updates only if local is
-    -- behind upstream, i.e. if git log gave no output
+    -- 对本地插件，只有当本地落后于上游时才标记为需要更新，
+    -- 也就是当 git log 没有输出时
     if opts.check and self.plugin._.is_local then
       if not vim.tbl_isempty(self:get_log()) then
         self.plugin._.updates = { from = info, to = target }
@@ -146,9 +146,10 @@ M.clone = {
 
     args[#args + 1] = "--origin=origin"
 
-    -- If git config --global core.autocrlf is true on a Unix/Linux system, then the git clone
-    -- process will lead to files with CRLF endings. Vi / vim / neovim cannot handle this.
-    -- Force git to clone with core.autocrlf=false.
+    -- 如果在 Unix/Linux 系统上 git config --global core.autocrlf 为 true，
+    -- 那么 git clone 过程会导致文件带有 CRLF 换行符。
+    -- 而 Vi / vim / neovim 无法处理这种情况。
+    -- 因此强制 git 以 core.autocrlf=false 进行克隆。
     args[#args + 1] = "-c"
     args[#args + 1] = "core.autocrlf=false"
 
@@ -181,8 +182,8 @@ M.clone = {
   end,
 }
 
--- setup origin branches if needed
--- fetch will retrieve the data
+-- 如果需要则设置 origin 分支
+-- fetch 会获取相应数据
 M.branch = {
   skip = function(plugin)
     if not plugin._.installed or plugin._.is_local then
@@ -208,7 +209,7 @@ M.branch = {
   end,
 }
 
--- check and switch origin
+-- 检查并切换 origin
 M.origin = {
   skip = function(plugin)
     if not plugin._.installed or plugin._.is_local then
@@ -223,10 +224,10 @@ M.origin = {
     if opts.check then
       local origin = Git.get_origin(self.plugin.dir)
       self:error({
-        "Origin has changed:",
-        "  * old: " .. origin,
-        "  * new: " .. self.plugin.url,
-        "Please run update to fix",
+        "origin 已经改变：",
+        "  * 旧值: " .. origin,
+        "  * 新值: " .. self.plugin.url,
+        "请运行 update 来修复",
       })
       return
     end
@@ -249,7 +250,7 @@ M.status = {
           local lines = vim.split(output, "\n")
           ---@type string[]
           lines = vim.tbl_filter(function(line)
-            -- Fix doc/tags being marked as modified
+            -- 修正 doc/tags 被标记为已修改的问题
             if line:gsub("[\\/]", "/") == "doc/tags" then
               local Process = require("lazy.manage.process")
               Process.exec({ "git", "checkout", "--", "doc/tags" }, { cwd = self.plugin.dir })
@@ -258,12 +259,12 @@ M.status = {
             return line ~= ""
           end, lines)
           if #lines > 0 then
-            local msg = { "You have local changes in `" .. self.plugin.dir .. "`:" }
+            local msg = { "在 `" .. self.plugin.dir .. "` 中存在本地改动：" }
             for _, line in ipairs(lines) do
               msg[#msg + 1] = "  * " .. line
             end
-            msg[#msg + 1] = "Please remove them to update."
-            msg[#msg + 1] = "You can also press `x` to remove the plugin and then `I` to install it again."
+            msg[#msg + 1] = "请移除这些改动后再更新。"
+            msg[#msg + 1] = "你也可以按 `x` 删除该插件，然后按 `I` 重新安装。"
             self:error(msg)
           end
         end
@@ -272,7 +273,7 @@ M.status = {
   end,
 }
 
--- fetches all needed origin branches
+-- 获取所有需要的 origin 分支
 M.fetch = {
   skip = function(plugin)
     return not plugin._.installed or plugin._.is_local or cooldown(plugin)
@@ -284,8 +285,8 @@ M.fetch = {
     local args = {
       "fetch",
       "--recurse-submodules",
-      "--tags", -- also fetch remote tags
-      "--force", -- overwrite existing tags if needed
+      "--tags", -- 同时获取远程标签
+      "--force", -- 必要时覆盖已有标签
       "--progress",
     }
 
@@ -305,8 +306,8 @@ M.fetch = {
   end,
 }
 
--- checkout to the target commit
--- branches will exists at this point, so so will the commit
+-- 检出到目标提交
+-- 到这一步分支和提交都已经存在
 M.checkout = {
   skip = function(plugin)
     return not plugin._.installed or plugin._.is_local
@@ -319,15 +320,15 @@ M.checkout = {
     local info = assert(Git.info(self.plugin.dir))
     local target = assert(Git.get_target(self.plugin))
 
-    -- if the plugin is pinned and we did not just clone it,
-    -- then don't update
+    -- 如果插件被锁定（pin）且我们不是刚刚克隆的，
+    -- 那么就不更新
     if self.plugin.pin and not self.plugin._.cloned then
       target = info
     end
 
     local lock
     if opts.lockfile then
-      -- restore to the lock if it exists
+      -- 如果锁定记录存在，则还原到该状态
       lock = Lock.get(self.plugin)
       if lock then
         ---@diagnostic disable-next-line: cast-local-type
@@ -335,8 +336,8 @@ M.checkout = {
       end
     end
 
-    -- don't run checkout if target is already reached.
-    -- unless we just cloned, since then we won't have any data yet
+    -- 如果已经处于目标状态，则不要运行 checkout。
+    -- 除非刚刚克隆过，因为那时我们还没有任何数据
     if Git.eq(info, target) and info.branch == target.branch then
       self.plugin._.updated = {
         from = info.commit,

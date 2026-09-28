@@ -2,8 +2,8 @@ local Config = require("lazy.core.config")
 local Pkg = require("lazy.pkg")
 local Util = require("lazy.core.util")
 
---- This class is used to manage the plugins.
---- A plugin is a collection of fragments that are related to each other.
+--- 这个类用于管理插件。
+--- 一个插件是若干彼此相关的片段的集合。
 ---@class LazyMeta
 ---@field plugins table<string, LazyPlugin>
 ---@field str_to_meta table<string, LazyPlugin>
@@ -28,7 +28,7 @@ function M.new(spec)
   return self
 end
 
--- import package specs
+-- 导入软件包 spec
 function M:load_pkgs()
   if not Config.options.pkg.enabled then
     return
@@ -38,20 +38,20 @@ function M:load_pkgs()
     local meta, fragment = self:add(pkg.spec)
     if meta and fragment then
       meta._.pkg = pkg
-      -- tag all top-level package fragments that were added as optional
+      -- 把所有被添加为可选的顶层软件包片段标记出来
       for _, fid in ipairs(meta._.frags) do
         if fid > last_id then
           local frag = self.fragments:get(fid)
           frag.spec.optional = true
         end
       end
-      -- keep track of the top-level package fragment
+      -- 记录顶层软件包片段
       self.pkgs[pkg.dir] = fragment.id
     end
   end
 end
 
---- Remove a plugin and all its fragments.
+--- 移除一个插件及其所有片段。
 ---@param name string
 function M:del(name)
   local meta = self.plugins[name]
@@ -64,9 +64,9 @@ function M:del(name)
   self.plugins[name] = nil
 end
 
---- Add a fragment to a plugin.
---- This will create a new plugin if it does not exist.
---- It also keeps track of renames.
+--- 把一个片段添加到插件中。
+--- 如果插件不存在，将创建一个新插件。
+--- 它还会跟踪重命名的情况。
 ---@param plugin LazyPluginSpec
 function M:add(plugin)
   local fragment = self.fragments:add(plugin)
@@ -81,7 +81,7 @@ function M:add(plugin)
   if not meta then
     meta = { name = fragment.name, _ = { frags = {} } }
     local url, dir = fragment.url, fragment.dir
-    -- add to index
+    -- 添加到索引
     if url then
       self.str_to_meta[url] = meta
     end
@@ -97,14 +97,14 @@ function M:add(plugin)
     self:_rebuild(meta.name)
     local new_dir = meta.dir
     if old_dir ~= new_dir then
-      local msg = "Plugin `" .. meta.name .. "` changed `dir`:\n- from: `" .. old_dir .. "`\n- to: `" .. new_dir .. "`"
-      msg = msg .. "\n\nThis plugin was already partially loaded, so things may break.\nPlease fix your config."
+      local msg = "插件 `" .. meta.name .. "` 改变了 `dir`：\n- 原来: `" .. old_dir .. "`\n- 现在: `" .. new_dir .. "`"
+      msg = msg .. "\n\n该插件已经被部分加载，因此可能会出现问题。\n请修正你的配置。"
       self.spec:error(msg)
     end
   end
 
   if plugin.name then
-    -- handle renames
+    -- 处理重命名
     if meta.name ~= plugin.name then
       self.plugins[meta.name] = nil
       meta.name = plugin.name
@@ -117,8 +117,8 @@ function M:add(plugin)
   return meta, fragment
 end
 
---- Rebuild all plugins based on dirty fragments,
---- or dirty plugins. Will remove plugins that no longer have fragments.
+--- 基于脏片段或脏插件重建所有插件，
+--- 同时会移除那些已不再拥有任何片段的插件。
 function M:rebuild()
   local frag_count = vim.tbl_count(self.fragments.dirty)
   local plugin_count = vim.tbl_count(self.dirty)
@@ -126,22 +126,22 @@ function M:rebuild()
     return
   end
   if Config.options.debug then
-    Util.track("rebuild plugins frags=" .. frag_count .. " plugins=" .. plugin_count)
+    Util.track("重建插件 片段数=" .. frag_count .. " 插件数=" .. plugin_count)
   end
   for fid in pairs(self.fragments.dirty) do
     local meta = self.frag_to_meta[fid]
     if meta then
       if self.fragments:get(fid) then
-        -- fragment still exists, so mark plugin as dirty
+        -- 片段仍然存在，因此把插件标记为脏
         self.dirty[meta.name] = true
       else
-        -- fragment was deleted, so remove it from plugin
+        -- 片段已被删除，因此把它从插件中移除
         self.frag_to_meta[fid] = nil
         ---@param f number
         meta._.frags = Util.filter(function(f)
           return f ~= fid
         end, meta._.frags)
-        -- if no fragments left, delete plugin
+        -- 如果没有片段剩下，则删除该插件
         if #meta._.frags == 0 then
           self:del(meta.name)
         else
@@ -159,9 +159,9 @@ function M:rebuild()
   end
 end
 
---- Rebuild a single plugin.
---- This will resolve the plugin based on its fragments using metatables.
---- This also resolves dependencies, dep, optional, dir, dev, and url.
+--- 重建单个插件。
+--- 这会使用元表根据插件的片段来解析该插件。
+--- 同时也会解析 dependencies、dep、optional、dir、dev 和 url。
 ---@param name string
 function M:_rebuild(name)
   if not self.dirty[name] then
@@ -182,7 +182,7 @@ function M:_rebuild(name)
   plugin._.top = true
   plugin.optional = true
 
-  assert(#plugin._.frags > 0, "no fragments found for plugin " .. name)
+  assert(#plugin._.frags > 0, "插件 " .. name .. " 没有找到任何片段")
 
   ---@type table<number, boolean>
   local added = {}
@@ -190,7 +190,7 @@ function M:_rebuild(name)
     if not added[fid] then
       added[fid] = true
       local fragment = self.fragments:get(fid)
-      assert(fragment, "fragment " .. fid .. " not found, for plugin " .. name)
+      assert(fragment, "未找到片段 " .. fid .. "，它属于插件 " .. name)
       ---@diagnostic disable-next-line: no-unknown
       super = setmetatable(fragment.spec, super and { __index = super } or nil)
       plugin._.dep = plugin._.dep and fragment.dep
@@ -198,7 +198,7 @@ function M:_rebuild(name)
       plugin.url = fragment.url or plugin.url
       plugin._.top = plugin._.top and fragment.pid == nil
 
-      -- dependencies
+      -- 依赖
       for _, dep in ipairs(fragment.deps or {}) do
         local dep_meta = self.frag_to_meta[dep]
         if dep_meta then
@@ -238,12 +238,12 @@ function M:_rebuild(name)
     plugin.dir = plugin.dir or Config.options.root .. "/" .. plugin.name
   end
 
-  -- dependencies
+  -- 依赖
   if #plugin.dependencies == 0 and not super.dependencies then
     plugin.dependencies = nil
   end
 
-  -- optional
+  -- 可选
   if not plugin.optional and not super.optional then
     plugin.optional = nil
   end
@@ -253,7 +253,7 @@ function M:_rebuild(name)
   return plugin
 end
 
---- Disable a plugin.
+--- 禁用一个插件。
 ---@param plugin LazyPlugin
 function M:disable(plugin)
   plugin._.kind = "disabled"
@@ -261,7 +261,7 @@ function M:disable(plugin)
   self.spec.disabled[plugin.name] = plugin
 end
 
---- Check if a plugin should be disabled, but ignore uninstalling it.
+--- 检查插件是否应该被禁用，但忽略卸载它。
 function M:fix_cond()
   for _, plugin in pairs(self.plugins) do
     local cond = plugin.cond
@@ -285,7 +285,7 @@ function M:fix_cond()
   end
 end
 
---- Removes plugins for which all its fragments are optional.
+--- 移除那些所有片段都是可选的插件。
 function M:fix_optional()
   if self.spec.optional then
     return 0
@@ -301,7 +301,7 @@ function M:fix_optional()
   return changes
 end
 
---- Removes plugins that are disabled.
+--- 移除那些已被禁用的插件。
 function M:fix_disabled()
   local changes = 0
   local function check(top)
@@ -319,21 +319,21 @@ function M:fix_disabled()
       end
     end
   end
-  -- disable top-level plugins first, since they may have non-top-level frags
-  -- that disable other plugins
+  -- 先禁用顶层插件，因为它们可能含有非顶层片段，
+  -- 而这些片段会禁用其他插件
   check(true)
-  -- then disable non-top-level plugins
+  -- 然后禁用非顶层插件
   check(false)
   return changes
 end
 
---- Removes package fragments for plugins that no longer use the same directory.
+--- 移除那些不再使用同一目录的插件的软件包片段。
 function M:fix_pkgs()
   for dir, fid in pairs(self.pkgs) do
     local plugin = self.frag_to_meta[fid]
     plugin = plugin and self.plugins[plugin.name]
     if plugin then
-      -- check if plugin is still in the same directory
+      -- 检查该插件是否仍在同一个目录中
       if plugin.dir ~= dir then
         self.fragments:del(fid)
       end
@@ -342,7 +342,7 @@ function M:fix_pkgs()
   self:rebuild()
 end
 
---- Resolve all plugins, based on cond, enabled and optional.
+--- 根据 cond、enabled 和 optional 解析所有插件。
 function M:resolve()
   Util.track("resolve plugins")
   self:rebuild()

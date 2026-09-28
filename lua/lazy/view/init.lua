@@ -85,11 +85,11 @@ function M.create()
     require("lazy.manage.process").abort()
     require("lazy.async").abort()
     return ViewConfig.keys.abort
-  end, { silent = true, buffer = self.buf, expr = true, desc = "Abort" })
+  end, { silent = true, buffer = self.buf, expr = true, desc = "中止" })
 
   vim.keymap.set("n", "gx", "K", { buffer = self.buf, remap = true })
 
-  -- plugin details
+  -- 插件详情
   self:on_key(ViewConfig.keys.details, function()
     local plugin = self.render:get_plugin()
     if plugin then
@@ -110,7 +110,7 @@ function M.create()
       self.state.plugin = open and selected or nil
       self:update()
     end
-  end, "Details")
+  end, "详情")
 
   self:on_key(ViewConfig.keys.next, function()
     local cursor = vim.api.nvim_win_get_cursor(self.view.win)
@@ -121,7 +121,7 @@ function M.create()
         return
       end
     end
-  end, "Next Plugin")
+  end, "下一个插件")
 
   self:on_key(ViewConfig.keys.prev, function()
     local cursor = vim.api.nvim_win_get_cursor(self.view.win)
@@ -132,19 +132,19 @@ function M.create()
         return
       end
     end
-  end, "Prev Plugin")
+  end, "上一个插件")
 
   self:on_key(ViewConfig.keys.profile_sort, function()
     if self.state.mode == "profile" then
       self.state.profile.sort_time_taken = not self.state.profile.sort_time_taken
       self:update()
     end
-  end, "Sort Profile")
+  end, "排序性能分析")
 
   self:on_key(ViewConfig.keys.profile_filter, function()
     if self.state.mode == "profile" then
       vim.ui.input({
-        prompt = "Enter time threshold in ms: ",
+        prompt = "请输入时间阈值（毫秒）：",
         default = tostring(self.state.profile.threshold),
       }, function(input)
         if not input then
@@ -152,14 +152,14 @@ function M.create()
         end
         local num = input == "" and 0 or tonumber(input)
         if not num then
-          Util.error("Please input a number")
+          Util.error("请输入一个数字")
         else
           self.state.profile.threshold = num
           self:update()
         end
       end)
     end
-  end, "Filter Profile")
+  end, "筛选性能分析")
 
   for lhs, rhs in pairs(Config.options.ui.custom_keys) do
     if rhs then
@@ -193,7 +193,7 @@ function M:open_url(path)
       local url = plugin.url:gsub("%.git$", "")
       Util.open(url .. path)
     else
-      Util.error("No url for " .. plugin.name)
+      Util.error(plugin.name .. " 没有可用的网址")
     end
   end
 end
@@ -220,17 +220,17 @@ function M:setup_patterns()
     ["(https?://%S+)"] = function(url)
       Util.open(url)
     end,
-  }, self.hover, "Hover")
+  }, self.hover, "悬停")
   self:on_pattern(ViewConfig.keys.diff, {
     [commit_pattern] = function(hash)
       self:diff({ commit = hash })
     end,
-  }, self.diff, "Diff")
+  }, self.diff, "差异")
   self:on_pattern(ViewConfig.commands.restore.key_plugin, {
     [commit_pattern] = function(hash)
       self:restore({ commit = hash })
     end,
-  }, self.restore, "Restore")
+  }, self.restore, "还原")
 end
 
 ---@param opts? {commit:string}
@@ -291,7 +291,7 @@ function M:diff(opts)
   end
 end
 
---- will create a key mapping that can be used on certain patterns
+--- 创建一个可用于特定模式的按键映射
 ---@param key string
 ---@param patterns table<string, fun(str:string)>
 ---@param fallback? fun(self)

@@ -8,7 +8,7 @@ local M = {}
 ---@alias GitInfo {branch?:string, commit?:string, tag?:string, version?:Semver}
 
 ---@param repo string
----@param details? boolean Fetching details is slow! Don't loop over a plugin to fetch all details!
+---@param details? boolean 获取详情较慢！不要对插件循环调用以获取所有详情！
 ---@return GitInfo?
 function M.info(repo, details)
   local line = M.head(repo)
@@ -84,8 +84,8 @@ function M.get_branch(plugin)
   if plugin.branch then
     return plugin.branch
   else
-    -- we need to return the default branch
-    -- Try origin first
+    -- 我们需要返回默认分支
+    -- 先尝试 origin
     local main = M.ref(plugin.dir, "remotes/origin/HEAD")
     if main then
       local branch = main:match("ref: refs/remotes/origin/(.*)")
@@ -94,19 +94,19 @@ function M.get_branch(plugin)
       end
     end
 
-    -- fallback to local HEAD
+    -- 回退到本地的 HEAD
     main = assert(M.head(plugin.dir))
     return main and main:match("ref: refs/heads/(.*)")
   end
 end
 
--- Return the last commit for the given branch
+-- 返回给定分支的最后一次提交
 ---@param repo string
 ---@param branch string
 ---@param origin? boolean
 function M.get_commit(repo, branch, origin)
   if origin then
-    -- origin ref might not exist if it is the same as local
+    -- 如果 origin 与本地相同，origin 的 ref 可能并不存在
     return M.ref(repo, "remotes/origin", branch) or M.ref(repo, "heads", branch)
   else
     return M.ref(repo, "heads", branch)
@@ -156,7 +156,7 @@ end
 function M.ref(repo, ...)
   local ref = table.concat({ ... }, "/")
 
-  -- if this is a tag ref, then dereference it instead
+  -- 如果这是一个 tag ref，那么改为解引用它
   if ref:find("tags/", 1, true) == 1 then
     local tags = M.get_tag_refs(repo, ref)
     for _, tag_ref in pairs(tags) do
@@ -164,7 +164,7 @@ function M.ref(repo, ...)
     end
   end
 
-  -- otherwise just get the ref
+  -- 否则直接获取该 ref
   return Util.head(repo .. "/.git/refs/" .. ref) or M.packed_refs(repo)[ref]
 end
 
@@ -183,7 +183,7 @@ function M.packed_refs(repo)
   return ret
 end
 
--- this is slow, so don't use on a loop over all plugins!
+-- 这个函数很慢，所以不要在遍历所有插件的循环中使用！
 ---@param tagref string?
 function M.get_tag_refs(repo, tagref)
   tagref = tagref or "--tags"
@@ -220,13 +220,13 @@ function M.get_config(repo)
   ---@type string
   local current_section = nil
   for line in config:gmatch("[^\n]+") do
-    -- Check if the line is a section header
+    -- 检查这一行是否是分节标题
     local section = line:match("^%s*%[(.+)%]%s*$")
     if section then
       ---@type string
       current_section = section:gsub('%s+"', "."):gsub('"+%s*$', "")
     else
-      -- Ignore comments and blank lines
+      -- 忽略注释和空行
       if not line:match("^%s*[#;]") and line:match("%S") then
         local key, value = line:match("^%s*(%S+)%s*=%s*(.+)%s*$")
         ret[current_section .. "." .. key] = value

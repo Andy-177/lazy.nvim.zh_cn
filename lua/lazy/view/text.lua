@@ -102,7 +102,7 @@ function Text:render(buf)
           local ok, err = pcall(vim.api.nvim_buf_set_extmark, buf, Config.ns, l - 1, extmark_col, extmark)
           if not ok then
             Util.error(
-              "Failed to set extmark. Please report a bug with this info:\n"
+              "设置 extmark 失败。请附带以下信息反馈问题：\n"
                 .. vim.inspect({ segment = segment, line = line, error = err })
             )
           end

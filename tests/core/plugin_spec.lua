@@ -512,7 +512,7 @@ describe("plugin spec", function()
           },
         },
         expected_opts = { key = true, key_active = true },
-      }, -- for now, one test...
+      }, -- 暂时只有一个测试……
     }
     for _, test in ipairs(tests) do
       local spec = Plugin.Spec.new(test.spec)

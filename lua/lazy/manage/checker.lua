@@ -35,8 +35,8 @@ end
 function M.fast_check(opts)
   opts = opts or {}
   for _, plugin in pairs(Config.plugins) do
-    -- don't check local plugins here, since we mark them as needing updates
-    -- only if local is behind upstream (if the git log task gives no output)
+    -- 这里不检查本地插件，因为我们只在本地落后于上游时
+    -- 才会把它们标记为需要更新（也就是 git log 任务没有任何输出时）
     if plugin._.installed and not (plugin.pin or plugin._.is_local) then
       plugin._.updates = nil
       local info = Git.info(plugin.dir)
@@ -89,7 +89,7 @@ function M.report(notify)
     end
   end
   if #lines > 0 and notify and Config.options.checker.notify and not Config.headless() then
-    table.insert(lines, 1, "# Plugin Updates")
+    table.insert(lines, 1, "# 插件更新")
     Util.info(lines)
   end
 end

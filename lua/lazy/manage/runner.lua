@@ -50,7 +50,7 @@ function Runner:plugin(name)
   return self._plugins[name]
 end
 
---- Update plugins
+--- 更新插件
 function Runner:update()
   for name in pairs(self._plugins) do
     self._plugins[name] = Config.plugins[name] or self._plugins[name]
@@ -86,7 +86,7 @@ function Runner:_start()
     wait_step = nil
     local next = {} ---@type string[]
 
-    -- check running tasks
+    -- 检查正在运行的任务
     for _, name in ipairs(names) do
       state[name] = state[name] or { step = 0 }
       local s = state[name]
@@ -94,13 +94,13 @@ function Runner:_start()
       local step = self._pipeline[s.step]
 
       if is_running then
-        -- still running
+        -- 仍在运行
         active = active + 1
       -- selene:allow(empty_if)
       elseif s.task and s.task:has_errors() then
-        -- don't continue tasks if there are errors
+        -- 如果存在错误则不再继续任务
       elseif step and step.task == "wait" and not resume then
-        -- waiting for sync
+        -- 等待同步
         waiting = waiting + 1
         wait_step = s.step
       else
@@ -108,7 +108,7 @@ function Runner:_start()
       end
     end
 
-    -- schedule next tasks
+    -- 调度下一个任务
     for _, name in ipairs(next) do
       if self._opts.concurrency and active >= self._opts.concurrency then
         break
@@ -117,12 +117,12 @@ function Runner:_start()
       local plugin = self:plugin(name)
       while s.step <= #self._pipeline do
         if s.step == #self._pipeline then
-          -- done
+          -- 完成
           s.task = nil
           plugin._.working = false
           break
         elseif s.step < #self._pipeline then
-          -- next
+          -- 下一步
           s.step = s.step + 1
           local step = self._pipeline[s.step]
           if step.task == "wait" then
@@ -163,11 +163,11 @@ end
 ---@param step PipelineStep
 ---@return LazyTask?
 function Runner:queue(plugin, step)
-  assert(self._running and self._running:running(), "Runner is not running")
+  assert(self._running and self._running:running(), "Runner 未在运行")
   local def = vim.split(step.task, ".", { plain = true })
   ---@type LazyTaskDef
   local task_def = require("lazy.manage.task." .. def[1])[def[2]]
-  assert(task_def, "Task not found: " .. step.task)
+  assert(task_def, "未找到任务: " .. step.task)
   local opts = step.opts or {}
   if not (task_def.skip and task_def.skip(plugin, opts)) then
     return Task.new(plugin, def[2], task_def.run, opts)
@@ -178,8 +178,8 @@ function Runner:is_running()
   return self._running and self._running:running()
 end
 
--- Execute the callback async when done.
--- When no callback is specified, this will wait sync
+-- 完成后异步执行回调。
+-- 未指定回调时，将同步等待
 ---@param cb? fun()
 function Runner:wait(cb)
   if not self:is_running() then

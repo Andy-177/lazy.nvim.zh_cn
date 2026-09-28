@@ -1,75 +1,73 @@
-*lazy.nvim.txt*                             A modern plugin manager for Neovim
+*lazy.nvim.txt*                             用于 Neovim 的现代化插件管理器
 
 ==============================================================================
-Table of Contents                                *lazy.nvim-table-of-contents*
+目录                                    *lazy.nvim-table-of-contents*
 
-1. 📰 What’s new?                           |lazy.nvim-📰-what’s-new?|
+1. 📰 新增了什么                         |lazy.nvim-📰-what’s-new?|
   - 11.x                                   |lazy.nvim-📰-what’s-new?-11.x|
-2. 🚀 Getting Started                       |lazy.nvim-🚀-getting-started|
-  - ✨ Features                 |lazy.nvim-🚀-getting-started-✨-features|
-  - ⚡️ Requirements   |lazy.nvim-🚀-getting-started-⚡️-requirements|
-3. 🛠️ Installation                       |lazy.nvim-🛠️-installation|
-  - Structured Setup         |lazy.nvim-🛠️-installation-structured-setup|
-  - Single File Setup       |lazy.nvim-🛠️-installation-single-file-setup|
-4. 🔌 Plugin Spec                               |lazy.nvim-🔌-plugin-spec|
-  - Spec Source                       |lazy.nvim-🔌-plugin-spec-spec-source|
-  - Spec Loading                     |lazy.nvim-🔌-plugin-spec-spec-loading|
-  - Spec Setup                         |lazy.nvim-🔌-plugin-spec-spec-setup|
-  - Spec Lazy Loading           |lazy.nvim-🔌-plugin-spec-spec-lazy-loading|
-  - Spec Versioning               |lazy.nvim-🔌-plugin-spec-spec-versioning|
-  - Spec Advanced                   |lazy.nvim-🔌-plugin-spec-spec-advanced|
-  - Examples                             |lazy.nvim-🔌-plugin-spec-examples|
-  - Lazy Loading                     |lazy.nvim-🔌-plugin-spec-lazy-loading|
-  - Versioning                         |lazy.nvim-🔌-plugin-spec-versioning|
-5. 📦 Packages                                     |lazy.nvim-📦-packages|
-  - Lazy                                        |lazy.nvim-📦-packages-lazy|
+2. 🚀 快速上手                            |lazy.nvim-🚀-getting-started|
+  - ✨ 特性                     |lazy.nvim-🚀-getting-started-✨-features|
+  - ⚡️ 环境要求      |lazy.nvim-🚀-getting-started-⚡️-requirements|
+3. 🛠️ 安装                                |lazy.nvim-🛠️-installation|
+  - 结构化安装                 |lazy.nvim-🛠️-installation-structured-setup|
+  - 单文件安装                   |lazy.nvim-🛠️-installation-single-file-setup|
+4. 🔌 插件 Spec                                |lazy.nvim-🔌-plugin-spec|
+  - Spec 来源                        |lazy.nvim-🔌-plugin-spec-spec-source|
+  - Spec 加载                      |lazy.nvim-🔌-plugin-spec-spec-loading|
+  - Spec 设置                        |lazy.nvim-🔌-plugin-spec-spec-setup|
+  - Spec 延迟加载        |lazy.nvim-🔌-plugin-spec-spec-lazy-loading|
+  - Spec 版本控制            |lazy.nvim-🔌-plugin-spec-spec-versioning|
+  - Spec 进阶                      |lazy.nvim-🔌-plugin-spec-spec-advanced|
+  - 示例                                 |lazy.nvim-🔌-plugin-spec-examples|
+  - 延迟加载                          |lazy.nvim-🔌-plugin-spec-lazy-loading|
+  - 版本控制                             |lazy.nvim-🔌-plugin-spec-versioning|
+5. 📦 软件包                                    |lazy.nvim-📦-packages|
+  - Lazy                                   |lazy.nvim-📦-packages-lazy|
   - Rockspec                                |lazy.nvim-📦-packages-rockspec|
   - Packspec                                |lazy.nvim-📦-packages-packspec|
-6. ⚙️ Configuration                       |lazy.nvim-⚙️-configuration|
-  - 🌈 Highlight Groups|lazy.nvim-⚙️-configuration-🌈-highlight-groups|
-7. 🚀 Usage                                           |lazy.nvim-🚀-usage|
-  - ▶️ Startup Sequence     |lazy.nvim-🚀-usage-▶️-startup-sequence|
-  - 🚀 Commands                         |lazy.nvim-🚀-usage-🚀-commands|
-  - 📆 User Events                   |lazy.nvim-🚀-usage-📆-user-events|
-  - ❌ Uninstalling                   |lazy.nvim-🚀-usage-❌-uninstalling|
-  - 🔒 Lockfile                         |lazy.nvim-🚀-usage-🔒-lockfile|
-  - 📦 Migration Guide           |lazy.nvim-🚀-usage-📦-migration-guide|
-  - ⚡ Profiling & Debug         |lazy.nvim-🚀-usage-⚡-profiling-&-debug|
-  - 📂 Structuring Your Plugins|lazy.nvim-🚀-usage-📂-structuring-your-plugins|
-8. 🔥 Developers                                 |lazy.nvim-🔥-developers|
-  - Best Practices                  |lazy.nvim-🔥-developers-best-practices|
-  - Building                              |lazy.nvim-🔥-developers-building|
-  - Minit (Minimal Init)      |lazy.nvim-🔥-developers-minit-(minimal-init)|
-9. Links                                                     |lazy.nvim-links|
+6. ⚙️ 配置                                |lazy.nvim-⚙️-configuration|
+  - 🌈 高亮组|lazy.nvim-⚙️-configuration-🌈-highlight-groups|
+7. 🚀 用法                                          |lazy.nvim-🚀-usage|
+  - ▶️ 启动顺序      |lazy.nvim-🚀-usage-▶️-startup-sequence|
+  - 🚀 命令                            |lazy.nvim-🚀-usage-🚀-commands|
+  - 📆 用户事件                 |lazy.nvim-🚀-usage-📆-user-events|
+  - ❌ 卸载                       |lazy.nvim-🚀-usage-❌-uninstalling|
+  - 🔒 锁文件                          |lazy.nvim-🚀-usage-🔒-lockfile|
+  - 📦 迁移指南            |lazy.nvim-🚀-usage-📦-migration-guide|
+  - ⚡ 性能分析与调试       |lazy.nvim-🚀-usage-⚡-profiling-&-debug|
+  - 📂 组织你的插件|lazy.nvim-🚀-usage-📂-structuring-your-plugins|
+8. 🔥 开发者                                      |lazy.nvim-🔥-developers|
+  - 最佳实践                    |lazy.nvim-🔥-developers-best-practices|
+  - 构建                             |lazy.nvim-🔥-developers-building|
+  - Minit（最小化 init） |lazy.nvim-🔥-developers-minit-(minimal-init)|
+9. 相关链接                                                |lazy.nvim-links|
 
 ==============================================================================
-1. 📰 What’s new?                           *lazy.nvim-📰-what’s-new?*
+1. 📰 新增了什么                         *lazy.nvim-📰-what’s-new?*
 
 
 11.X                                       *lazy.nvim-📰-what’s-new?-11.x*
 
-- **New Website**: There’s a whole new website with a fresh look and improved
-    documentation. Check it out at <https://lazy.folke.io>. The GitHub `README.md`
-    has been updated to point to the new website. The `vimdoc` contains all the
-    information that is available on the website.
-- **Spec Resolution & Merging**: the code that resolves a final spec from a
-    plugin’s fragments has been rewritten. This should be a tiny bit faster, but
-    more importantly, fixes some issues and is easier to maintain.
-- Packages <https://lazy.folke.io/packages> can now specify their dependencies
-    and configuration using one of:
-    - **Lazy**: `lazy.lua` file
-    - **Rockspec**: luarocks <https://luarocks.org/> `*-scm-1.rockspec` file <https://github.com/luarocks/luarocks/wiki/Rockspec-format>
-    - **Packspec**: `pkg.json` (experimental, since the format <https://github.com/neovim/packspec/issues/41> is not quite there yet)
-    Related _lazy.nvim_ options:
+- **全新网站**：网站焕然一新，文档也得到了改进。
+    前往 <https://lazy.folke.io> 看看吧。GitHub 上的 `README.md`
+    也已更新为指向新网站。`vimdoc` 中包含了网站上提供的全部信息。
+- **Spec 解析与合并**：从插件的各个片段解析出最终 spec 的代码已被重写。
+    这应该会快上那么一点点，但更重要的是，它修复了一些问题，而且更易于维护。
+- 软件包 <https://lazy.folke.io/packages> 现在可以用以下任一方式
+    指定它们的依赖和配置：
+    - **Lazy**：`lazy.lua` 文件
+    - **Rockspec**：luarocks <https://luarocks.org/> 的 `*-scm-1.rockspec` 文件 <https://github.com/luarocks/luarocks/wiki/Rockspec-format>
+    - **Packspec**：`pkg.json`（实验性功能，因为该格式 <https://github.com/neovim/packspec/issues/41> 尚未完全成熟）
+    相关的 _lazy.nvim_ 选项：
     >lua
         {
           pkg = {
             enabled = true,
             cache = vim.fn.stdpath("state") .. "/lazy/pkg-cache.lua",
-            -- the first package source that is found for a plugin will be used.
+            -- 插件找到的第一个可用的包源将被使用。
             sources = {
               "lazy",
-              "rockspec", -- will only be used when rocks.enabled is true
+              "rockspec", -- 仅当 rocks.enabled 为 true 时才会使用
               "packspec",
             },
           },
@@ -80,89 +78,87 @@ Table of Contents                                *lazy.nvim-table-of-contents*
           },
         }
     <
-- Installing neorg <https://github.com/nvim-neorg/neorg> is now as simple as:
+- 安装 neorg <https://github.com/nvim-neorg/neorg> 现在非常简单：
     >lua
         { "nvim-neorg/neorg", opts = {} }
     <
-- Packages are not limited to just Neovim plugins. You can install any
-    **luarocks** package, like:
+- 软件包不再局限于 Neovim 插件。你可以安装任意
+    **luarocks** 软件包，例如：
     >lua
         { "https://github.com/lubyk/yaml" }
     <
-    Luarocks packages without a `/lua` directory are never lazy-loaded, since
-    it’s just a library.
-- `build` functions or `*.lua` build files (like `build.lua`) now run
-    asynchronously. You can use `coroutine.yield(status_msg)` to show progress.
-    Yielding will also schedule the next `resume` to run in the next tick, so you
-    can do long-running tasks without blocking Neovim.
+    不带 `/lua` 目录的 Luarocks 软件包永远不会被延迟加载，因为
+    它只是一个库。
+- `build` 函数或 `*.lua` 构建文件（例如 `build.lua`）现在会
+    异步运行。你可以用 `coroutine.yield(status_msg)` 来显示进度。
+    让出执行权还会把下一次 `resume` 调度到下一个 tick，因此你
+    可以执行耗时较长的任务而不会阻塞 Neovim。
 
 
 ==============================================================================
-2. 🚀 Getting Started                       *lazy.nvim-🚀-getting-started*
+2. 🚀 快速上手                            *lazy.nvim-🚀-getting-started*
 
-**lazy.nvim** is a modern plugin manager for Neovim.
-
-
-✨ FEATURES                     *lazy.nvim-🚀-getting-started-✨-features*
-
-- 📦 Manage all your Neovim plugins with a powerful UI
-- 🚀 Fast startup times thanks to automatic caching and bytecode compilation of Lua modules
-- 💾 Partial clones instead of shallow clones
-- 🔌 Automatic lazy-loading of Lua modules and lazy-loading on events, commands, filetypes, and key mappings
-- ⏳ Automatically install missing plugins before starting up Neovim, allowing you to start using it right away
-- 💪 Async execution for improved performance
-- 🛠️ No need to manually compile plugins
-- 🧪 Correct sequencing of dependencies
-- 📁 Configurable in multiple files
-- 📚 Generates helptags of the headings in `README.md` files for plugins that don’t have vimdocs
-- 💻 Dev options and patterns for using local plugins
-- 📊 Profiling tools to optimize performance
-- 🔒 Lockfile `lazy-lock.json` to keep track of installed plugins
-- 🔎 Automatically check for updates
-- 📋 Commit, branch, tag, version, and full Semver <https://devhints.io/semver> support
-- 📈 Statusline component to see the number of pending updates
-- 🎨 Automatically lazy-loads colorschemes
+**lazy.nvim** 是一个用于 Neovim 的现代化插件管理器。
 
 
-⚡️ REQUIREMENTS       *lazy.nvim-🚀-getting-started-⚡️-requirements*
+✨ 特性                            *lazy.nvim-🚀-getting-started-✨-features*
 
-- Neovim >= **0.8.0** (needs to be built with **LuaJIT**)
-- Git >= **2.19.0** (for partial clones support)
-- a Nerd Font <https://www.nerdfonts.com/> **(optional)**
-- luarocks <https://luarocks.org/> to install rockspecs.
-    You can remove `rockspec` from `opts.pkg.sources` to disable this feature.
+- 📦 用强大的 UI 管理你所有的 Neovim 插件
+- 🚀 借助自动缓存以及 Lua 模块的字节码编译，获得极快的启动速度
+- 💾 使用部分克隆而非浅克隆
+- 🔌 自动延迟加载 Lua 模块，并支持按事件、命令、文件类型和快捷键映射延迟加载
+- ⏳ 在启动 Neovim 之前自动安装缺失的插件，让你能够立刻开始使用
+- 💪 异步执行以提升性能
+- 🛠️ 无需手动编译插件
+- 🧪 正确处理依赖关系的执行顺序
+- 📁 可在多个文件中进行配置
+- 📚 为没有 vimdoc 的插件，根据其 `README.md` 文件中的标题生成 helptags
+- 💻 用于使用本地插件的 dev 选项与模式匹配
+- 📊 用于优化性能的性能分析工具
+- 🔒 锁文件 `lazy-lock.json`，用于记录已安装的插件
+- 🔎 自动检查更新
+- 📋 支持 commit、branch、tag、version 以及完整的 Semver <https://devhints.io/semver>
+- 📈 状态栏组件，用于显示待处理更新的数量
+- 🎨 自动延迟加载配色方案
+
+
+⚡️ 环境要求        *lazy.nvim-🚀-getting-started-⚡️-requirements*
+
+- Neovim >= **0.8.0**（必须使用 **LuaJIT** 构建）
+- Git >= **2.19.0**（用于支持部分克隆）
+- 一个 Nerd Font <https://www.nerdfonts.com/> 字体 **（可选）**
+- luarocks <https://luarocks.org/>，用于安装 rockspec。
+    你可以从 `opts.pkg.sources` 中移除 `rockspec` 来禁用此功能。
 
 
 ==============================================================================
-3. 🛠️ Installation                       *lazy.nvim-🛠️-installation*
+3. 🛠️ 安装                                *lazy.nvim-🛠️-installation*
 
-There are multiple ways to install **lazy.nvim**. The **Structured Setup** is
-the recommended way, but you can also use the **Single File Setup** if you
-prefer to keep everything in your `init.lua`.
+安装 **lazy.nvim** 有多种方式。**结构化安装**是推荐的方式，
+但如果你更喜欢把所有内容都放在 `init.lua` 里，也可以使用**单文件安装**。
 
-Please refer to the Configuration </configuration> section for an overview of
-all available options.
+所有可用选项的概览，请参阅「配置」</configuration>一节。
 
 
 
 
-STRUCTURED SETUP             *lazy.nvim-🛠️-installation-structured-setup*
+结构化安装                 *lazy.nvim-🛠️-installation-structured-setup*
 
 >lua
     require("config.lazy")
 <
 
 >lua
-    -- Bootstrap lazy.nvim
+    -- 引导安装 lazy.nvim
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
     if not (vim.uv or vim.loop).fs_stat(lazypath) then
       local lazyrepo = "https://github.com/folke/lazy.nvim.git"
       local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
       if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
-          { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+          { "克隆 lazy.nvim 失败：\n", "ErrorMsg" },
           { out, "WarningMsg" },
-          { "\nPress any key to exit..." },
+          { "\n按任意键退出……" },
         }, true, {})
         vim.fn.getchar()
         os.exit(1)
@@ -170,47 +166,47 @@ STRUCTURED SETUP             *lazy.nvim-🛠️-installation-structured-setup*
     end
     vim.opt.rtp:prepend(lazypath)
     
-    -- Make sure to setup `mapleader` and `maplocalleader` before
-    -- loading lazy.nvim so that mappings are correct.
-    -- This is also a good place to setup other settings (vim.opt)
+    -- 请确保在加载 lazy.nvim 之前先设置好 `mapleader` 和 `maplocalleader`，
+    -- 这样快捷键映射才是正确的。
+    -- 这里也是设置其他选项（vim.opt）的好地方
     vim.g.mapleader = " "
     vim.g.maplocalleader = "\\"
     
-    -- Setup lazy.nvim
+    -- 设置 lazy.nvim
     require("lazy").setup({
       -- highlight-start
       spec = {
-        -- import your plugins
+        -- 导入你的插件
         { import = "plugins" },
       },
       -- highlight-end
-      -- Configure any other settings here. See the documentation for more details.
-      -- colorscheme that will be used when installing plugins.
+      -- 在这里配置其他设置。更多细节请参阅文档。
+      -- 安装插件时要使用的配色方案。
       install = { colorscheme = { "habamax" } },
-      -- automatically check for plugin updates
+      -- 自动检查插件更新
       checker = { enabled = true },
     })
 <
 
-You can then create your plugin specs in `~/.config/nvim/lua/plugins/`. Each
-file should return a table with the plugins you want to install.
+接下来你可以在 `~/.config/nvim/lua/plugins/` 中创建插件 spec。每个
+文件都应返回一个表，其中包含你想安装的插件。
 
-For more info see Structuring Your Plugins </usage/structuring>
+更多信息请参阅「组织你的插件」</usage/structuring>
 
 
-SINGLE FILE SETUP           *lazy.nvim-🛠️-installation-single-file-setup*
+单文件安装                   *lazy.nvim-🛠️-installation-single-file-setup*
 
 >lua
-    -- Bootstrap lazy.nvim
+    -- 引导安装 lazy.nvim
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
     if not (vim.uv or vim.loop).fs_stat(lazypath) then
       local lazyrepo = "https://github.com/folke/lazy.nvim.git"
       local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
       if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
-          { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+          { "克隆 lazy.nvim 失败：\n", "ErrorMsg" },
           { out, "WarningMsg" },
-          { "\nPress any key to exit..." },
+          { "\n按任意键退出……" },
         }, true, {})
         vim.fn.getchar()
         os.exit(1)
@@ -218,211 +214,207 @@ SINGLE FILE SETUP           *lazy.nvim-🛠️-installation-single-file-setup*
     end
     vim.opt.rtp:prepend(lazypath)
     
-    -- Make sure to setup `mapleader` and `maplocalleader` before
-    -- loading lazy.nvim so that mappings are correct.
-    -- This is also a good place to setup other settings (vim.opt)
+    -- 请确保在加载 lazy.nvim 之前先设置好 `mapleader` 和 `maplocalleader`，
+    -- 这样快捷键映射才是正确的。
+    -- 这里也是设置其他选项（vim.opt）的好地方
     vim.g.mapleader = " "
     vim.g.maplocalleader = "\\"
     
-    -- Setup lazy.nvim
+    -- 设置 lazy.nvim
     require("lazy").setup({
       -- highlight-start
       spec = {
-        -- add your plugins here
+        -- 在这里添加你的插件
       },
       -- highlight-end
-      -- Configure any other settings here. See the documentation for more details.
-      -- colorscheme that will be used when installing plugins.
+      -- 在这里配置其他设置。更多细节请参阅文档。
+      -- 安装插件时要使用的配色方案。
       install = { colorscheme = { "habamax" } },
-      -- automatically check for plugin updates
+      -- 自动检查插件更新
       checker = { enabled = true },
     })
 <
 
 
 ==============================================================================
-4. 🔌 Plugin Spec                               *lazy.nvim-🔌-plugin-spec*
+4. 🔌 插件 Spec                               *lazy.nvim-🔌-plugin-spec*
 
 
-SPEC SOURCE                           *lazy.nvim-🔌-plugin-spec-spec-source*
+SPEC 来源                           *lazy.nvim-🔌-plugin-spec-spec-source*
 
   -----------------------------------------------------------------------------------
-  Property   Type       Description
+  属性     类型       说明
   ---------- ---------- -------------------------------------------------------------
-  [1]        string?    Short plugin url. Will be expanded using
-                        config.git.url_format. Can also be a url or dir.
+  [1]        string?    插件的简短 url。会使用
+                        config.git.url_format 进行展开。也可以是 url 或目录。
 
-  dir        string?    A directory pointing to a local plugin
+  dir        string?    指向本地插件的目录
 
-  url        string?    A custom git url where the plugin is hosted
+  url        string?    存放该插件的自定义 git url
 
-  name       string?    A custom name for the plugin used for the local plugin
-                        directory and as the display name
+  name       string?    插件的自定义名称，用于本地插件
+                        目录，同时也是显示名称
 
-  dev        boolean?   When true, a local plugin directory will be used instead. See
+  dev        boolean?   为 true 时，将改用本地插件目录。参见
                         config.dev
   -----------------------------------------------------------------------------------
-A valid spec should define one of `[1]`, `dir` or `url`.
+一个合法的 spec 应当定义 `[1]`、`dir` 或 `url` 之一。
 
 
-SPEC LOADING                         *lazy.nvim-🔌-plugin-spec-spec-loading*
+SPEC 加载                         *lazy.nvim-🔌-plugin-spec-spec-loading*
 
   --------------------------------------------------------------------------------------------------
-  Property       Type                      Description
+  属性         类型                      说明
   -------------- ------------------------- ---------------------------------------------------------
-  dependencies   LazySpec[]                A list of plugin names or plugin specs that should be
-                                           loaded when the plugin loads. Dependencies are always
-                                           lazy-loaded unless specified otherwise. When specifying a
-                                           name, make sure the plugin spec has been defined
-                                           somewhere else.
+  dependencies   LazySpec[]                插件加载时应当一同加载的插件名称或插件 spec 列表。依赖总是
+                                            会被延迟加载，除非另有说明。在指定名称时，请确保该插件的
+                                            spec 已在其他地方定义过。
 
-  enabled        boolean? or fun():boolean When false, or if the function returns false, then this
-                                           plugin will not be included in the spec
+  enabled        boolean? or fun():boolean 为 false 时，或当该函数返回 false 时，这个
+                                            插件将不会被包含进 spec
 
-  cond           boolean? or               Behaves the same as enabled, but won’t uninstall the
-                 fun(LazyPlugin):boolean   plugin when the condition is false. Useful to disable
-                                           some plugins in vscode, or firenvim for example.
+  cond           boolean? or               行为与 enabled 相同，但条件为 false 时
+                 fun(LazyPlugin):boolean   不会卸载插件。例如可用于在 vscode 或 firenvim 中
+                                            禁用某些插件。
 
-  priority       number?                   Only useful for start plugins (lazy=false) to force
-                                           loading certain plugins first. Default priority is 50.
-                                           It’s recommended to set this to a high number for
-                                           colorschemes.
+  priority       number?                   仅对启动时加载的插件（lazy=false）有用，用于强制
+                                            优先加载某些插件。默认优先级为 50。
+                                            建议为配色方案设置一个较高的数值。
   --------------------------------------------------------------------------------------------------
 
-SPEC SETUP                             *lazy.nvim-🔌-plugin-spec-spec-setup*
+SPEC 设置                             *lazy.nvim-🔌-plugin-spec-spec-setup*
 
   --------------------------------------------------------------------------------------------------
-  Property   Type                          Description
+  属性     类型                              说明
   ---------- ----------------------------- ---------------------------------------------------------
-  init       fun(LazyPlugin)               init functions are always executed during startup. Mostly
-                                           useful for setting vim.g.* configuration used by Vim
-                                           plugins startup
+  init       fun(LazyPlugin)               init 函数总是在启动期间执行。主要
+                                            用于设置 Vim 插件启动时所需的 vim.g.* 配置
 
-  opts       table or                      opts should be a table (will be merged with parent
-             fun(LazyPlugin, opts:table)   specs), return a table (replaces parent specs) or should
-                                           change a table. The table will be passed to the
-                                           Plugin.config() function. Setting this value will imply
-                                           Plugin.config()
+  opts       table or                      opts 应为一个表（会与父级
+             fun(LazyPlugin, opts:table)   spec 合并），也可以返回一个表（替换父级
+                                            spec）或直接修改某个表。该表会被传给
+                                            Plugin.config() 函数。设置此值即隐含
+                                            Plugin.config()
 
-  config     fun(LazyPlugin, opts:table)   config is executed when the plugin loads. The default
-             or true                       implementation will automatically run
-                                           require(MAIN).setup(opts) if opts or config = true is
-                                           set. Lazy uses several heuristics to determine the
-                                           plugin’s MAIN module automatically based on the plugin’s
-                                           name. (opts is the recommended way to configure plugins).
+  config     fun(LazyPlugin, opts:table)   config 会在插件加载时执行。默认
+             or true                       实现会在设置了 opts 或 config = true 时，
+                                            自动运行 require(MAIN).setup(opts)。
+                                            Lazy 会依据插件的名称，使用若干启发式
+                                            规则自动确定插件的 MAIN 模块。
+                                            （推荐用 opts 来配置插件）。
 
-  main       string?                       You can specify the main module to use for config() and
-                                           opts(), in case it can not be determined automatically.
-                                           See config()
+  main       string?                       你可以指定 config() 和 opts() 所使用的
+                                            主模块，以便在无法自动确定时使用。
+                                            参见 config()
 
-  build      fun(LazyPlugin) or string or  build is executed when a plugin is installed or updated.
-             false or a list of build      See Building for more information.
-             commands                      
+  build      fun(LazyPlugin) or string or  build 会在插件被安装或更新时执行。
+             false or a list of build      更多信息参见「构建」一节。
+             commands
   --------------------------------------------------------------------------------------------------
-Always use `opts` instead of `config` when possible. `config` is almost never
-needed.
+只要可能，请始终使用 `opts` 而不是 `config`。几乎从来都不需要
+使用 `config`。
 
 
 
 
-SPEC LAZY LOADING               *lazy.nvim-🔌-plugin-spec-spec-lazy-loading*
+SPEC 延迟加载               *lazy.nvim-🔌-plugin-spec-spec-lazy-loading*
 
   --------------------------------------------------------------------------------------------------------------------
-  Property   Type                                                             Description
+  属性     类型                                                             说明
   ---------- ---------------------------------------------------------------- ----------------------------------------
-  lazy       boolean?                                                         When true, the plugin will only be
-                                                                              loaded when needed. Lazy-loaded plugins
-                                                                              are automatically loaded when their Lua
-                                                                              modules are required, or when one of the
-                                                                              lazy-loading handlers triggers
+  lazy       boolean?                                                         为 true 时，插件只会在
+                                                                               需要时才会加载。延迟加载的
+                                                                               插件会在其 Lua 模块被 require，
+                                                                               或某个延迟加载处理器被触发时
+                                                                               自动加载
 
-  event      string? or string[] or                                           Lazy-load on event. Events can be
-             fun(self:LazyPlugin, event:string[]):string[] or                 specified as BufEnter or with a pattern
-             {event:string[]\|string, pattern?:string[]\|string}              like BufEnter *.lua
+  event      string? or string[] or                                           按事件延迟加载。事件可以
+             fun(self:LazyPlugin, event:string[]):string[] or                 直接写成 BufEnter，也可以带上
+             {event:string[]\|string, pattern?:string[]\|string}              模式，例如 BufEnter *.lua
 
-  cmd        string? or string[] or                                           Lazy-load on command
-             fun(self:LazyPlugin, cmd:string[]):string[]                      
+  cmd        string? or string[] or                                           按命令延迟加载
+             fun(self:LazyPlugin, cmd:string[]):string[]
 
-  ft         string? or string[] or                                           Lazy-load on filetype
-             fun(self:LazyPlugin, ft:string[]):string[]                       
 
-  keys       string? or string[] or LazyKeysSpec[] or                         Lazy-load on key mapping
-             fun(self:LazyPlugin, keys:string[]):(string \| LazyKeysSpec)[]   
+  ft         string? or string[] or                                           按文件类型延迟加载
+             fun(self:LazyPlugin, ft:string[]):string[]
+
+
+  keys       string? or string[] or LazyKeysSpec[] or                         按快捷键映射延迟加载
+             fun(self:LazyPlugin, keys:string[]):(string \| LazyKeysSpec)[]
   --------------------------------------------------------------------------------------------------------------------
-Refer to the Lazy Loading <./lazy_loading.md> section for more information.
+更多信息请参阅「延迟加载」一节 <./lazy_loading.md>。
 
 
-SPEC VERSIONING                   *lazy.nvim-🔌-plugin-spec-spec-versioning*
+SPEC 版本控制                   *lazy.nvim-🔌-plugin-spec-spec-versioning*
 
   ------------------------------------------------------------------------------
-  Property     Type                 Description
+  属性     类型                 说明
   ------------ -------------------- --------------------------------------------
-  branch       string?              Branch of the repository
+  branch       string?              仓库的分支
 
-  tag          string?              Tag of the repository
+  tag          string?              仓库的标签
 
-  commit       string?              Commit of the repository
+  commit       string?              仓库的提交
 
-  version      string? or false to  Version to use from the repository. Full
-               override the default Semver ranges are supported
+  version      string? or false to  要从仓库中使用的版本。支持完整的
+               override the default Semver 版本范围
 
-  pin          boolean?             When true, this plugin will not be included
-                                    in updates
+  pin          boolean?             为 true 时，此插件不会被纳入
+                                     更新
 
-  submodules   boolean?             When false, git submodules will not be
-                                    fetched. Defaults to true
+  submodules   boolean?             为 false 时，不会获取 git 子模块。
+                                     默认为 true
   ------------------------------------------------------------------------------
-Refer to the Versioning <./versioning.md> section for more information.
+更多信息请参阅「版本控制」一节 <./versioning.md>。
 
 
-SPEC ADVANCED                       *lazy.nvim-🔌-plugin-spec-spec-advanced*
+SPEC 进阶                       *lazy.nvim-🔌-plugin-spec-spec-advanced*
 
   ----------------------------------------------------------------------------------------
-  Property   Type       Description
+  属性     类型       说明
   ---------- ---------- ------------------------------------------------------------------
-  optional   boolean?   When a spec is tagged optional, it will only be included in the
-                        final spec, when the same plugin has been specified at least once
-                        somewhere else without optional. This is mainly useful for Neovim
-                        distros, to allow setting options on plugins that may/may not be
-                        part of the user’s plugins.
+  optional   boolean?   当一个 spec 被标记为 optional 时，只有当同一个插件曾在其他
+                        某处不带 optional 地被指定过，它才会被包含进最终 spec。
+                        这主要对 Neovim 发行版有用，便于为可能属于、也可能不属于
+                        用户插件集的插件设置选项。
 
-  specs      LazySpec   A list of plugin specs defined in the scope of the plugin. This is
-                        mainly useful for Neovim distros, to allow setting options on
-                        plugins that may/may not be part of the user’s plugins. When the
-                        plugin is disabled, none of the scoped specs will be included in
-                        the final spec. Similar to dependencies without the automatic
-                        loading of the specs.
+  specs      LazySpec   在插件作用域内定义的插件 spec 列表。这
+                        主要对 Neovim 发行版有用，便于为可能属于、也可能不属于
+                        用户插件集的插件设置选项。当该
+                        插件被禁用时，这些作用域内的 spec 都不会被包含进
+                        最终 spec。类似于 dependencies，但不会自动
+                        加载这些 spec。
 
-  module     false?     Do not automatically load this Lua module when it’s required
-                        somewhere
+  module     false?     当它的 Lua 模块在某处被 require 时，不要自动加载它
 
-  import     string?    Import the given spec module.
+  import     string?    导入给定的 spec 模块。
   ----------------------------------------------------------------------------------------
 
-EXAMPLES                                 *lazy.nvim-🔌-plugin-spec-examples*
+示例                                 *lazy.nvim-🔌-plugin-spec-examples*
 
 >lua
     return {
-      -- the colorscheme should be available when starting Neovim
+      -- 启动 Neovim 时应当可以使用的配色方案
       {
         "folke/tokyonight.nvim",
-        lazy = false, -- make sure we load this during startup if it is your main colorscheme
-        priority = 1000, -- make sure to load this before all the other start plugins
+        lazy = false, -- 如果这是你的主配色方案，确保在启动期间就加载它
+        priority = 1000, -- 确保它在所有其他启动时加载的插件之前加载
         config = function()
-          -- load the colorscheme here
+          -- 在这里加载配色方案
           vim.cmd([[colorscheme tokyonight]])
         end,
       },
     
-      -- I have a separate config.mappings file where I require which-key.
-      -- With lazy the plugin will be automatically loaded when it is required somewhere
+      -- 我有一个单独的 config.mappings 文件，里面 require 了 which-key。
+      -- 使用 lazy 时，只要某处 require 了它，插件就会被自动加载
       { "folke/which-key.nvim", lazy = true },
     
       {
         "nvim-neorg/neorg",
-        -- lazy-load on filetype
+        -- 按文件类型延迟加载
         ft = "norg",
-        -- options for neorg. This will automatically call `require("neorg").setup(opts)`
+        -- neorg 的选项。这会自动调用 `require("neorg").setup(opts)`
         opts = {
           load = {
             ["core.defaults"] = {},
@@ -432,9 +424,9 @@ EXAMPLES                                 *lazy.nvim-🔌-plugin-spec-examples*
     
       {
         "dstein64/vim-startuptime",
-        -- lazy-load on a command
+        -- 按命令延迟加载
         cmd = "StartupTime",
-        -- init is called during startup. Configuration for vim plugins typically should be set in an init function
+        -- init 会在启动期间被调用。Vim 插件的配置通常应当在 init 函数中设置
         init = function()
           vim.g.startuptime_tries = 10
         end,
@@ -442,10 +434,10 @@ EXAMPLES                                 *lazy.nvim-🔌-plugin-spec-examples*
     
       {
         "hrsh7th/nvim-cmp",
-        -- load cmp on InsertEnter
+        -- 在 InsertEnter 时加载 cmp
         event = "InsertEnter",
-        -- these dependencies will only be loaded when cmp loads
-        -- dependencies are always lazy-loaded unless specified otherwise
+        -- 这些依赖只有在 cmp 加载时才会被加载
+        -- 依赖总是会被延迟加载，除非另有说明
         dependencies = {
           "hrsh7th/cmp-nvim-lsp",
           "hrsh7th/cmp-buffer",
@@ -455,86 +447,83 @@ EXAMPLES                                 *lazy.nvim-🔌-plugin-spec-examples*
         end,
       },
     
-      -- if some code requires a module from an unloaded plugin, it will be automatically loaded.
-      -- So for api plugins like devicons, we can always set lazy=true
+      -- 如果某些代码 require 了某个尚未加载的插件的模块，它会被自动加载。
+      -- 所以对于 devicons 这类 api 插件，我们总是可以设置 lazy=true
       { "nvim-tree/nvim-web-devicons", lazy = true },
     
-      -- you can use the VeryLazy event for things that can
-      -- load later and are not important for the initial UI
+      -- 对于可以晚点加载、且对初始界面并不重要的事情，
+      -- 你可以使用 VeryLazy 事件
       { "stevearc/dressing.nvim", event = "VeryLazy" },
     
       {
         "Wansmer/treesj",
         keys = {
-          { "J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" },
+          { "J", "<cmd>TSJToggle<cr>", desc = "切换合并" },
         },
         opts = { use_default_keymaps = false, max_join_length = 150 },
       },
     
       {
         "monaqa/dial.nvim",
-        -- lazy-load on keys
-        -- mode is `n` by default. For more advanced options, check the section on key mappings
+        -- 按快捷键映射延迟加载
+        -- mode 默认为 `n`。有关更高级的选项，请查阅快捷键映射一节
         keys = { "<C-a>", { "<C-x>", mode = "n" } },
       },
     
-      -- local plugins need to be explicitly configured with dir
+      -- 本地插件需要用 dir 显式配置
       { dir = "~/projects/secret.nvim" },
     
-      -- you can use a custom url to fetch a plugin
+      -- 你可以用自定义 url 来获取插件
       { url = "git@github.com:folke/noice.nvim.git" },
     
-      -- local plugins can also be configured with the dev option.
-      -- This will use {config.dev.path}/noice.nvim/ instead of fetching it from GitHub
-      -- With the dev option, you can easily switch between the local and installed version of a plugin
+      -- 本地插件也可以用 dev 选项来配置。
+      -- 这会使用 {config.dev.path}/noice.nvim/，而不是从 GitHub 获取
+      -- 借助 dev 选项，你可以轻松地在本地版本和已安装版本之间切换
       { "folke/noice.nvim", dev = true },
     }
 <
 
 
-LAZY LOADING                         *lazy.nvim-🔌-plugin-spec-lazy-loading*
+延迟加载                         *lazy.nvim-🔌-plugin-spec-lazy-loading*
 
-**lazy.nvim** automagically lazy-loads Lua modules. This means that if you have
-a plugin `A` that is lazy-loaded and a plugin `B` that requires a module of
-plugin `A`, then plugin `A` will be loaded on demand as expected.
+**lazy.nvim** 会自动延迟加载 Lua 模块。这意味着，如果你有一个被延迟加载的
+插件 `A`，以及一个 require 了插件 `A` 某个模块的插件 `B`，那么插件 `A`
+就会如预期那样按需加载。
 
 
-Additionally, you can also lazy-load on **events**, **commands**, **file
-types** and **key mappings**.
+此外，你还可以按**事件**、**命令**、**文件类型**和**快捷键映射**来延迟加载。
 
-Plugins will be lazy-loaded when one of the following is `true`:
+当满足以下任一条件时，插件会被延迟加载：
 
-- The plugin only exists as a dependency in your spec
-- It has an `event`, `cmd`, `ft` or `keys` key
+- 该插件在你的 spec 中只作为依赖存在
+- 它带有 `event`、`cmd`、`ft` 或 `keys` 字段
 - `config.defaults.lazy == true`
 
 
-🌈 COLORSCHEMES ~
+🌈 配色方案 ~
 
-Colorscheme plugins can be configured with `lazy=true`. The plugin will
-automagically load when doing `colorscheme foobar`.
+配色方案插件可以配置为 `lazy=true`。执行 `colorscheme foobar` 时，该插件会
+自动加载。
 
 
 
-⌨️ LAZY KEY MAPPINGS ~
+⌨️ 延迟加载的快捷键映射 ~
 
-The `keys` property can be a `string` or `string[]` for simple normal-mode
-mappings, or it can be a `LazyKeysSpec` table with the following key-value
-pairs:
+`keys` 属性可以是一个 `string` 或 `string[]`，用于简单的普通模式映射；
+也可以是一个 `LazyKeysSpec` 表，包含以下键值对：
 
-- **[1]**: (`string`) lhs **(required)**
-- **[2]**: (`string|fun()`) rhs **(optional)**
-- **mode**: (`string|string[]`) mode **(optional, defaults to "n")**
-- **ft**: (`string|string[]`) `filetype` for buffer-local keymaps **(optional)**
-- any other option valid for `vim.keymap.set`
+- **[1]**：（`string`）映射触发键 lhs **（必填）**
+- **[2]**：（`string|fun()`）映射结果 rhs **（可选）**
+- **mode**：（`string|string[]`）模式 **（可选，默认值为 "n"）**
+- **ft**：（`string|string[]`）用于缓冲区本地映射的 `filetype` **（可选）**
+- 任何其他对 `vim.keymap.set` 有效的选项
 
-Key mappings will load the plugin the first time they get executed.
+快捷键映射会在首次被执行时加载该插件。
 
-When `[2]` is `nil`, then the real mapping has to be created by the `config()`
-function.
+当 `[2]` 为 `nil` 时，真正的映射必须由 `config()` 函数来创建。
 
 >lua
-    -- Example for neo-tree.nvim
+    -- neo-tree.nvim 的示例
     {
       "nvim-neo-tree/neo-tree.nvim",
         keys = {
@@ -545,124 +534,122 @@ function.
 <
 
 
-VERSIONING                             *lazy.nvim-🔌-plugin-spec-versioning*
+版本控制                             *lazy.nvim-🔌-plugin-spec-versioning*
 
-If you want to install a specific revision of a plugin, you can use `commit`,
-`tag`, `branch`, `version`.
+如果你想安装某个插件的特定修订版本，可以使用 `commit`、
+`tag`、`branch`、`version`。
 
-The `version` property supports Semver <https://semver.org/> ranges.
-
-
-
-EXAMPLES ~
-
-- `*`: latest stable version (this excludes pre-release versions)
-- `1.2.x`: any version that starts with `1.2`, such as `1.2.0`, `1.2.3`, etc.
-- `^1.2.3`: any version that is compatible with `1.2.3`, such as `1.3.0`, `1.4.5`, etc., but not `2.0.0`.
-- `~1.2.3`: any version that is compatible with `1.2.3`, such as `1.2.4`, `1.2.5`, but not `1.3.0`.
-- `>1.2.3`: any version that is greater than `1.2.3`, such as `1.3.0`, `1.4.5`, etc.
-- `>=1.2.3`: any version that is greater than or equal to `1.2.3`, such as `1.2.3`, `1.3.0`, `1.4.5`, etc.
-- `<1.2.3`: any version that is less than `1.2.3`, such as `1.1.0`, `1.0.5`, etc.
-- `<=1.2.3`: any version that is less than or equal to `1.2.3`, such as `1.2.3`, `1.1.0`, `1.0.5`, etc
-
-
-==============================================================================
-5. 📦 Packages                                     *lazy.nvim-📦-packages*
-
-**lazy.nvim** supports three ways for plugins to define their dependencies and
-configuration.
-
-- **Lazy**: `lazy.lua` file
-- **Rockspec**: luarocks <https://luarocks.org/> `*-scm-1.rockspec` file <https://github.com/luarocks/luarocks/wiki/Rockspec-format>
-- **Packspec**: `pkg.json` (experimental, since the format <https://github.com/neovim/packspec/issues/41> is not quite there yet)
-
-You can enable/disable package sources with `config.pkg.sources`
-</configuration>. The order of sources is important, as the first source that
-finds a package will be used.
+`version` 属性支持 Semver <https://semver.org/> 版本范围。
 
 
 
-LAZY                                            *lazy.nvim-📦-packages-lazy*
+示例 ~
 
-Using a `lazy.lua` file is the recommended way to define your plugin
-dependencies and configuration. Syntax is the same as any plugin spec.
-
-
-ROCKSPEC                                    *lazy.nvim-📦-packages-rockspec*
-
-When a plugin contains a `*-1.rockspec` file, **lazy.nvim** will automatically
-build the rock and its dependencies.
-
-A **rockspec** will only be used if one of the following is true:
-
-- the package does not have a `/lua` directory
-- the package has a complex build step
-- the package has dependencies (excluding `lua`)
-
-
-PACKSPEC                                    *lazy.nvim-📦-packages-packspec*
-
-Supports the pkg.json
-<https://github.com/nvim-lua/nvim-package-specification/issues/41> format, with
-a lazy extension in `lazy`. `lazy` can contain any valid lazy spec fields. They
-will be added to the plugin’s spec.
+- `*`：最新的稳定版本（不含预发布版本）
+- `1.2.x`：任何以 `1.2` 开头的版本，例如 `1.2.0`、`1.2.3` 等。
+- `^1.2.3`：任何与 `1.2.3` 兼容的版本，例如 `1.3.0`、`1.4.5` 等，但不含 `2.0.0`。
+- `~1.2.3`：任何与 `1.2.3` 兼容的版本，例如 `1.2.4`、`1.2.5`，但不含 `1.3.0`。
+- `>1.2.3`：任何大于 `1.2.3` 的版本，例如 `1.3.0`、`1.4.5` 等。
+- `>=1.2.3`：任何大于或等于 `1.2.3` 的版本，例如 `1.2.3`、`1.3.0`、`1.4.5` 等。
+- `<1.2.3`：任何小于 `1.2.3` 的版本，例如 `1.1.0`、`1.0.5` 等。
+- `<=1.2.3`：任何小于或等于 `1.2.3` 的版本，例如 `1.2.3`、`1.1.0`、`1.0.5` 等
 
 
 ==============================================================================
-6. ⚙️ Configuration                       *lazy.nvim-⚙️-configuration*
+5. 📦 软件包                                    *lazy.nvim-📦-packages*
 
-**lazy.nvim** comes with the following defaults:
+**lazy.nvim** 支持三种方式让插件定义自己的依赖和配置。
+
+- **Lazy**：`lazy.lua` 文件
+- **Rockspec**：luarocks <https://luarocks.org/> 的 `*-scm-1.rockspec` 文件 <https://github.com/luarocks/luarocks/wiki/Rockspec-format>
+- **Packspec**：`pkg.json`（实验性功能，因为该格式 <https://github.com/neovim/packspec/issues/41> 尚未完全成熟）
+
+你可以通过 `config.pkg.sources`
+</configuration> 启用/禁用包源。包源的顺序很重要，因为找到
+软件包的那个包源会被优先使用。
+
+
+
+Lazy                                            *lazy.nvim-📦-packages-lazy*
+
+推荐使用 `lazy.lua` 文件来定义插件的依赖和配置。其语法与任何
+插件 spec 完全相同。
+
+
+Rockspec                                    *lazy.nvim-📦-packages-rockspec*
+
+当一个插件包含 `*-1.rockspec` 文件时，**lazy.nvim** 会自动
+构建该 rock 及其依赖。
+
+只有满足以下条件之一时，才会使用 **rockspec**：
+
+- 该软件包没有 `/lua` 目录
+- 该软件包有复杂的构建步骤
+- 该软件包有依赖（不含 `lua`）
+
+
+Packspec                                    *lazy.nvim-📦-packages-packspec*
+
+支持 pkg.json
+<https://github.com/nvim-lua/nvim-package-specification/issues/41> 格式，并在
+`lazy` 中提供一个 lazy 扩展。`lazy` 可以包含任意合法的 lazy spec 字段。它们
+会被添加到插件的 spec 中。
+
+
+==============================================================================
+6. ⚙️ 配置                                *lazy.nvim-⚙️-configuration*
+
+**lazy.nvim** 带有以下默认配置：
 
 >lua
     {
-      root = vim.fn.stdpath("data") .. "/lazy", -- directory where plugins will be installed
+      root = vim.fn.stdpath("data") .. "/lazy", -- 安装插件的目录
       defaults = {
-        -- Set this to `true` to have all your plugins lazy-loaded by default.
-        -- Only do this if you know what you are doing, as it can lead to unexpected behavior.
-        lazy = false, -- should plugins be lazy-loaded?
-        -- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
-        -- have outdated releases, which may break your Neovim install.
-        version = nil, -- always use the latest git commit
-        -- version = "*", -- try installing the latest stable version for plugins that support semver
-        -- default `cond` you can use to globally disable a lot of plugins
-        -- when running inside vscode for example
+        -- 把它设为 `true`，即可默认延迟加载你的所有插件。
+        -- 只有在清楚自己在做什么时才这么做，因为可能导致意料之外的行为。
+        lazy = false, -- 插件是否应当被延迟加载？
+        -- 目前建议保持 version=false，因为许多支持版本控制的
+        -- 插件发布的版本已经过时，可能会破坏你的 Neovim 安装。
+        version = nil, -- 始终使用最新的 git 提交
+        -- version = "*", -- 对支持 semver 的插件尝试安装最新的稳定版本
+        -- 默认的 `cond` 可以用来全局禁用大量插件，
+        -- 例如在 vscode 中运行时
         cond = nil, ---@type boolean|fun(self:LazyPlugin):boolean|nil
       },
-      -- leave nil when passing the spec as the first argument to setup()
+      -- 把 spec 作为 setup() 的第一个参数传入时，请保持 nil
       spec = nil, ---@type LazySpec
-      local_spec = true, -- load project specific .lazy.lua spec files. They will be added at the end of the spec.
-      lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
-      ---@type number? limit the maximum amount of concurrent tasks
+      local_spec = true, -- 加载项目专属的 .lazy.lua spec 文件。它们会被添加到 spec 的末尾。
+      lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- 执行 update 后生成的锁文件。
+      ---@type number? 限制并发任务的最大数量
       concurrency = jit.os:find("Windows") and (vim.uv.available_parallelism() * 2) or nil,
       git = {
-        -- defaults for the `Lazy log` command
-        -- log = { "--since=3 days ago" }, -- show commits from the last 3 days
-        log = { "-8" }, -- show the last 8 commits
-        timeout = 120, -- kill processes that take more than 2 minutes
+        -- `Lazy log` 命令的默认值
+        -- log = { "--since=3 days ago" }, -- 显示最近 3 天的提交
+        log = { "-8" }, -- 显示最近 8 个提交
+        timeout = 120, -- 终止耗时超过 2 分钟的进程
         url_format = "https://github.com/%s.git",
-        -- lazy.nvim requires git >=2.19.0. If you really want to use lazy with an older version,
-        -- then set the below to false. This should work, but is NOT supported and will
-        -- increase downloads a lot.
+        -- lazy.nvim 需要 git >=2.19.0。如果你确实想用更旧的版本来使用 lazy，
+        -- 那么把下面设为 false。这应该能工作，但并不受支持，而且会
+        -- 大幅增加下载量。
         filter = true,
-        -- rate of network related git operations (clone, fetch, checkout)
+        -- 与网络相关的 git 操作（clone、fetch、checkout）的频率
         throttle = {
-          enabled = false, -- not enabled by default
-          -- max 2 ops every 5 seconds
+          enabled = false, -- 默认不启用
+          -- 每 5 秒最多 2 次操作
           rate = 2,
-          duration = 5 * 1000, -- in ms
+          duration = 5 * 1000, -- 以毫秒为单位
         },
-        -- Time in seconds to wait before running fetch again for a plugin.
-        -- Repeated update/check operations will not run again until this
-        -- cooldown period has passed.
+        -- 在再次为某个插件执行 fetch 之前需要等待的秒数。
+        -- 在这个冷却期过去之前，重复的 update/check 操作不会再次运行。
         cooldown = 0,
       },
       pkg = {
         enabled = true,
         cache = vim.fn.stdpath("state") .. "/lazy/pkg-cache.lua",
-        -- the first package source that is found for a plugin will be used.
+        -- 为某个插件找到的第一个可用的包源将被使用。
         sources = {
           "lazy",
-          "rockspec", -- will only be used when rocks.enabled is true
+          "rockspec", -- 仅当 rocks.enabled 为 true 时才会使用
           "packspec",
         },
       },
@@ -670,38 +657,38 @@ will be added to the plugin’s spec.
         enabled = true,
         root = vim.fn.stdpath("data") .. "/lazy-rocks",
         server = "https://lumen-oss.github.io/rocks-binaries/",
-        -- use hererocks to install luarocks?
-        -- set to `nil` to use hererocks when luarocks is not found
-        -- set to `true` to always use hererocks
-        -- set to `false` to always use luarocks
+        -- 使用 hererocks 来安装 luarocks 吗？
+        -- 设为 `nil` 可在找不到 luarocks 时使用 hererocks
+        -- 设为 `true` 始终使用 hererocks
+        -- 设为 `false` 始终使用 luarocks
         hererocks = nil,
       },
       dev = {
-        -- Directory where you store your local plugin projects. If a function is used,
-        -- the plugin directory (e.g. `~/projects/plugin-name`) must be returned.
+        -- 你存放本地插件项目的目录。如果使用函数，
+        -- 则必须返回插件目录（例如 `~/projects/plugin-name`）。
         ---@type string | fun(plugin: LazyPlugin): string
         path = "~/projects",
-        ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
-        patterns = {}, -- For example {"folke"}
-        fallback = false, -- Fallback to git when local plugin doesn't exist
+        ---@type string[] 匹配这些模式的插件会使用你的本地版本，而不是从 GitHub 获取
+        patterns = {}, -- 例如 {"folke"}
+        fallback = false, -- 当本地插件不存在时回退到 git
       },
       install = {
-        -- install missing plugins on startup. This doesn't increase startup time.
+        -- 在启动时安装缺失的插件。这不会增加启动时间。
         missing = true,
-        -- try to load one of these colorschemes when starting an installation during startup
+        -- 在启动期间开始安装时，尝试加载以下配色方案之一
         colorscheme = { "habamax" },
       },
       ui = {
-        -- a number <1 is a percentage., >1 is a fixed size
+        -- 小于 1 的数值表示百分比，大于 1 表示固定尺寸
         size = { width = 0.8, height = 0.8 },
-        wrap = true, -- wrap the lines in the ui
-        -- The border to use for the UI window. Accepts same border values as |nvim_open_win()|.
+        wrap = true, -- 在 ui 中换行
+        -- UI 窗口使用的边框。接受与 |nvim_open_win()| 相同的边框值。
         border = "none",
-        -- The backdrop opacity. 0 is fully opaque, 100 is fully transparent.
+        -- 背景的不透明度。0 表示完全不透明，100 表示完全透明。
         backdrop = 60,
-        title = nil, ---@type string only works when border is not "none"
+        title = nil, ---@type string 仅当 border 不为 "none" 时有效
         title_pos = "center", ---@type "center" | "left" | "right"
-        -- Show pills on top of the Lazy window
+        -- 在 Lazy 窗口顶部显示标签
         pills = true, ---@type boolean
         icons = {
           cmd = " ",
@@ -713,12 +700,12 @@ will be added to the plugin’s spec.
           init = " ",
           import = " ",
           keys = " ",
-          lazy = "󰒲 ",
+          lazy = "󰂲 ",
           loaded = "●",
           not_loaded = "○",
           plugin = " ",
           runtime = " ",
-          require = "󰢱 ",
+          require = "󰂱 ",
           source = " ",
           start = " ",
           task = "✔ ",
@@ -729,87 +716,87 @@ will be added to the plugin’s spec.
             "‒",
           },
         },
-        -- leave nil, to automatically select a browser depending on your OS.
-        -- If you want to use a specific browser, you can define it here
+        -- 保持 nil，以便根据你的操作系统自动选择浏览器。
+        -- 如果你想使用特定浏览器，可以在这里定义
         browser = nil, ---@type string?
-        throttle = 1000 / 30, -- how frequently should the ui process render events
+        throttle = 1000 / 30, -- ui 进程处理渲染事件的频率
         custom_keys = {
-          -- You can define custom key maps here. If present, the description will
-          -- be shown in the help menu.
-          -- To disable one of the defaults, set it to false.
-    
+          -- 你可以在这里定义自定义快捷键映射。如果存在，说明文字将
+          -- 显示在帮助菜单中。
+          -- 要禁用某个默认项，把它设为 false。
+
           ["<localleader>l"] = {
             function(plugin)
               require("lazy.util").float_term({ "lazygit", "log" }, {
                 cwd = plugin.dir,
               })
             end,
-            desc = "Open lazygit log",
+            desc = "打开 lazygit 日志",
           },
-    
+
           ["<localleader>i"] = {
             function(plugin)
               Util.notify(vim.inspect(plugin), {
-                title = "Inspect " .. plugin.name,
+                title = "检查 " .. plugin.name,
                 lang = "lua",
               })
             end,
-            desc = "Inspect Plugin",
+            desc = "检查插件",
           },
-    
+
           ["<localleader>t"] = {
             function(plugin)
               require("lazy.util").float_term(nil, {
                 cwd = plugin.dir,
               })
             end,
-            desc = "Open terminal in plugin dir",
+            desc = "在插件目录中打开终端",
           },
         },
       },
-      -- Output options for headless mode
+      -- headless 模式的输出选项
       headless = {
-        -- show the output from process commands like git
+        -- 显示 git 等进程命令的输出
         process = true,
-        -- show log messages
+        -- 显示日志消息
         log = true,
-        -- show task start/end
+        -- 显示任务的开始/结束
         task = true,
-        -- use ansi colors
+        -- 使用 ansi 颜色
         colors = true,
       },
       diff = {
-        -- diff command <d> can be one of:
-        -- * browser: opens the github compare view. Note that this is always mapped to <K> as well,
-        --   so you can have a different command for diff <d>
-        -- * git: will run git diff and open a buffer with filetype git
-        -- * terminal_git: will open a pseudo terminal with git diff
-        -- * diffview.nvim: will open Diffview to show the diff
+        -- diff 命令 <d> 可以是以下之一：
+        -- * browser：打开 github 的 compare 视图。请注意它始终也会绑定到 <K>，
+        --   这样你就可以为 diff <d> 设置一个不同的命令
+        -- * git：运行 git diff 并打开一个 filetype 为 git 的缓冲区
+        -- * terminal_git：打开一个运行 git diff 的伪终端
+        -- * diffview.nvim：打开 Diffview 来显示 diff
         cmd = "git",
       },
       checker = {
-        -- automatically check for plugin updates
+        -- 自动检查插件更新
         enabled = false,
-        concurrency = nil, ---@type number? set to 1 to check for updates very slowly
-        notify = true, -- get a notification when new updates are found
-        frequency = 3600, -- check for updates every hour
-        check_pinned = false, -- check for pinned packages that can't be updated
+        concurrency = nil, ---@type number? 设为 1 可非常缓慢地检查更新
+        notify = true, -- 发现新更新时给出通知
+        frequency = 3600, -- 每小时检查一次更新
+        check_pinned = false, -- 检查无法更新的已固定软件包
       },
       change_detection = {
-        -- automatically check for config file changes and reload the ui
+        -- 自动检查配置文件变更并重新加载 ui
         enabled = true,
-        notify = true, -- get a notification when changes are found
+        notify = true, -- 发现变更时给出通知
       },
       performance = {
         cache = {
           enabled = true,
         },
-        reset_packpath = true, -- reset the package path to improve startup time
+        reset_packpath = true, -- 重置软件包路径以加快启动速度
         rtp = {
-          reset = true, -- reset the runtime path to $VIMRUNTIME and your config directory
+          reset = true, -- 将运行时路径重置为 $VIMRUNTIME 和你的配置目录
           ---@type string[]
-          paths = {}, -- add any custom paths here that you want to includes in the rtp
-          ---@type string[] list any plugins you want to disable here
+          paths = {}, -- 在这里添加你想包含进 rtp 的任何自定义路径
+          ---@type string[] 在这里列出你想禁用的任何插件
           disabled_plugins = {
             -- "gzip",
             -- "matchit",
@@ -822,30 +809,30 @@ will be added to the plugin’s spec.
           },
         },
       },
-      -- lazy can generate helptags from the headings in markdown readme files,
-      -- so :help works even for plugins that don't have vim docs.
-      -- when the readme opens with :help it will be correctly displayed as markdown
+      -- lazy 可以从 markdown readme 文件的标题生成 helptags，
+      -- 因此即使插件没有 vim 文档，:help 也能正常工作。
+      -- 当用 :help 打开 readme 时，它会被正确地按 markdown 显示
       readme = {
         enabled = true,
         root = vim.fn.stdpath("state") .. "/lazy/readme",
         files = { "README.md", "lua/**/README.md" },
-        -- only generate markdown helptags for plugins that don't have docs
+        -- 只为没有文档的插件生成 markdown helptags
         skip_if_doc_exists = true,
       },
-      state = vim.fn.stdpath("state") .. "/lazy/state.json", -- state info for checker and other things
-      -- Enable profiling of lazy.nvim. This will add some overhead,
-      -- so only enable this when you are debugging lazy.nvim
+      state = vim.fn.stdpath("state") .. "/lazy/state.json", -- checker 及其他功能使用的状态信息
+      -- 启用 lazy.nvim 的性能分析。这会带来一些额外开销，
+      -- 因此只在调试 lazy.nvim 时才启用
       profiling = {
-        -- Enables extra stats on the debug tab related to the loader cache.
-        -- Additionally gathers stats about all package.loaders
+        -- 在 debug 标签页中启用与 loader 缓存相关的额外统计信息。
+        -- 此外还会收集所有 package.loaders 的统计信息
         loader = false,
-        -- Track each new require in the Lazy profiling tab
+        -- 在 Lazy 性能分析标签页中跟踪每一次新的 require
         require = false,
       },
     }
 <
 
-If you don’t want to use a Nerd Font, you can replace the icons with Unicode symbols. ~
+如果你不想使用 Nerd Font，可以把图标替换为 Unicode 符号。~
 
 >lua
     {
@@ -869,214 +856,209 @@ If you don’t want to use a Nerd Font, you can replace the icons with Unicode s
     }
 <
 
-
-🌈 HIGHLIGHT GROUPS   *lazy.nvim-⚙️-configuration-🌈-highlight-groups*
+🌈 高亮组   *lazy.nvim-⚙️-configuration-🌈-highlight-groups*
 
   -----------------------------------------------------------------------
-  Highlight Group         Default Group           Description
+  高亮组                     默认高亮组                 说明
   ----------------------- ----------------------- -----------------------
-  LazyBold                { bold = true }         
+  LazyBold                { bold = true }
 
-  LazyButton              CursorLine              
+  LazyButton              CursorLine
 
-  LazyButtonActive        Visual                  
+  LazyButtonActive        Visual
 
-  LazyComment             Comment                 
+  LazyComment             Comment
 
-  LazyCommit              @variable.builtin       commit ref
+  LazyCommit              @variable.builtin       提交引用
 
-  LazyCommitIssue         Number                  
+  LazyCommitIssue         Number
 
-  LazyCommitScope         Italic                  conventional commit
-                                                  scope
+  LazyCommitScope         Italic                  约定式提交的作用域
 
-  LazyCommitType          Title                   conventional commit
-                                                  type
+  LazyCommitType          Title                   约定式提交的类型
 
-  LazyDimmed              Conceal                 property
+  LazyDimmed              Conceal                 属性
 
-  LazyDir                 @markup.link            directory
+  LazyDir                 @markup.link            目录
 
-  LazyError               DiagnosticError         task errors
+  LazyError               DiagnosticError         任务错误
 
-  LazyH1                  IncSearch               home button
+  LazyH1                  IncSearch               主目录按钮
 
-  LazyH2                  Bold                    titles
+  LazyH2                  Bold                    标题
 
-  LazyInfo                DiagnosticInfo          task errors
+  LazyInfo                DiagnosticInfo          任务错误
 
-  LazyItalic              { italic = true }       
+  LazyItalic              { italic = true }
 
-  LazyLocal               Constant                
+  LazyLocal               Constant
 
-  LazyNoCond              DiagnosticWarn          unloaded icon for a
-                                                  plugin where cond() was
-                                                  false
+  LazyNoCond              DiagnosticWarn          cond() 为 false 时
+                                                  该插件的未加载图标
 
-  LazyNormal              NormalFloat             
+  LazyNormal              NormalFloat
 
-  LazyProgressDone        Constant                progress bar done
+  LazyProgressDone        Constant                进度条已完成
 
-  LazyProgressTodo        LineNr                  progress bar todo
+  LazyProgressTodo        LineNr                  进度条待完成
 
-  LazyProp                Conceal                 property
+  LazyProp                Conceal                 属性
 
-  LazyReasonCmd           Operator                
+  LazyReasonCmd           Operator
 
-  LazyReasonEvent         Constant                
+  LazyReasonEvent         Constant
 
-  LazyReasonFt            Character               
+  LazyReasonFt            Character
 
-  LazyReasonImport        Identifier              
+  LazyReasonImport        Identifier
 
-  LazyReasonKeys          Statement               
+  LazyReasonKeys          Statement
 
-  LazyReasonPlugin        Special                 
+  LazyReasonPlugin        Special
 
-  LazyReasonRequire       @variable.parameter     
+  LazyReasonRequire       @variable.parameter
 
-  LazyReasonRuntime       @macro                  
+  LazyReasonRuntime       @macro
 
-  LazyReasonSource        Character               
+  LazyReasonSource        Character
 
-  LazyReasonStart         @variable.member        
+  LazyReasonStart         @variable.member
 
-  LazySpecial             @punctuation.special    
+  LazySpecial             @punctuation.special
 
-  LazyTaskOutput          MsgArea                 task output
+  LazyTaskOutput          MsgArea                 任务输出
 
   LazyUrl                 @markup.link            url
 
-  LazyValue               @string                 value of a property
+  LazyValue               @string                 属性的值
 
-  LazyWarning             DiagnosticWarn          task errors
+  LazyWarning             DiagnosticWarn          任务错误
   -----------------------------------------------------------------------
 
 ==============================================================================
-7. 🚀 Usage                                           *lazy.nvim-🚀-usage*
+7. 🚀 用法                                          *lazy.nvim-🚀-usage*
 
 
-▶️ STARTUP SEQUENCE         *lazy.nvim-🚀-usage-▶️-startup-sequence*
+▶️ 启动顺序      *lazy.nvim-🚀-usage-▶️-startup-sequence*
 
-**lazy.nvim** does **NOT** use Neovim packages and even disables plugin loading
-completely (`vim.go.loadplugins = false`). It takes over the complete startup
-sequence for more flexibility and better performance.
+**lazy.nvim** **不会**使用 Neovim 的软件包机制，甚至会完全禁用插件加载
+（`vim.go.loadplugins = false`）。它接管了整个启动
+流程，以获得更大的灵活性和更好的性能。
 
-In practice this means that step 10 of |Neovim Initialization| is done by Lazy:
+实际上这意味着 |Neovim Initialization| 的第 10 步由 Lazy 完成：
 
-1. All the plugins’ `init()` functions are executed
-2. All plugins with `lazy=false` are loaded. This includes sourcing `/plugin` and `/ftdetect` files. (`/after` will not be sourced yet)
-3. All files from `/plugin` and `/ftdetect` directories in your rtp are sourced (excluding `/after`)
-4. All `/after/plugin` files are sourced (this includes `/after` from plugins)
+1. 执行所有插件的 `init()` 函数
+2. 加载所有 `lazy=false` 的插件。这包括 source `/plugin` 和 `/ftdetect` 文件。（`/after` 此时还不会被 source）
+3. source 你 rtp 中 `/plugin` 和 `/ftdetect` 目录下的所有文件（不包括 `/after`）
+4. source 所有 `/after/plugin` 文件（这包括来自插件的 `/after`）
 
-Files from runtime directories are always sourced in alphabetical order.
+来自运行时目录的文件总是按字母顺序 source。
 
 
-🚀 COMMANDS                             *lazy.nvim-🚀-usage-🚀-commands*
 
-Plugins are managed with the `:Lazy` command. Open the help with `<?>` to see
-all the key mappings.
+🚀 命令                            *lazy.nvim-🚀-usage-🚀-commands*
 
-You can press `<CR>` on a plugin to show its details. Most properties can be
-hovered with `<K>` to open links, help files, readmes, git commits and git
-issues.
+插件通过 `:Lazy` 命令管理。按 `<?>` 可以打开帮助，查看所有
+快捷键映射。
 
-Lazy can automatically check for updates in the background. This feature can be
-enabled with `config.checker.enabled = true`.
+你可以在某个插件上按 `<CR>` 来显示其详情。大多数属性都可以
+用 `<K>` 悬停，以打开链接、帮助文件、readme、git 提交和 git
+issue。
 
-Any operation can be started from the UI, with a sub command or an API
-function:
+Lazy 可以在后台自动检查更新。此功能可以
+通过 `config.checker.enabled = true` 启用。
+
+任何操作都可以从 UI 发起，用子命令或 API
+函数：
 
   ----------------------------------------------------------------------------------
-  Command                   Lua                              Description
+  命令                      Lua                              说明
   ------------------------- -------------------------------- -----------------------
-  :Lazy build {plugins}     require("lazy").build(opts)      Rebuild a plugin
+  :Lazy build {plugins}     require("lazy").build(opts)      重新构建插件
 
-  :Lazy check [plugins]     require("lazy").check(opts?)     Check for updates and
-                                                             show the log (git
-                                                             fetch)
+  :Lazy check [plugins]     require("lazy").check(opts?)     检查更新并
+                                                             显示日志（git
+                                                             fetch）
 
-  :Lazy clean [plugins]     require("lazy").clean(opts?)     Clean plugins that are
-                                                             no longer needed
+  :Lazy clean [plugins]     require("lazy").clean(opts?)     清理不再需要的
+                                                             插件
 
-  :Lazy clear               require("lazy").clear()          Clear finished tasks
+  :Lazy clear               require("lazy").clear()          清除已完成的任务
 
-  :Lazy debug               require("lazy").debug()          Show debug information
+  :Lazy debug               require("lazy").debug()          显示调试信息
 
-  :Lazy health              require("lazy").health()         Run :checkhealth lazy
+  :Lazy health              require("lazy").health()         运行 :checkhealth lazy
 
-  :Lazy help                require("lazy").help()           Toggle this help page
+  :Lazy help                require("lazy").help()           切换此帮助页面
 
-  :Lazy home                require("lazy").home()           Go back to plugin list
+  :Lazy home                require("lazy").home()           返回插件列表
 
-  :Lazy install [plugins]   require("lazy").install(opts?)   Install missing plugins
+  :Lazy install [plugins]   require("lazy").install(opts?)   安装缺失的插件
 
-  :Lazy load {plugins}      require("lazy").load(opts)       Load a plugin that has
-                                                             not been loaded yet.
-                                                             Similar to :packadd.
-                                                             Like
-                                                             :Lazy load foo.nvim.
-                                                             Use :Lazy! load to skip
-                                                             cond checks.
+  :Lazy load {plugins}      require("lazy").load(opts)       加载尚未加载的插件。
+                                                             类似于 :packadd。
+                                                             例如
+                                                             :Lazy load foo.nvim。
+                                                             使用
+                                                             :Lazy! load 可跳过
+                                                             cond 检查。
 
-  :Lazy log [plugins]       require("lazy").log(opts?)       Show recent updates
+  :Lazy log [plugins]       require("lazy").log(opts?)       显示最近的更新
 
-  :Lazy profile             require("lazy").profile()        Show detailed profiling
+  :Lazy profile             require("lazy").profile()        显示详细的性能分析
 
-  :Lazy reload {plugins}    require("lazy").reload(opts)     Reload a plugin
-                                                             (experimental!!)
+  :Lazy reload {plugins}    require("lazy").reload(opts)     重新加载插件
+                                                             （实验性！！）
 
-  :Lazy restore [plugins]   require("lazy").restore(opts?)   Updates all plugins to
-                                                             the state in the
-                                                             lockfile. For a single
-                                                             plugin: restore it to
-                                                             the state in the
-                                                             lockfile or to a given
-                                                             commit under the cursor
+  :Lazy restore [plugins]   require("lazy").restore(opts?)   将所有插件更新到
+                                                             锁文件中的状态。
+                                                             对于单个插件：
+                                                             把它恢复到锁文件中
+                                                             的状态，或恢复到
+                                                             光标下指定的提交
 
-  :Lazy sync [plugins]      require("lazy").sync(opts?)      Run install, clean and
-                                                             update
+  :Lazy sync [plugins]      require("lazy").sync(opts?)      运行 install、clean
+                                                             和 update
 
-  :Lazy update [plugins]    require("lazy").update(opts?)    Update plugins. This
-                                                             will also update the
-                                                             lockfile
+  :Lazy update [plugins]    require("lazy").update(opts?)    更新插件。同时也会
+                                                             更新锁文件
   ----------------------------------------------------------------------------------
-Any command can have a **bang** to make the command wait till it finished. For
-example, if you want to sync lazy from the cmdline, you can use:
+任何命令都可以加上 **bang**（`!`），使该命令等待执行结束。例
+如，如果你想从命令行同步 lazy，可以使用：
 
 >shell
     nvim --headless "+Lazy! sync" +qa
 <
 
-`opts` is a table with the following key-values:
+`opts` 是一个包含以下键值的表：
 
-- **wait**: when true, then the call will wait till the operation completed
-- **show**: when false, the UI will not be shown
-- **plugins**: a list of plugin names to run the operation on
-- **concurrency**: limit the `number` of concurrently running tasks
+- **wait**：为 true 时，该调用会等待操作完成
+- **show**：为 false 时，不会显示 UI
+- **plugins**：要对其执行该操作的插件名称列表
+- **concurrency**：限制同时运行的任务 `number` 数量
 
-Stats API (`require("lazy").stats()`):
+统计 API（`require("lazy").stats()`）：
 
 >lua
     {
-      -- startuptime in milliseconds till UIEnter
+      -- 启动到 UIEnter 为止的 startuptime，单位为毫秒
       startuptime = 0,
-      -- when true, startuptime is the accurate cputime for the Neovim process. (Linux & macOS)
-      -- this is more accurate than `nvim --startuptime`, and as such will be slightly higher
-      -- when false, startuptime is calculated based on a delta with a timestamp when lazy started.
+      -- 为 true 时，startuptime 是 Neovim 进程精确的 cputime。（Linux 与 macOS）
+      -- 这比 `nvim --startuptime` 更准确，因此数值会略高
+      -- 为 false 时，startuptime 是基于 lazy 启动时的时间戳差值计算得出的。
       real_cputime = false,
-      count = 0, -- total number of plugins
-      loaded = 0, -- number of loaded plugins
+      count = 0, -- 插件总数
+      loaded = 0, -- 已加载的插件数量
       ---@type table<string, number>
       times = {},
     }
 <
 
-**lazy.nvim** provides a statusline component that you can use to show the
-number of pending updates. Make sure to enable `config.checker.enabled = true`
-to make this work.
+**lazy.nvim** 提供了一个状态栏组件，可用于显示
+待处理更新的数量。请确保启用 `config.checker.enabled = true`
+以使其生效。
 
-Example of configuring lualine.nvim ~
+配置 lualine.nvim 的示例 ~
 
 >lua
     require("lualine").setup({
@@ -1093,56 +1075,55 @@ Example of configuring lualine.nvim ~
 <
 
 
-📆 USER EVENTS                       *lazy.nvim-🚀-usage-📆-user-events*
+📆 用户事件                 *lazy.nvim-🚀-usage-📆-user-events*
 
-The following user events will be triggered:
+将会触发以下用户事件：
 
-- **LazyDone**: when lazy has finished starting up and loaded your config
-- **LazySync**: after running sync
-- **LazyInstall**: after an install
-- **LazyUpdate**: after an update
-- **LazyClean**: after a clean
-- **LazyCheck**: after checking for updates
-- **LazyLog**: after running log
-- **LazyLoad**: after loading a plugin. The `data` attribute will contain the plugin name.
-- **LazySyncPre**: before running sync
-- **LazyInstallPre**: before an install
-- **LazyUpdatePre**: before an update
-- **LazyCleanPre**: before a clean
-- **LazyCheckPre**: before checking for updates
-- **LazyLogPre**: before running log
-- **LazyReload**: triggered by change detection after reloading plugin specs
-- **VeryLazy**: triggered after `LazyDone` and processing `VimEnter` auto commands
-- **LazyVimStarted**: triggered after `UIEnter` when `require("lazy").stats().startuptime` has been calculated.
-    Useful to update the startuptime on your dashboard.
-
-
-❌ UNINSTALLING                       *lazy.nvim-🚀-usage-❌-uninstalling*
-
-To uninstall **lazy.nvim**, you need to remove the following files and
-directories:
-
-- **data**: `~/.local/share/nvim/lazy`
-- **state**: `~/.local/state/nvim/lazy`
-- **lockfile**: `~/.config/nvim/lazy-lock.json`
+- **LazyDone**：当 lazy 完成启动并加载完你的配置时
+- **LazySync**：执行 sync 之后
+- **LazyInstall**：执行安装之后
+- **LazyUpdate**：执行更新之后
+- **LazyClean**：执行清理之后
+- **LazyCheck**：检查更新之后
+- **LazyLog**：执行 log 之后
+- **LazyLoad**：加载插件之后。`data` 属性将包含插件名称。
+- **LazySyncPre**：执行 sync 之前
+- **LazyInstallPre**：执行安装之前
+- **LazyUpdatePre**：执行更新之前
+- **LazyCleanPre**：执行清理之前
+- **LazyCheckPre**：检查更新之前
+- **LazyLogPre**：执行 log 之前
+- **LazyReload**：由变更检测在重新加载插件 spec 之后触发
+- **VeryLazy**：在 `LazyDone` 之后并处理完 `VimEnter` 自动命令之后触发
+- **LazyVimStarted**：在 `UIEnter` 之后且 `require("lazy").stats().startuptime` 计算完成之后触发。
+    可用于更新你面板上的启动时间。
 
 
-  Paths can differ if you changed `XDG` environment variables.
+❌ 卸载                       *lazy.nvim-🚀-usage-❌-uninstalling*
 
-🔒 LOCKFILE                             *lazy.nvim-🚀-usage-🔒-lockfile*
+要卸载 **lazy.nvim**，你需要删除以下文件和
+目录：
 
-After every **update**, the local lockfile (`lazy-lock.json`) is updated with
-the installed revisions. It is recommended to have this file under version
-control.
-
-If you use your Neovim config on multiple machines, using the lockfile, you can
-ensure that the same version of every plugin is installed.
-
-If you are on another machine, you can do `:Lazy restore`, to update all your
-plugins to the version from the lockfile.
+- **data**：`~/.local/share/nvim/lazy`
+- **state**：`~/.local/state/nvim/lazy`
+- **lockfile**：`~/.config/nvim/lazy-lock.json`
 
 
-📦 MIGRATION GUIDE               *lazy.nvim-🚀-usage-📦-migration-guide*
+  如果你修改过 `XDG` 环境变量，路径可能会有所不同。
+
+🔒 锁文件                          *lazy.nvim-🚀-usage-🔒-lockfile*
+
+每次 **update** 之后，本地锁文件（`lazy-lock.json`）都会用
+已安装的修订版本更新。建议把这个文件纳入版本
+控制。
+
+如果你在多台机器上使用同一份 Neovim 配置，借助锁文件，你可以
+确保每个插件都安装了相同的版本。
+
+如果你换到了另一台机器上，可以执行 `:Lazy restore`，把所有插件
+更新到锁文件中的版本。
+
+📦 迁移指南            *lazy.nvim-🚀-usage-📦-migration-guide*
 
 
 PACKER.NVIM ~
@@ -1155,12 +1136,12 @@ PACKER.NVIM ~
 - `lock` ➡️ `pin`
 - `disable=true` ➡️ `enabled = false`
 - `tag='*'` ➡️ `version="*"`
-- `after` is **not needed** for most use-cases. Use `dependencies` otherwise.
-- `wants` is **not needed** for most use-cases. Use `dependencies` otherwise.
-- `config` don’t support string type, use `fun(LazyPlugin)` instead.
-- `module` is auto-loaded. No need to specify
-- `keys` spec is |lazy.nvim-different|
-- `rtp` can be accomplished with:
+- 对于大多数用例，`after` **并不需要**。否则请使用 `dependencies`。
+- 对于大多数用例，`wants` **并不需要**。否则请使用 `dependencies`。
+- `config` 不支持 string 类型，请改用 `fun(LazyPlugin)`。
+- `module` 会被自动加载，无需指定
+- `keys` spec 的写法与之前不同
+- `rtp` 可以这样实现：
 
 >lua
     config = function(plugin)
@@ -1168,13 +1149,13 @@ PACKER.NVIM ~
     end
 <
 
-With packer `wants`, `requires` and `after` can be used to manage dependencies.
-With lazy, this isn’t needed for most of the Lua dependencies. They can be
-installed just like normal plugins (even with `lazy=true`) and will be loaded
-when other plugins need them. The `dependencies` key can be used to group those
-required plugins with the one that requires them. The plugins which are added
-as `dependencies` will always be lazy-loaded and loaded when the plugin is
-loaded.
+在 packer 中，可以用 `wants`、`requires` 和 `after` 来管理依赖。
+而在 lazy 中，对于大多数 Lua 依赖并不需要这样做。它们可以像
+普通插件一样安装（即使带有 `lazy=true`），并会在其他插件
+需要它们时加载。可以用 `dependencies` 键把这些被依赖的插件
+和需要它们的插件归为一组。被添加为
+`dependencies` 的插件总是会被延迟加载，并在该插件
+加载时被加载。
 
 
 PAQ-NVIM ~
@@ -1184,42 +1165,42 @@ PAQ-NVIM ~
 - `run` ➡️ `build`
 
 
-⚡ PROFILING & DEBUG             *lazy.nvim-🚀-usage-⚡-profiling-&-debug*
+⚡ 性能分析与调试       *lazy.nvim-🚀-usage-⚡-profiling-&-debug*
 
-Great care has been taken to make the startup code (`lazy.core`) as efficient
-as possible. During startup, all Lua files used before `VimEnter` or
-`BufReadPre` are byte-compiled and cached, similar to what impatient.nvim
-<https://github.com/lewis6991/impatient.nvim> does.
+启动代码（`lazy.core`）经过了精心设计，以确保尽可能高的
+效率。在启动期间，`VimEnter` 或
+`BufReadPre` 之前用到的所有 Lua 文件都会被字节编译并缓存，这与 impatient.nvim
+<https://github.com/lewis6991/impatient.nvim> 的做法类似。
 
-My config for example loads in about `11ms` with `93` plugins. I do a lot of
-lazy-loading though :)
+例如，我的配置在 `93` 个插件的情况下约 `11ms` 就加载完成。不过我
+用了大量延迟加载 :)
 
-**lazy.nvim** comes with an advanced profiler `:Lazy profile` to help you
-improve performance. The profiling view shows you why and how long it took to
-load your plugins.
-
-
-🐛 DEBUG ~
-
-See an overview of active lazy-loading handlers and what’s in the module
-cache.
+**lazy.nvim** 自带一个高级性能分析器 `:Lazy profile`，帮助你
+优化性能。性能分析视图会告诉你为什么加载插件，以及加载它们
+花了多长时间。
 
 
-📂 STRUCTURING YOUR PLUGINS*lazy.nvim-🚀-usage-📂-structuring-your-plugins*
+🐛 调试 ~
 
-Some users may want to split their plugin specs in multiple files. Instead of
-passing a spec table to `setup()`, you can use a Lua module. The specs from the
-**module** and any top-level **sub-modules** will be merged together in the
-final spec, so it is not needed to add `require` calls in your main plugin file
-to the other files.
+查看当前活跃的延迟加载处理器概览，以及模块
+缓存中的内容。
 
-The benefits of using this approach:
 
-- Simple to **add** new plugin specs. Just create a new file in your plugins module.
-- Allows for **caching** of all your plugin specs. This becomes important if you have a lot of smaller plugin specs.
-- Spec changes will automatically be **reloaded** when they’re updated, so the `:Lazy` UI is always up to date.
+📂 组织你的插件 *lazy.nvim-🚀-usage-📂-structuring-your-plugins*
 
-Example:
+有些用户可能想把插件 spec 拆分到多个文件中。这样你就可以使用
+一个 Lua 模块，而不必把 spec 表传给 `setup()`。来自
+**module** 以及任何顶层 **sub-modules** 的 spec 会被合并到
+最终的 spec 中，因此你不需要在主插件文件中添加对
+其他文件的 `require` 调用。
+
+采用这种方式的好处：
+
+- **添加**新的插件 spec 很简单。只需在你的 plugins 模块中新建一个文件。
+- 允许对**缓存**你所有的插件 spec。当你有大量较小的插件 spec 时，这一点会变得很重要。
+- spec 的变更在更新后会被自动**重新加载**，因此 `:Lazy` UI 始终是最新的。
+
+示例：
 
 - `~/.config/nvim/init.lua`
 
@@ -1227,7 +1208,7 @@ Example:
     require("lazy").setup("plugins")
 <
 
-- `~/.config/nvim/lua/plugins.lua` or `~/.config/nvim/lua/plugins/init.lua` **(this file is optional)**
+- `~/.config/nvim/lua/plugins.lua` 或 `~/.config/nvim/lua/plugins/init.lua` **（此文件是可选的）**
 
 >lua
     return {
@@ -1237,28 +1218,28 @@ Example:
     }
 <
 
-- Any lua file in `~/.config/nvim/lua/plugins/*.lua` will be automatically merged in the main plugin spec
+- `~/.config/nvim/lua/plugins/*.lua` 中的任何 lua 文件都会被自动合并进主插件 spec
 
-For a real-life example, you can check LazyVim
-<https://github.com/LazyVim/LazyVim> and more specifically:
+想看真实的示例，可以查看 LazyVim
+<https://github.com/LazyVim/LazyVim>，更具体地说：
 
-- lazyvim.plugins <https://github.com/LazyVim/LazyVim/tree/main/lua/lazyvim/plugins> contains all the plugin specs that will be loaded
+- lazyvim.plugins <https://github.com/LazyVim/LazyVim/tree/main/lua/lazyvim/plugins> 包含了所有将被加载的插件 spec
 
 
-↩️ IMPORTING SPECS, CONFIG & OPTS
+↩️ 导入 SPEC、配置与 OPTS
 
-As part of a spec, you can add `import` statements to import additional plugin
-modules. Both of the `setup()` calls are equivalent:
+作为 spec 的一部分，你可以添加 `import` 语句来导入额外的插件
+模块。以下两种 `setup()` 调用是等价的：
 
 >lua
     require("lazy").setup("plugins")
-    
-    -- Same as:
+
+    -- 等同于：
     require("lazy").setup({{import = "plugins"}})
 <
 
-To import multiple modules from a plugin, add additional specs for each import.
-For example, to import LazyVim core plugins and an optional plugin:
+要从某个插件导入多个模块，请为每个 import 额外添加一个 spec。
+例如，要导入 LazyVim 的核心插件以及一个可选插件：
 
 >lua
     require("lazy").setup({
@@ -1269,60 +1250,59 @@ For example, to import LazyVim core plugins and an optional plugin:
     })
 <
 
-When you import specs, you can override them by simply adding a spec for the
-same plugin to your local specs, adding any keys you want to override / merge.
+当你导入 spec 时，只需在本地 spec 中为同一个插件添加一个 spec，
+并加入任何你想覆盖/合并的键，就可以覆盖它们。
 
-`opts`, `dependencies`, `cmd`, `event`, `ft` and `keys` are always merged with
-the parent spec. Any other property will override the property from the parent
-spec.
-
+`opts`、`dependencies`、`cmd`、`event`、`ft` 和 `keys` 总是会与
+父级 spec 合并。其他任何属性都会覆盖父级
+spec 中的同名属性。
 
 ==============================================================================
-8. 🔥 Developers                                 *lazy.nvim-🔥-developers*
+8. 🔥 开发者                                      *lazy.nvim-🔥-developers*
 
-To make it easier for users to install your plugin, you can include a package
-spec </packages> in your repo.
+为了让用户更容易安装你的插件，你可以在你的仓库中
+包含一个软件包 spec </packages>。
 
 
-BEST PRACTICES                      *lazy.nvim-🔥-developers-best-practices*
+最佳实践                    *lazy.nvim-🔥-developers-best-practices*
 
-- If your plugin needs `setup()`, then create a simple `lazy.lua` file like this:
+- 如果你的插件需要 `setup()`，那么创建一个像下面这样的简单 `lazy.lua` 文件：
     >lua
           return { "me/my-plugin", opts = {} }
     <
-- Plugins that are pure lua libraries should be lazy-loaded with `lazy = true`.
+- 纯 lua 库的插件应当用 `lazy = true` 来延迟加载。
     >lua
         { "nvim-lua/plenary.nvim", lazy = true }
     <
-- Always use `opts` instead of `config` when possible. `config` is almost never
-    needed.
-- Only use `dependencies` if a plugin needs the dep to be installed **AND**
-    loaded. Lua plugins/libraries are automatically loaded when they are
-    `require()`d, so they don’t need to be in `dependencies`.
-- Inside a `build` function or `*.lua` build file, use
-    `coroutine.yield(msg:string|LazyMsg)` to show progress.
-- Don’t change the `cwd` in your build function, since builds run in parallel
-    and changing the `cwd` will affect other builds.
+- 只要可能，请始终使用 `opts` 而不是 `config`。几乎从来都不需要
+    使用 `config`。
+- 只有当某个插件需要该依赖被安装 **并且**被
+    加载时，才使用 `dependencies`。lua 插件/库在被
+    `require()` 时会自动加载，所以它们不需要出现在 `dependencies` 中。
+- 在 `build` 函数或 `*.lua` 构建文件内部，使用
+    `coroutine.yield(msg:string|LazyMsg)` 来显示进度。
+- 不要在你的 build 函数中更改 `cwd`，因为构建是并行运行的，
+    更改 `cwd` 会影响其他构建。
 
 
-BUILDING                                  *lazy.nvim-🔥-developers-building*
+构建                             *lazy.nvim-🔥-developers-building*
 
-The spec **build** property can be one of the following:
+spec 的 **build** 属性可以是以下任一形式：
 
-- `fun(plugin: LazyPlugin)`: a function that builds the plugin.
-- `*.lua`: a Lua file that builds the plugin (like `build.lua`)
-- `":Command"`: a Neovim command
-- `"rockspec"`: this will run `luarocks make` in the plugin’s directory
-    This is automatically set by the `rockspec` package </packages> source.
-- any other **string** will be run as a shell command
-- a `list` of any of the above to run multiple build steps
-- if no `build` is specified, but a `build.lua` file exists, that will be used instead.
+- `fun(plugin: LazyPlugin)`：一个用于构建插件的函数。
+- `*.lua`：一个用于构建插件的 Lua 文件（例如 `build.lua`）
+- `":Command"`：一条 Neovim 命令
+- `"rockspec"`：这会在插件目录中运行 `luarocks make`
+    该值会由 `rockspec` 软件包 </packages> 源自动设置。
+- 任何其他 **string** 都会作为 shell 命令运行
+- 上述任意项的 `list`，用于运行多个构建步骤
+- 如果没有指定 `build`，但存在 `build.lua` 文件，则会改用该文件。
 
-Build functions and `*.lua` files run asynchronously in a coroutine. Use
-`coroutine.yield(msg:string|LazyMsg)` to show progress.
+build 函数和 `*.lua` 文件会在协程中异步运行。使用
+`coroutine.yield(msg:string|LazyMsg)` 来显示进度。
 
-Yielding will also schedule the next `coroutine.resume()` to run in the next
-tick, so you can do long-running tasks without blocking Neovim.
+让出执行权还会把下一次 `coroutine.resume()` 调度到下一个
+tick，因此你可以执行耗时较长的任务而不会阻塞 Neovim。
 
 >lua
     ---@class LazyMsg
@@ -1330,49 +1310,49 @@ tick, so you can do long-running tasks without blocking Neovim.
     ---@field level? number vim.log.levels.XXX
 <
 
-Use `vim.log.levels.TRACE` to only show the message as a **status** message for
-the task.
+使用 `vim.log.levels.TRACE` 可以只把消息作为任务的 **status**
+消息显示。
 
 
 
-MINIT (MINIMAL INIT)          *lazy.nvim-🔥-developers-minit-(minimal-init)*
+Minit（最小化 init） *lazy.nvim-🔥-developers-minit-(minimal-init)*
 
-**lazy.nvim** comes with some built-in functionality to help you create a
-minimal init for your plugin.
+**lazy.nvim** 自带一些内置功能，帮助你为你的插件
+创建一个最小化的 init。
 
-I mainly use this for testing and for users to create a `repro.lua`.
+我主要把它用于测试，以及帮助用户创建 `repro.lua`。
 
-When running in **headless** mode, **lazy.nvim** will log any messages to the
-terminal. See `opts.headless` for more info.
+以 **headless** 模式运行时，**lazy.nvim** 会把所有消息记录到
+终端。更多信息参见 `opts.headless`。
 
-**minit** will install/load all your specs and will always run an update as
-well.
+**minit** 会安装/加载你的所有 spec，并且总会同时运行一次
+更新。
 
 
 BOOTSTRAP ~
 
 >lua
-    -- setting this env will override all XDG paths
+    -- 设置该环境变量会覆盖所有 XDG 路径
     vim.env.LAZY_STDPATH = ".tests"
-    -- this will install lazy in your stdpath
+    -- 这会把 lazy 安装到你的 stdpath 中
     load(vim.fn.system("curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua"))()
 <
 
 
-TESTING WITH BUSTED ~
+使用 BUSTED 测试 ~
 
-This will add `"lunarmodules/busted"`, configure `hererocks` and run `busted`.
+这会添加 `"lunarmodules/busted"`、配置 `hererocks` 并运行 `busted`。
 
-Below is an example of how I use **minit** to run tests with busted
-<https://olivinelabs.com/busted/> in **LazyVim**.
+下面是我在 **LazyVim** 中使用 **minit** 运行 busted
+<https://olivinelabs.com/busted/> 测试的示例。
 
 >lua
     #!/usr/bin/env -S nvim -l
-    
+
     vim.env.LAZY_STDPATH = ".tests"
     load(vim.fn.system("curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua"))()
-    
-    -- Setup lazy.nvim
+
+    -- 设置 lazy.nvim
     require("lazy.minit").busted({
       spec = {
         "LazyVim/starter",
@@ -1383,13 +1363,13 @@ Below is an example of how I use **minit** to run tests with busted
     })
 <
 
-To use this, you can run:
+要使用它，你可以运行：
 
 >sh
     nvim -l ./tests/busted.lua tests
 <
 
-If you want to inspect the test environment, run:
+如果你想查看测试环境，请运行：
 
 >sh
     nvim -u ./tests/busted.lua
@@ -1401,30 +1381,30 @@ REPRO.LUA ~
 >lua
     vim.env.LAZY_STDPATH = ".repro"
     load(vim.fn.system("curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua"))()
-    
+
     require("lazy.minit").repro({
       spec = {
         "stevearc/conform.nvim",
         "nvim-neotest/nvim-nio",
       },
     })
-    
-    -- do anything else you need to do to reproduce the issue
+
+    -- 执行任何其他复现该问题所需的操作
 <
 
-Then run it with:
+然后用以下命令运行：
 
 >sh
     nvim -u repro.lua
 <
 
 ==============================================================================
-9. Links                                                     *lazy.nvim-links*
+9. 相关链接                                                *lazy.nvim-links*
 
-1. *image*: https://user-images.githubusercontent.com/292349/208301737-68fb279c-ba70-43ef-a369-8c3e8367d6b1.png
-2. *image*: https://user-images.githubusercontent.com/292349/208301766-5c400561-83c3-4811-9667-1ec4bb3c43b8.png
-3. *image*: https://user-images.githubusercontent.com/292349/208301790-7eedbfa5-d202-4e70-852e-de68aa47233b.png
+1. *图片*: https://user-images.githubusercontent.com/292349/208301737-68fb279c-ba70-43ef-a369-8c3e8367d6b1.png
+2. *图片*: https://user-images.githubusercontent.com/292349/208301766-5c400561-83c3-4811-9667-1ec4bb3c43b8.png
+3. *图片*: https://user-images.githubusercontent.com/292349/208301790-7eedbfa5-d202-4e70-852e-de68aa47233b.png
 
-Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
+由 panvimdoc <https://github.com/kdheepak/panvimdoc> 生成
 
 vim:tw=78:ts=8:noet:ft=help:norl:

@@ -6,7 +6,7 @@ local M = {}
 
 local function rm(dir)
   local stat = vim.uv.fs_lstat(dir)
-  assert(stat and stat.type == "directory", dir .. " should be a directory!")
+  assert(stat and stat.type == "directory", dir .. " 应该是一个目录！")
   Util.walk(dir, function(path, _, type)
     if type == "directory" then
       vim.uv.fs_rmdir(path)
@@ -25,7 +25,7 @@ M.clean = {
   run = function(self, opts)
     opts = opts or {}
     local dir = self.plugin.dir:gsub("/+$", "")
-    assert(dir:find(Config.options.root .. "/", 1, true) == 1, self.plugin.dir .. " should be under packpath!")
+    assert(dir:find(Config.options.root .. "/", 1, true) == 1, self.plugin.dir .. " 应该位于 packpath 之下！")
 
     local rock_root = Config.options.rocks.root .. "/" .. self.plugin.name
     if vim.uv.fs_stat(rock_root) then

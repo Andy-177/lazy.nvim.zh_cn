@@ -17,7 +17,7 @@ M.handlers = {
         Util.open(url .. "/compare/" .. diff.from .. ".." .. diff.to)
       end
     else
-      Util.error("No url for " .. plugin.name)
+      Util.error(plugin.name .. " 没有可用的网址")
     end
   end,
 

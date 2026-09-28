@@ -48,7 +48,7 @@ function Process.new(cmd, opts)
     self.cmd = cmd
   end
   opts.timeout = opts.timeout or (Config.options.git and Config.options.git.timeout * 1000)
-  -- make sure the cwd is valid
+  -- 确保 cwd 是有效的
   if not opts.cwd and type(uv.cwd()) ~= "string" then
     opts.cwd = uv.os_homedir()
   end
@@ -96,7 +96,7 @@ function Process:_run()
       Async.yield()
     end
   else
-    self.data = "Failed to spawn process " .. self.cmd .. " " .. vim.inspect(self.opts)
+    self.data = "启动进程失败 " .. self.cmd .. " " .. vim.inspect(self.opts)
   end
   self:on_exit()
 end
@@ -104,9 +104,9 @@ end
 function Process:on_exit()
   self.data = self.data:gsub("[^\r\n]+\r", "")
   if self.timedout then
-    self.data = self.data .. "\n" .. "Process was killed because it reached the timeout"
+    self.data = self.data .. "\n" .. "进程因达到超时时间而被终止"
   elseif self.signal ~= 0 then
-    self.data = self.data .. "\n" .. "Process was killed with SIG" .. M.signals[self.signal]:upper()
+    self.data = self.data .. "\n" .. "进程被 SIG" .. M.signals[self.signal]:upper() .. " 终止"
   end
   if self.opts.on_exit then
     self.opts.on_exit(self.code == 0 and self.signal == 0, self.data)

@@ -54,7 +54,7 @@ function Spec:parse(spec)
   self.meta:resolve()
 end
 
--- PERF: optimized code to get package name without using lua patterns
+-- 性能优化：无需使用 lua 模式匹配即可得到包名
 ---@return string
 function Spec.get_name(pkg)
   local name = pkg:sub(-4) == ".git" and pkg:sub(1, -5) or pkg
@@ -110,21 +110,21 @@ function Spec:normalize(spec)
     ---@cast spec LazySpecImport
     self:import(spec)
   else
-    self:error("Invalid plugin spec " .. vim.inspect(spec))
+    self:error("无效的插件 spec " .. vim.inspect(spec))
   end
 end
 
 ---@param spec LazySpecImport
 function Spec:import(spec)
   if spec.import == "lazy" then
-    return self:error("You can't name your plugins module `lazy`.")
+    return self:error("你不能把自己的插件模块命名为 `lazy`。")
   end
   if type(spec.import) == "function" then
     if not spec.name then
-      return self:error("Invalid import spec. Missing name: " .. vim.inspect(spec))
+      return self:error("无效的 import spec。缺少 name: " .. vim.inspect(spec))
     end
   elseif type(spec.import) ~= "string" then
-    return self:error("Invalid import spec. `import` should be a string: " .. vim.inspect(spec))
+    return self:error("无效的 import spec。`import` 应该是一个字符串: " .. vim.inspect(spec))
   end
 
   local import_name = spec.name or spec.import
@@ -158,7 +158,7 @@ function Spec:import(spec)
           if mod then
             local ret, foo = mod()
             if foo then
-              return nil, "Spec module returned more than one value. Expected a single value."
+              return nil, "Spec 模块返回了多个值，但预期只返回一个值。"
             end
             return ret
           else
@@ -179,26 +179,26 @@ function Spec:import(spec)
     local modname = modspec.modname
     Util.track({ import = modname })
     self.importing = modname
-    -- unload the module so we get a clean slate
+    -- 卸载该模块，以便从干净的状态开始
     ---@diagnostic disable-next-line: no-unknown
     package.loaded[modname] = nil
     Util.try(function()
       local mod, err = modspec.load()
       if err then
-        self:error("Failed to load `" .. modname .. "`:\n" .. err)
+        self:error("加载 `" .. modname .. "` 失败：\n" .. err)
       elseif type(mod) ~= "table" then
         return self:error(
-          "Invalid spec module: `"
+          "无效的 spec 模块：`"
             .. modname
-            .. "`\nExpected a `table` of specs, but a `"
+            .. "`\n预期返回一个 spec 的 `table`，但实际返回了 `"
             .. type(mod)
-            .. "` was returned instead"
+            .. "`"
         )
       else
         self:normalize(mod)
       end
     end, {
-      msg = "Failed to load `" .. modname .. "`",
+      msg = "加载 `" .. modname .. "` 失败",
       on_error = function(msg)
         self:error(msg)
       end,
@@ -207,7 +207,7 @@ function Spec:import(spec)
     Util.track()
   end
   if imported == 0 then
-    self:error("No specs found for module " .. vim.inspect(spec.import))
+    self:error("未找到模块 " .. vim.inspect(spec.import) .. " 对应的 spec")
   end
 end
 
@@ -243,7 +243,7 @@ function M.update_state()
     end
     if plugin.virtual then
       plugin._.is_local = true
-      plugin._.installed = true -- local plugins are managed by the user
+      plugin._.installed = true -- 本地插件由用户自行管理
     elseif plugin.dir:find(Config.options.root .. "/", 1, true) == 1 then
       plugin._.installed = installed[plugin.name] ~= nil
       installed[plugin.name] = nil
@@ -321,7 +321,7 @@ end
 
 function M.load()
   M.loading = true
-  -- load specs
+  -- 加载 spec
   Util.track("spec")
   Config.spec = Spec.new()
 
@@ -334,18 +334,18 @@ function M.load()
 
   Config.spec:parse(specs)
 
-  -- override some lazy props
+  -- 覆盖 lazy 的一些属性
   local lazy = Config.spec.plugins["lazy.nvim"]
   if lazy then
     lazy.lazy = true
     lazy.dir = Config.me
     lazy.config = function()
-      error("lazy config should not be called")
+      error("不应该调用 lazy 的 config")
     end
     lazy._.loaded = {}
   end
 
-  -- add hererocks when enabled and needed
+  -- 在启用且需要时添加 hererocks
   for _, plugin in pairs(Config.spec.plugins) do
     if plugin.build == "rockspec" then
       if Config.hererocks() then
@@ -361,7 +361,7 @@ function M.load()
 
   local existing = Config.plugins
   Config.plugins = Config.spec.plugins
-  -- copy state. This wont do anything during startup
+  -- 复制状态。启动期间这不会有任何作用
   for name, plugin in pairs(existing) do
     if Config.plugins[name] then
       local new_state = Config.plugins[name]._
@@ -386,7 +386,7 @@ function M.load()
   vim.api.nvim_exec_autocmds("User", { pattern = "LazyPlugins", modeline = false })
 end
 
--- Finds the plugin that has this path
+-- 查找拥有该路径的插件
 ---@param path string
 ---@param opts? {fast?:boolean}
 function M.find(path, opts)
@@ -420,9 +420,9 @@ function M.has_errors(plugin)
   return false
 end
 
--- Merges super values or runs the values function to override values or return new ones.
--- Values are cached for performance.
--- Used for opts, cmd, event, ft and keys
+-- 合并 super 的值，或者运行 values 函数来覆盖或返回新的值。
+-- 这些值会被缓存以提升性能。
+-- 用于 opts、cmd、event、ft 和 keys
 ---@param plugin LazyPlugin
 ---@param prop string
 ---@param is_list? boolean
@@ -438,8 +438,8 @@ function M.values(plugin, prop, is_list)
   return plugin._.cache[key]
 end
 
--- Merges super values or runs the values function to override values or return new ones
--- Used for opts, cmd, event, ft and keys
+-- 合并 super 的值，或者运行 values 函数来覆盖或返回新的值
+-- 用于 opts、cmd、event、ft 和 keys
 ---@param root LazyPlugin
 ---@param plugin LazyPlugin
 ---@param prop string

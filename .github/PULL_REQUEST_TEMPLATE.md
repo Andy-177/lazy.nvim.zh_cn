@@ -1,16 +1,15 @@
-## Description
+## 说明
 
-<!-- Describe the big picture of your changes to communicate to the maintainers
-  why we should accept this pull request. -->
+<!-- 概述你所做改动的整体思路，让维护者明白我们为什么应该接受这个 pull request。 -->
 
-## Related Issue(s)
+## 关联的 Issue
 
-<!--
-  If this PR fixes any issues, please link to the issue here.
-  - Fixes #<issue_number>
--->
+<!--
+  如果此 PR 修复了某些问题，请在这里链接对应 issue。
+  - Fixes #<issue_number>
+-->
 
-## Screenshots
+## 截图
 
-<!-- Add screenshots of the changes if applicable. -->
-
+<!-- 如果适用，请附上改动的截图。 -->
+

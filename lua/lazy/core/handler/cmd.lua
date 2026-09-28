@@ -36,7 +36,7 @@ function M:_add(cmd)
     local info = vim.api.nvim_get_commands({})[cmd] or vim.api.nvim_buf_get_commands(0, {})[cmd]
     if not info then
       vim.schedule(function()
-        Util.error("Command `" .. cmd .. "` not found after loading " .. plugins)
+        Util.error("加载 " .. plugins .. " 之后仍未找到命令 `" .. cmd .. "`")
       end)
       return
     end
@@ -52,7 +52,7 @@ function M:_add(cmd)
     nargs = "*",
     complete = function(_, line)
       self:_load(cmd)
-      -- NOTE: return the newly loaded command completion
+      -- 注意：返回新加载的命令补全
       return vim.fn.getcompletion(line, "cmdline")
     end,
   })

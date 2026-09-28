@@ -1,9 +1,9 @@
 local Config = require("lazy.core.config")
 local Util = require("lazy.core.util")
 
---- This class is used to manage the fragments of a plugin spec.
---- It keeps track of the fragments and their relations to other fragments.
---- A fragment can be a dependency (dependencies) or a child (specs) of another fragment.
+--- 这个类用于管理插件 spec 的各个片段（fragment）。
+--- 它记录这些片段以及它们与其他片段之间的关系。
+--- 一个片段可以是另一个片段的依赖（dependencies），也可以是它的子 spec（specs）。
 ---@class LazyFragments
 ---@field fragments table<number, LazyFragment>
 ---@field frag_stack number[]
@@ -38,11 +38,11 @@ function M:get(id)
   return self.fragments[id]
 end
 
---- Remove a fragment and all its children.
---- This will also remove the fragment from its parent's children list.
+--- 移除一个片段及其所有子片段。
+--- 这也会把该片段从其父片段的子列表中移除。
 ---@param id number
 function M:del(id)
-  -- del fragment
+  -- 删除片段
   local fragment = self.fragments[id]
   if not fragment then
     return
@@ -50,7 +50,7 @@ function M:del(id)
 
   self.dirty[id] = true
 
-  -- remove from parent
+  -- 从父片段中移除
   local pid = fragment.pid
   if pid then
     local parent = self.fragments[pid]
@@ -69,7 +69,7 @@ function M:del(id)
     self.dirty[pid] = true
   end
 
-  -- remove children
+  -- 移除子片段
   if fragment.frags then
     for _, fid in ipairs(fragment.frags) do
       self:del(fid)
@@ -79,8 +79,8 @@ function M:del(id)
   self.fragments[id] = nil
 end
 
---- Add a fragment to the fragments list.
---- This also resolves its name, url, dir, dependencies and child specs.
+--- 把一个片段添加到片段列表中。
+--- 这也会解析它的 name、url、dir、依赖以及子 spec。
 ---@param plugin LazyPluginSpec
 function M:add(plugin)
   if self.plugins[plugin] then
@@ -104,7 +104,7 @@ function M:add(plugin)
     spec = plugin --[[@as LazyPlugin]],
   }
 
-  -- short url / ref
+  -- 短 url / ref
   if plugin[1] then
     local slash = plugin[1]:find("/", 1, true)
     if slash then
@@ -120,17 +120,17 @@ function M:add(plugin)
     end
   end
 
-  -- name
+  -- 名称
   fragment.name = fragment.name
     or fragment.url and self.spec.get_name(fragment.url)
     or fragment.dir and self.spec.get_name(fragment.dir)
   if not fragment.name or fragment.name == "" then
-    return self.spec:error("Invalid plugin spec " .. vim.inspect(plugin))
+    return self.spec:error("无效的插件 spec " .. vim.inspect(plugin))
   end
 
   if type(plugin.config) == "table" then
     self.spec:warn(
-      "{" .. fragment.name .. "}: setting a table to `Plugin.config` is deprecated. Please use `Plugin.opts` instead"
+      "{" .. fragment.name .. "}: 给 `Plugin.config` 赋一个 table 已被弃用，请改用 `Plugin.opts`"
     )
     ---@diagnostic disable-next-line: assign-type-mismatch
     plugin.opts = plugin.config
@@ -139,14 +139,14 @@ function M:add(plugin)
 
   self.fragments[id] = fragment
 
-  -- add to parent
+  -- 添加到父片段
   if pid then
     local parent = self.fragments[pid]
     parent.frags = parent.frags or {}
     table.insert(parent.frags, id)
   end
 
-  -- add to parent's deps
+  -- 添加到父片段的依赖中
   local did = self.dep_stack[#self.dep_stack]
   if did and did == pid then
     fragment.dep = true
@@ -156,13 +156,13 @@ function M:add(plugin)
   end
 
   table.insert(self.frag_stack, id)
-  -- dependencies
+  -- 依赖
   if plugin.dependencies then
     table.insert(self.dep_stack, id)
     self.spec:normalize(plugin.dependencies)
     table.remove(self.dep_stack)
   end
-  -- child specs
+  -- 子 spec
   if plugin.specs then
     self.spec:normalize(plugin.specs)
   end

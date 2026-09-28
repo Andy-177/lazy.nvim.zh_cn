@@ -3,7 +3,7 @@ name: Update Repo
 on:
   workflow_dispatch:
   schedule:
-    # Run every hour
+    # 每小时运行一次
     - cron: "0 * * * *"
 
 jobs:

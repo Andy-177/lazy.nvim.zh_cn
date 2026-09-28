@@ -4,14 +4,14 @@ local M = {}
 
 ---@class LazyStats
 M._stats = {
-  -- startuptime in milliseconds till UIEnter
+  -- 距离 UIEnter 的启动时间（毫秒）
   startuptime = 0,
-  -- when true, startuptime is the accurate cputime for the Neovim process. (Linux & macOS)
-  -- this is more accurate than `nvim --startuptime`, and as such will be slightly higher
-  -- when false, startuptime is calculated based on a delta with a timestamp when lazy started.
+  -- 为 true 时，startuptime 是 Neovim 进程准确的 CPU 时间（Linux 与 macOS）
+  -- 这比 `nvim --startuptime` 更准确，因此数值会略高一些
+  -- 为 false 时，startuptime 是根据 lazy 启动时刻的时间戳差值计算得出的
   real_cputime = false,
-  count = 0, -- total number of plugins
-  loaded = 0, -- number of loaded plugins
+  count = 0, -- 插件总数
+  loaded = 0, -- 已加载的插件数量
   ---@type table<string, number>
   times = {},
 }
@@ -47,7 +47,7 @@ function M.cputime()
   end
 
   local function real()
-    -- Zero-initialize to handle 32-bit systems where only lower 32 bits are written
+    -- 零初始化，以兼容只会写入低 32 位的 32 位系统
     local pnano = ffi.new("nanotime[1]")
     local CLOCK_PROCESS_CPUTIME_ID = jit.os == "OSX" and 12 or 2
     ffi.C.clock_gettime(CLOCK_PROCESS_CPUTIME_ID, pnano)

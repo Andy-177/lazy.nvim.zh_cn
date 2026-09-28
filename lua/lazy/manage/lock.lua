@@ -14,7 +14,7 @@ function M.update()
   local f = assert(io.open(Config.options.lockfile, "wb"))
   f:write("{\n")
 
-  -- keep disabled and cond plugins
+  -- 保留被禁用以及 cond 的插件
   for name in pairs(M.lock) do
     if not (Config.spec.disabled[name] or Config.spec.ignore_installed[name]) then
       M.lock[name] = nil
@@ -26,7 +26,7 @@ function M.update()
       local info = assert(Git.info(plugin.dir))
       M.lock[plugin.name] = {
         branch = info.branch or assert(Git.get_branch(plugin)),
-        commit = assert(info.commit, "commit is nil"),
+        commit = assert(info.commit, "commit 为 nil"),
       }
     end
   end

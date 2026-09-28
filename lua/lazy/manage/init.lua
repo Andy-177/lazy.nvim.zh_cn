@@ -51,7 +51,7 @@ function M.run(ropts, opts)
 
   vim.api.nvim_exec_autocmds("User", { pattern = "LazyRender", modeline = false })
 
-  -- wait for post-install to finish
+  -- 等待 post-install 完成
   runner:wait(function()
     vim.api.nvim_exec_autocmds("User", { pattern = "LazyRender", modeline = false })
     Plugin.update_state()
@@ -235,7 +235,7 @@ function M.clear(plugins)
     plugin._.updated = nil
     plugin._.cloned = nil
     plugin._.dirty = nil
-    -- clear finished tasks
+    -- 清除已完成的任务
     if plugin._.tasks then
       ---@param task LazyTask
       plugin._.tasks = vim.tbl_filter(function(task)

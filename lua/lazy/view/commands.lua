@@ -13,13 +13,13 @@ function M.cmd(cmd, opts)
   cmd = cmd == "" and "home" or cmd
   local command = M.commands[cmd] --[[@as fun(opts)]]
   if command == nil then
-    Util.error("Invalid lazy command '" .. cmd .. "'")
+    Util.error("无效的 lazy 命令 '" .. cmd .. "'")
   elseif
     ViewConfig.commands[cmd]
     and ViewConfig.commands[cmd].plugins_required
     and not (opts and vim.tbl_count(opts.plugins or {}) > 0)
   then
-    return Util.error("`Lazy " .. cmd .. "` requires at least one plugin")
+    return Util.error("`Lazy " .. cmd .. "` 至少需要一个插件")
   else
     command(opts)
   end
@@ -66,15 +66,15 @@ M.commands = {
   end,
   ---@param opts ManagerOpts
   load = function(opts)
-    -- when a command is executed with a bang, wait will be set
-    require("lazy.core.loader").load(opts.plugins, { cmd = "Lazy load" }, { force = opts.wait })
+    -- 当命令带感叹号（bang）执行时，wait 会被设置
+    require("lazy.core.loader").load(opts.plugins, { cmd = "Lazy 加载" }, { force = opts.wait })
   end,
   reload = function(opts)
     for _, plugin in pairs(opts.plugins) do
       if type(plugin) == "string" then
         plugin = Config.plugins[plugin]
       end
-      Util.warn("Reloading **" .. plugin.name .. "**")
+      Util.warn("正在重新加载 **" .. plugin.name .. "**")
       require("lazy.core.loader").reload(plugin)
     end
   end,

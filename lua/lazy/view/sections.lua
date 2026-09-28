@@ -20,7 +20,7 @@ return {
         return task:has_errors()
       end)
     end,
-    title = "Failed",
+    title = "失败",
   },
   {
     filter = function(plugin)
@@ -31,13 +31,13 @@ return {
         return task:running()
       end)
     end,
-    title = "Working",
+    title = "进行中",
   },
   {
     filter = function(plugin)
       return plugin._.build
     end,
-    title = "Build",
+    title = "构建",
   },
   {
     filter = function(plugin)
@@ -52,26 +52,26 @@ return {
         end
       end)
     end,
-    title = "Breaking Changes",
+    title = "破坏性变更",
   },
   {
     filter = function(plugin)
       return plugin._.updated and plugin._.updated.from ~= plugin._.updated.to
     end,
-    title = "Updated",
+    title = "已更新",
   },
   {
     filter = function(plugin)
       return plugin._.cloned
     end,
-    title = "Installed",
+    title = "已安装",
   },
   {
     ---@param plugin LazyPlugin
     filter = function(plugin)
       return plugin._.updates ~= nil
     end,
-    title = "Updates",
+    title = "可更新",
   },
   {
     filter = function(plugin)
@@ -79,42 +79,42 @@ return {
         return task.name == "log" and vim.trim(task:output()) ~= ""
       end)
     end,
-    title = "Log",
+    title = "日志",
   },
   {
     filter = function(plugin)
       return plugin._.kind == "clean" and plugin._.installed
     end,
-    title = "Clean",
+    title = "待清理",
   },
   {
     filter = function(plugin)
       return not plugin._.installed and plugin._.kind ~= "disabled"
     end,
-    title = "Not Installed",
+    title = "未安装",
   },
   {
     filter = function(plugin)
       return plugin._.outdated
     end,
-    title = "Outdated",
+    title = "已过时",
   },
   {
     filter = function(plugin)
       return plugin._.loaded ~= nil
     end,
-    title = "Loaded",
+    title = "已加载",
   },
   {
     filter = function(plugin)
       return plugin._.installed
     end,
-    title = "Not Loaded",
+    title = "未加载",
   },
   {
     filter = function(plugin)
       return plugin._.kind == "disabled"
     end,
-    title = "Disabled",
+    title = "已禁用",
   },
 }
